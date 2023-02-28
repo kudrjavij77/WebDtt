@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "NewsAdd";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Новости</h2>
+@(Html.DevExtreme().DataGrid<WebDtt.Models.News>()
+    .ID("gridNews")
+    .DataSource(ds => ds.WebApi()
+        .RouteName("NewsDevApi")
+        .LoadAction("Get")
+        .InsertAction("Post")
+        .UpdateAction("Put")
+        .DeleteAction("Delete")
+        .Key("NewsID")
+    )
+
+    .RemoteOperations(true)
+    .Width(1000)
+    .Columns(columns => {
+
+        columns.AddFor(m => m.Title).Caption("Название");
+        columns.AddFor(m => m.Body).Caption("Содержание");
+        columns.AddFor(m => m.Creator).Caption("Автор")
+        .Lookup(l=>l.DataSource(ds=>ds.WebApi()
+                .Controller("NewsDev").LoadAction("UsersLookup").Key("UserID"))
+                .ValueExpr("Value").DisplayExpr("Text"));
+        columns.AddFor(m => m.Flags).Caption("Статус").Lookup(l => l.DataSource(new JS("newsFlags"))
+                        .DisplayExpr("name").ValueExpr("id"));
+        columns.AddFor(m => m.CreateDate).Caption("Дата Создания").SortOrder(SortOrder.Desc);
+        columns.AddFor(m => m.UpdateDate).Caption("Дата Изменения");
+        columns.AddFor(m => m.DeleteDate).Caption("Дата Удаления");
+    })
+    .Editing(e => e
+        .AllowAdding(true)
+        .AllowUpdating(true)
+        .AllowDeleting(true)
+        .Mode(GridEditMode.Popup)
+        .Form(f=>f.Items(i=> {
+            i.AddSimpleFor(m => m.Title);
+            i.AddSimpleFor(m => m.Body).Editor(ed=>ed.TextArea().Height(300));
+        })
+        .ColCount(1))
+        .UseIcons(true)
+    )
+    
+)
+
+<style>
+    h2 {
+        text-align:center;
+    }
+    #gridNews{
+    margin:auto;
+    }
+</style>
+

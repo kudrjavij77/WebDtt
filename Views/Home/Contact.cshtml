@@ -1,0 +1,115 @@
+﻿@using System.Web.Services.Description
+@using DevExpress.Utils.Drawing.Helpers
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/my-script/MessageForm.js"></script>
+
+@(Html.DevExtreme().Popup()
+    .ID("popup")
+    .MaxWidth(500)
+    .MaxHeight(800)
+    .Visible(false)
+    .ShowTitle(false)
+    .DragEnabled(false)
+    .CloseOnOutsideClick(true)
+    .CloseOnBackButton(true)
+    .ShowCloseButton(true)
+    .ShowTitle(true)
+    .ContentTemplate(new TemplateName("popup-template"))
+    )
+
+@using (Html.DevExtreme().NamedTemplate("popup-template"))
+{
+    @(Html.DevExtreme().ScrollView()
+        .Width("100%")
+        .Height("100%")
+        .Content(@<text>@Html.Partial("Templates/_MessageForm")</text>)
+        )
+}
+
+<div class="container">
+    <h2>Контакты</h2>
+    <br />
+    <h5>ГБУ ДПО 'Санкт-Петербургский центр оценки качества образования и информационных технологий'</h5>
+
+    <address>
+        <br />
+        <strong>Наш адрес:</strong>
+        <br />
+        190068, Санкт-Петербург, <br />
+        Вознесенский проспект, дом 34 литер А<br /><br />
+        <strong>Режим работы:</strong>
+        <br />
+        ПН-ПТ 11:00-18:00, обед 13:00-14:00 <br /><br />
+        <strong>Телефоны:</strong>
+        <br />
+        8(812) 576-34-38 - Курсы подготовки к ЕГЭ и ОГЭ для выпускников и обучающихся, подготовка экспертов и педагогогв;<br />
+        8(909) 587-34-38 - организационно-административные вопросы проведения добровольного тренировочного тестирования; <br />
+        @*8(911) 244-14-49 - техническая поддержка <br />*@
+        <br />
+        @(Html.DevExtreme().Button()
+            .Type(ButtonType.Default)
+            .StylingMode(ButtonStylingMode.Outlined)
+            .Text("Написать в тех. поддержку")
+            .OnClick(@<text>
+                         function showInfo(data) {
+                         var popup = $("#popup").dxPopup("instance");
+                         popup.show();
+                         }
+                      </text>))
+    </address>
+
+    <address>
+        <strong>Email:</strong>   <a href="mailto:dtt@ege.spb.ru">dtt@ege.spb.ru</a><br />
+    </address>
+
+    @(Html.DevExtreme().Map()
+        .ID("map")
+        .Provider(GeoMapProvider.Bing)
+        .Zoom(16)
+        .Height(440)
+        .Width("100%")
+        .Controls(true)
+        .MarkerIconSrc(new JS("markerUrl"))
+        .Markers(markers =>
+        {
+            markers.Add()
+                .Coordinates(59.925874, 30.308397)
+                .Tooltip(t => t.Text("ГБУ ДПО \"Санкт-Петербургский центр оценки " +
+                                     "качества образования и информационных технологий\""));
+        })
+    )
+
+</div>
+
+
+
+<script>
+    
+
+
+    //var markerUrl = "https://js.devexpress.com/Demos/RealtorApp/images/map-marker.png";
+
+    var markerUrl = "~Content/images/map-marker.png";
+
+    function checkBox_onValueChanged(data) {
+        var mapWidget = $("#map").dxMap("instance");
+        var markersData = mapWidget.option("markers");
+        var newMarkers = $.map(markersData, function (item) {
+            return $.extend(true, {}, item, { tooltip: { isShown: false } });
+        });
+        mapWidget.option("markers", newMarkers);
+        mapWidget.option("markerIconSrc", data.value ? markerUrl : null);
+    }
+
+    function button_onClick() {
+        var mapWidget = $("#map").dxMap("instance");
+        var markersData = mapWidget.option("markers");
+        var newMarkers = $.map(markersData, function (item) {
+            return $.extend(true, {}, item, { tooltip: { isShown: true } });
+        });
+        mapWidget.option("markers", newMarkers);
+    }
+</script>

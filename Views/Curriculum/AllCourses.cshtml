@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "AllCourses";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Курсы</h2>
+
+@(Html.DevExtreme().DataGrid<WebDtt.Models.Curriculum>()
+    .DataSource(ds => ds.WebApi()
+        .RouteName("CurriculaApi")
+        .LoadAction("Get")
+        .InsertAction("Post")
+        .UpdateAction("Put")
+        .DeleteAction("Delete")
+        .Key("CurriculumID")
+    )
+    .RemoteOperations(true)
+    .ColumnAutoWidth(true)
+    .ShowBorders(true)
+    .ShowRowLines(true)
+    .Columns(columns =>
+    {
+
+        //columns.AddFor(m => m.CurriculumID);
+
+        columns.AddFor(m => m.CourseName).Caption("Название курса");
+
+        columns.AddFor(m => m.Description).Caption("Описание");
+
+        columns.AddFor(m => m.Class).Caption("Класс")
+            .Lookup(l => l.DataSource(new JS("classArrayLookup"))
+                .DisplayExpr("name").ValueExpr("id"));
+
+        //columns.AddFor(m => m.Flags);
+
+        columns.AddFor(m => m.SubjectID).Caption("Предмет")
+            .Lookup(l => l.DataSource(ds => ds.WebApi()
+                .Controller("Curricula").LoadAction("SubjectsLookup").Key("SubjectID"))
+                .ValueExpr("SubjectID").DisplayExpr("SubjectName"));
+
+    })
+
+    .Editing(e => e
+        .AllowAdding(true)
+        .AllowUpdating(true)
+        .AllowDeleting(true)
+        .UseIcons(true)
+        .Mode(GridEditMode.Form)
+        .Form(f=>f.ColCount(2).Items(i =>
+        {
+            i.AddSimpleFor(m => m.Class);
+            i.AddSimpleFor(m => m.SubjectID);
+            i.AddSimpleFor(m => m.CourseName)
+                .Editor(ed => ed.TextArea().MaxLength(250).AutoResizeEnabled(true))
+                .ColSpan(2).IsRequired(true);
+            i.AddSimpleFor(m => m.Description)
+                .Editor(ed => ed.TextArea().AutoResizeEnabled(true))
+                .ColSpan(2);
+        }))
+    ))

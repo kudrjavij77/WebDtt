@@ -1,0 +1,121 @@
+﻿@using DevExtreme.AspNet.Mvc
+@{
+    ViewData["Title"] = "AllGroups";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/my-script/AllGroups.js"></script>
+<h2>Группы</h2>
+<div id="alerts"></div>
+
+@{
+    var filterValue = new object[] {
+        new object[] { "Flags", FilterBuilderFieldFilterOperations.LessThan, 128 },
+    };
+}
+
+@(Html.DevExtreme().DataGrid<WebDtt.Models.Group>()
+    .FilterPanel(fp=>fp.Visible(true))
+    .FilterValue(filterValue)
+    .DataSource(ds => ds.WebApi()
+        .Controller("Groups")
+        .LoadAction("Get")
+        .InsertAction("Post")
+        .UpdateAction("Put")
+        .DeleteAction("Delete")
+        .Key("GroupID")
+        .OnBeforeSend("onBeforeSend")
+    //.OnBeforeSend("addTeachersToGroup")
+    )
+    .ID("grid")
+    //.FilterRow(f=>f.Visible(true))
+    .WordWrapEnabled(true)
+    .Sorting(s => s.Mode(GridSortingMode.Multiple))
+    .HeaderFilter(hf => hf.Visible(true))
+    .ShowRowLines(true)
+    .Selection(sel => sel.AllowSelectAll(true).Mode(SelectionMode.Multiple))
+    .OnToolbarPreparing("toolbarGroup")
+    .SearchPanel(sp => sp.Visible(true))
+    .ColumnChooser(cc => cc.Mode(GridColumnChooserMode.DragAndDrop).Enabled(true))
+    .RemoteOperations(true)
+    .ColumnAutoWidth(true)
+    .Columns(columns =>
+    {
+
+        //columns.AddFor(m => m.GroupID);
+        columns.AddFor(m => m.GroupName).Caption("Название").Alignment(HorizontalAlignment.Left);
+        columns.AddFor(m => m.Capacity).Caption("Вместимость").Alignment(HorizontalAlignment.Left);
+        columns.AddFor(m => m.StartDateTime).DataType(GridColumnDataType.DateTime).Caption("Дата начала обучения").Alignment(HorizontalAlignment.Left);
+        columns.AddFor(m => m.FinishDateTime).DataType(GridColumnDataType.DateTime).Caption("Дата окончания обучения").Alignment(HorizontalAlignment.Left);
+        columns.AddFor(m => m.Duration).Caption("Продолжительность (ч)").Alignment(HorizontalAlignment.Left);
+        columns.AddFor(m => m.LessonDuration).Caption("Продолжительность занятия").Visible(false).Alignment(HorizontalAlignment.Left);
+        columns.AddFor(m => m.Price).Caption("Цена").Alignment(HorizontalAlignment.Left);
+        columns.AddFor(m => m.Flags)
+            .Lookup(l => l.DataSource(new JS("groupsFlags"))
+                .DisplayExpr("name").ValueExpr("id")).Caption("Состояние").Alignment(HorizontalAlignment.Left);
+        columns.AddFor(m => m.StationID).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("Groups").LoadAction("StationsLookup").Key("Value"))
+            .ValueExpr("Value").DisplayExpr("Text")).Caption("Место проведения").Alignment(HorizontalAlignment.Left);
+        columns.AddFor(m => m.AuditoriumNumber).Caption("Аудитория проведения");
+        columns.AddFor(m => m.EducationFormID).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("Groups").LoadAction("EducationFormsLookup").Key("Value"))
+            .ValueExpr("Value").DisplayExpr("Text")).Visible(false).Caption("Форма обучения");
+        columns.AddFor(m => m.CurriculumID).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("Groups").LoadAction("CurriculumLookup").Key("CurriculumID"))
+            .ValueExpr("CurriculumID").DisplayExpr(new JS("function(e){return e.CourseName + ' - ' + e.Subject + ' - ' + e.Class + ' класс'}"))
+            ).Caption("Курс").Alignment(HorizontalAlignment.Left);
+        columns.AddFor(m => m.Teachers).CellTemplate(new JS("teacherDisplayExpr")).Visible(false).Caption("Преподаватель");
+        columns.AddFor(m => m.DonateTypes).CellTemplate(new JS("donateTypesDisplayExpr")).Visible(false).Caption("Варианты оплаты");
+    })
+    .Editing(e => e
+        .AllowAdding(true)
+        .AllowUpdating(true)
+        .AllowDeleting(true)
+        .Mode(GridEditMode.Popup)
+        .Form(f => f.ColCount(6)
+            .ShowValidationSummary(true)
+            .Items(item =>
+            {
+                item.AddSimpleFor(m => m.GroupName).ColSpan(2).IsRequired(true);
+                item.AddSimpleFor(m => m.Capacity).ColSpan(2)
+                    .Editor(ed => ed.NumberBox().Min(1).Format(format => format.Type(Format.Decimal)));
+                item.AddSimpleFor(m => m.Price).ColSpan(2)
+
+                    .Editor(ed => ed.NumberBox().Min(1).Format(format => format.Type(Format.Decimal)));
+                item.AddSimpleFor(m => m.EducationFormID).ColSpan(2);
+                item.AddSimpleFor(m => m.StartDateTime).ColSpan(2);
+                item.AddSimpleFor(m => m.FinishDateTime).ColSpan(2);
+
+                item.AddSimpleFor(m => m.Duration).ColSpan(2)
+                    .Editor(ed => ed.NumberBox().Min(1).Format(format => format.Type(Format.Decimal)));
+                item.AddSimpleFor(m => m.LessonDuration).ColSpan(2)
+                    .Editor(ed => ed.NumberBox().Min(1).Format(format => format.Type(Format.Decimal)));
+                item.AddSimpleFor(m => m.Flags).ColSpan(2);
+
+                item.AddSimpleFor(m => m.Teachers).Editor(ed => ed.TagBox().ID("tgBox")
+                    .DataSource(ds => ds.WebApi().Controller("Persons").LoadAction("GetTeachers").Key("PersonID"))
+                    .DisplayExpr("ViewShortFio")
+                    //.ValueExpr("PersonID")
+                    .ApplyValueMode(EditorApplyValueMode.Instantly).ShowClearButton(true).ShowDropDownButton(true)).ColSpan(3);
+                item.AddSimpleFor(m => m.DonateTypes).Editor(ed => ed.TagBox()
+                    .DataSource(ds => ds.WebApi().Controller("Groups").LoadAction("DonateTypesLookup").Key("DonateTypeID"))
+                    .DisplayExpr("ViewName")
+                    //.ValueExpr("PersonID")
+                    .ApplyValueMode(EditorApplyValueMode.Instantly).ShowClearButton(true).ShowDropDownButton(true)).ColSpan(3);
+
+                item.AddSimpleFor(m => m.StationID).ColSpan(4);
+                item.AddSimpleFor(m => m.AuditoriumNumber).ColSpan(2);
+
+                item.AddSimpleFor(m => m.CurriculumID).ColSpan(6);
+
+                //item.AddSimple().Name("teachers").DataField("Teachers").Editor(ed => ed
+                //    .TagBox().DataSource(d => d.WebApi().Controller("Persons").LoadAction("GetTeachers").Key("PersonID"))
+                //    .DisplayExpr("ViewShortFio").ValueExpr("PersonID")
+                //    .ApplyValueMode(EditorApplyValueMode.Instantly).ShowClearButton(true).ShowDropDownButton(true)).ColSpan(3);
+            }))
+    ))
+
+@using (Html.DevExtreme().NamedTemplate("dxDataGridTeachers"))
+{
+    @(Html.DevExtreme().ScrollView()
+        .Content(@<text>@Html.Partial("Templates/_GroupTeachersGrid")</text>))
+}

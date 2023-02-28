@@ -1,0 +1,59 @@
+﻿@using WebDtt.Models
+@using WebDtt.Models.Dto
+
+@model ManagerMailMessage
+
+
+<script src="~/Scripts/my-script/EmailForm.js"></script>
+
+
+@{
+    ViewBag.Title = "EmailForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Рассылка</h2>
+<script type="text/javascript">
+    var formData = {};
+    @if (Model != null)
+    {
+        <text>
+    formData = @Html.Raw(Json.Encode(@Model));
+    if (formData['GroupIds']) {
+        formData['GroupIds'] = JSON.parse(`[${formData['GroupIds']}]`);
+    }
+        </text>
+    }
+
+</script>
+
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    using (Html.DevExtreme().ValidationGroup())
+    {
+        @Html.AntiForgeryToken()
+
+        @*@(Html.DevExtreme().Form<ManagerMailMessage>()
+            .ShowValidationSummary(true)
+            .Items(i =>
+            {
+                i.AddSimpleFor(m => m.GroupIds);
+                i.AddSimpleFor(m => m.ForStudents);
+                i.AddSimpleFor(m => m.ForTeachers);
+                i.AddSimpleFor(m => m.Title);
+                i.AddSimpleFor(m => m.Body);
+                i.AddButton()
+                    .HorizontalAlignment(HorizontalAlignment.Left)
+                    .ButtonOptions(b => b.Text("Register")
+                        .Type(ButtonType.Success)
+                        .UseSubmitBehavior(true)
+                    );
+            })
+            .FormData(Model))*@
+
+
+        <div id="dxMailForm"></div>
+    }
+}

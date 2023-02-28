@@ -1,0 +1,124 @@
+﻿@using DevExtreme.AspNet.Mvc.Builders
+@using WebDtt.Models
+@model IEnumerable<WebDtt.Models.StudentExam>
+
+@{
+    ViewBag.Title = "GetAllStudentExams";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/my-script/GetAllStudentExams.js"></script>
+<div id="alerts"></div>
+
+@{
+    var filterValue = new object[] {
+        new object[] { "CreateDate", FilterBuilderFieldFilterOperations.GreaterThan, "2022/09/01" },
+    };
+}
+
+
+@(Html.DevExtreme().DataGrid<StudentExam>()
+    .ID("dxStudentExamsGrid")
+    .DataSource(ds => ds.WebApi()
+        .Controller("StudentExams")
+        .LoadAction("Get")
+        .UpdateAction("Put")
+        .Key("StudentExamID"))
+    .ID("dxStudentExamsGrid")
+    .FilterPanel(fp=>fp.Visible(true))
+    .FilterValue(filterValue)
+    .Scrolling(scr=>scr.Mode(GridScrollingMode.Virtual).RowRenderingMode(GridRowRenderingMode.Virtual))
+    //.RemoteOperations(true)
+    .OnToolbarPreparing("OnToolbarPreparing")
+    .FilterRow(f => f.Visible(true))
+    .ShowBorders(true)
+    .ShowRowLines(true)
+    .SearchPanel(s => s.Visible(true))
+    .Sorting(s => s.Mode(GridSortingMode.Multiple))
+    .Selection(s => s.Mode(SelectionMode.Multiple).SelectAllMode(SelectAllMode.Page))
+    .HeaderFilter(hf => hf.Visible(true).AllowSearch(true))
+    .Summary(sum => sum
+        .TotalItems(ti =>
+            {
+                ti.AddFor(m => m.Exam.TestDateTime).SummaryType(SummaryType.Count);
+                ti.Add().Column("Оплачен").SummaryType(SummaryType.Sum);
+                ti.Add().Column("Готов к рассадке").SummaryType(SummaryType.Sum);
+                ti.Add().Column("Возврат средств").SummaryType(SummaryType.Sum);
+                ti.Add().Column("Доступен к прохождению").SummaryType(SummaryType.Sum);
+                ti.Add().Column("Тест закончен").SummaryType(SummaryType.Sum);
+                ti.Add().Column("Удален").SummaryType(SummaryType.Sum);
+            }))
+        .Paging(p => p.Enabled(false))
+        .Height(700)
+        .WordWrapEnabled(true)
+        .Editing(e => e
+            .Mode(GridEditMode.Cell)
+            .Form(f => f.Items(i =>
+            {
+                i.AddSimpleFor(m => m.PersonTestDateTime);
+            }))
+            .AllowUpdating(true)
+            .UseIcons(true))
+        .Columns(c =>
+        {
+            c.AddFor(m => m.StudentExamID).Visible(false).AllowEditing(false);
+
+        c.AddFor(m => m.PersonTestDateTime).DataType(GridColumnDataType.DateTime).Visible(false).Caption("Персональное время начала экзамена");
+
+        c.Add().DataField("Exam.TestDateTime").DataType(GridColumnDataType.Date).AllowEditing(false).Caption("Дата начала экзамена");
+
+        c.Add().DataField("Station.ExamStartupTime").Visible(false).AllowEditing(false).Caption("Время начала очного экзамена");
+
+        c.AddFor(m => m.FinishDateTime).Visible(false).AllowEditing(false).Caption("Время завершения экзамена");
+
+        c.Add().DataField("Exam.ExamType.ExamTypeName").AllowEditing(false).Caption("Форма экзамена");
+
+        c.Add().DataField("Exam.Subject.SubjectCode").AllowEditing(false).Visible(false).Caption("Код предмета");
+
+        c.Add().DataField("Exam.Subject.SubjectName").AllowEditing(false).Caption("Предмет");
+
+            c.Add().DataField("CreateDate").AllowEditing(false).Visible(false).Caption("Дата создания");
+
+        c.AddFor(m => m.PersonID).Lookup(l => l
+            .DataSource(d => d.WebApi().Controller("Orders").LoadAction("GetPersonLookup").Key("PersonID"))
+            .ValueExpr("PersonID").DisplayExpr("ViewShortFio")).AllowEditing(false).Caption("Участник");
+
+        //c.AddFor(m => m.Flags).Lookup(l => l.DataSource(new JS("studentExamFlags"))
+        //.DisplayExpr("name").ValueExpr("id")).Caption("Статус экзамена");
+
+        c.AddFor(m => m.OrderID).Lookup(l => l
+            .DataSource(d => d.WebApi().Controller("Orders").LoadAction("Get").Key("OrderID"))
+            .ValueExpr("OrderID").DisplayExpr("OrderNumber")).AllowEditing(false).Caption("Номер договора");
+
+        c.Add().DataField("StExOrderType").AllowEditing(false).Visible(false).Caption("Тип договора");
+
+        c.Add().DataField("OrderFlags").Lookup(l => l.DataSource(new JS("orderFlags")).DisplayExpr("name").ValueExpr("id"))
+            .AllowEditing(false).Visible(false).Caption("Статус договора");
+
+        c.Add().DataField("Station.StationExamCode").AllowEditing(false).Visible(false).Caption("Код ППЭ");
+
+        c.Add().DataField("Station.StationExamName").AllowEditing(false).Visible(false).Caption("ППЭ");
+
+        c.Add().DataField("Station.StationExamAddress").AllowEditing(false).Visible(false).Caption("Адрес");
+
+
+        c.Add().DataField("Оплачен").CalculateCellValue("function(e) {return ((e.OrderFlags&2) === 2);}");
+        c.Add().DataField("Готов к рассадке").CalculateCellValue("function(e) {return (e.Flags & 1) === 1;}").Visible(false);
+        c.Add().DataField("Возврат средств").CalculateCellValue("function(e) {return (e.Flags & 4) === 4;}").Visible(false);
+        c.Add().DataField("Доступен к прохождению").CalculateCellValue("function(e) {return (e.Flags & 2) === 2;}");
+        c.Add().DataField("Тест закончен").CalculateCellValue("function(e) {return (e.Flags & 16) === 16;}");
+        c.Add().DataField("Материалы отправлены на почту").CalculateCellValue("function(e) {return (e.Flags & 8) === 8;}");
+        c.Add().DataField("Результат доступен").CalculateCellValue("function(e) {return (e.Flags & 32) === 32;}");
+        c.Add().DataField("Ссылка на вебинар отправлена").CalculateCellValue("function(e) {return (e.Flags & 64) === 64;}");
+        c.Add().DataField("Удален").CalculateCellValue("function(e) {return (e.Flags & 128) === 128;}");
+        c.Add().DataField("CheckState").Lookup(l => l.DataSource(new JS("studentExamCheckState")).DisplayExpr("name").ValueExpr("id"))
+            .AllowEditing(false).Visible(false).Caption("Статус проверки части С");
+        c.Add().DataField("arrFlags").CalculateCellValue("displayFlags")
+            .AllowHeaderFiltering(true)
+            .FilterType(FilterType.Include)
+            .AllowSorting(true)
+            .AllowFiltering(true)
+            .AllowSearch(true);
+
+    }))
+

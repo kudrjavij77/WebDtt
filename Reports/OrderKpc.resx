@@ -1,0 +1,234 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="xrLabel4.Text" xml:space="preserve">
+    <value>Государственное бюджетное учреждение дополнительного профессионального образования «Санкт-Петербургский центр оценки качества образования и информационных технологий» (ГБУ ДПО «СПбЦОКОиИТ»), осуществляющее образовательную деятельность на основании лицензии от 01.03.2016г № 1749, выданной Комитетом по образованию, именуемое в дальнейшем «Исполнитель», в лице директора Розова Павла Сергеевича, действующего на основании Устава,</value>
+  </data>
+  <data name="xrLabel18.Text" xml:space="preserve">
+    <value>1.4. Обучение проводятся один раз в неделю по [Group.LessonDuration] академических часа. Форма обучения – [Group.EducationForm.Description]. В периоды перехода государственных общеобразовательных организаций Санкт-Петербурга на исключительно дистанционное обучение допускается организация обучения в рамках настоящего договора с применением дистанционных образовательных технологий.</value>
+  </data>
+  <data name="xrLabel13.Text" xml:space="preserve">
+    <value>4.1. Полная стоимость платных образовательных услуг за весь период обучения, с учетом определенного Сторонами порядка оплаты в [CountDonates] этап(а)  и сроками обучения, составляет [DonateType.FullTotal] ([DonateType.FullTotalString]) рублей 00 коп, НДС не облагается, является твердой и определена на весь срок исполнения Договора.
+Порядок оплаты:</value>
+  </data>
+  <data name="xrLabel11.Text" xml:space="preserve">
+    <value>3.1. Исполнитель обязан:
+3.1.1. Организовать и обеспечить надлежащее предоставление образовательных услуг, предусмотренных разделом I настоящего Договора. Образовательные услуги оказываются в соответствии с программой и расписанием занятий Исполнителя.
+3.1.2. Зачислить Обучающегося в группу № [Group.GroupName] после подписания Сторонами настоящего Договора и выполнения со стороны Заказчика условий, предусмотренных п.п.3.2.1 настоящего Договора.
+Максимальное количество обучающихся в одной группе - 15 (пятнадцать) человек, по информатике -12 (двенадцать) человек.
+3.1.3. Довести до Заказчика и Обучающегося информацию, содержащую сведения о предоставлении платных образовательных услуг в порядке и объеме, которые предусмотрены Законом Российской Федерации "О защите прав потребителей" и Федеральным законом "Об образовании в Российской Федерации".
+3.1.4. Обеспечить Обучающемуся предусмотренные выбранной образовательной программой условия ее освоения.
+3.1.5. Принимать от Заказчика плату за образовательные услуги.
+3.1.6. В случае если занятие не состоялось по вине Исполнителя, Исполнитель принимает на себя обязательство по проведению данного занятия в иное время, с обязательным уведомлением Заказчика о дате, времени и месте проведения указанного занятия.
+3.1.7. В случае пропуска занятий Обучающимся, Исполнитель по запросу Заказчика/Обучающегося предоставляет имеющиеся в наличии раздаточные материалы по пропущенной теме.
+3.2. Заказчик обязан:
+3.2.1. Своевременно вносить плату за предоставляемые Обучающемуся образовательные услуги, указанные в разделе 1 настоящего Договора, в размере и порядке, определенными настоящим Договором, а также предоставлять Исполнителю платежные документы, подтверждающие оплату.
+	Платежный документ (квитанция/платежное поручение) может быть предоставлен Заказчиком любым из нижеперечисленных способов:
+	● в личном кабинете Обучающегося на сайте https://dtt.ege.spb.ru
+	● по электронной почте: kurs@ege.spb.ru.
+В случае предоставления платежного документа по электронной почте Заказчик обязан убедиться в получении Исполнителем указанного платежного документа.
+3.3. Обучающийся обязан:
+3.3.1. Осваивать образовательную программу в соответствии с учебным планом.
+3.3.2. Посещать занятия согласно расписанию занятий.
+3.3.3. Соблюдать требования законов Российской Федерации и иных нормативных правовых актов в области образования, Устава, правила внутреннего распорядка обучающихся и иные локальные нормативные акты Исполнителя, касающиеся процесса обучения.</value>
+  </data>
+  <data name="xrLabel9.Text" xml:space="preserve">
+    <value>2.1. Исполнитель вправе:
+2.1.1. Самостоятельно осуществлять образовательный процесс.
+2.2. Заказчик/Обучающийся вправе:
+2.2.1. Получать у Исполнителя информацию по вопросам организации и обеспечения надлежащего предоставления услуг, предусмотренных разделом I настоящего Договора.
+2.2.2. Знакомиться со свидетельством о государственной регистрации, Уставом, лицензией на осуществление образовательной деятельности, с учебной документацией, другими документами, регламентирующими организацию и осуществление образовательной деятельности Исполнителем.
+2.2.3. Обращаться к Исполнителю по вопросам, касающимся образовательного процесса.</value>
+  </data>
+  <data name="xrLabel76.Text" xml:space="preserve">
+    <value>именуемому в дальнейшем «Обучающийся».
+Срок освоения Программы составляет [Group.Duration] академических часов. Заказчик обязуется
+оплатить указанную в настоящем пункте образовательную услугу в соответствии с условиями
+настоящего Договора.
+1.2. Место оказания услуг по настоящему Договору [Group.Station.StationAddress]</value>
+  </data>
+  <data name="xrLabel16.ExpressionBindings" xml:space="preserve">
+    <value>FormatString('Фамилия, имя, отчество (при наличии):
+{0} {1} {2}', [CreatorPerson.LastName],[CreatorPerson.FirstName],[CreatorPerson.Patronymic])+
+FormatString('
+Дата рождения: {0:d}', [CreatorPerson.BirthDate]) +
+FormatString('
+Адрес места жительства:
+{0}', [CreatorPerson.RegistrationAddress])+
+FormatString('
+Паспорт: {0} {1}, выдан {2}, {3:d}', [CreatorPerson.DocSeria], [CreatorPerson.DocNumber], [CreatorPerson.IssuedBy], [CreatorPerson.IssedDate])+
+FormatString('
+Телефон: ') + [CreatorPerson.Phones]+
+FormatString('
+Электронная почта: ')+[CreatorPerson.Email]</value>
+  </data>
+  <data name="xrLabel16.Text" xml:space="preserve">
+    <value>Фамилия, имя, отчество (при наличии):
+[CreatorPerson.LastName] [CreatorPerson.FirstName] [CreatorPerson.Patronymic]
+Дата рождения: [CreatorPerson.BirthDate.ToString("dd.MM.yyyy")]
+Адрес места жительства:
+[CreatorPerson.RegistrationAddress]
+Паспорт: [CreatorPerson.DocSeria] [CreatorPerson.DocNumber], выдан [CreatorPerson.IssuedBy], [CreatorPerson.IssuedDate.ToString("dd.MM.yyyy")]
+Телефон: [CreatorPerson.Phones]
+Электронная почта: [CreatorPerson.Email]</value>
+  </data>
+  <data name="xrLabel60.Text" xml:space="preserve">
+    <value>Государственное бюджетное учреждение дополнительного профессионального образования «Санкт-Петербургский центр оценки качества образования и информационных технологий»
+Местонахождения: 190068, Санкт-Петербург, Вознесенский проспект, д.34, литер Н
+Наименование получателя: 
+Комитет финансов СПб (ГБУ ДПО «СПбЦОКОиИТ», л/сч 0191102)
+Банковские реквизиты:
+Номер казн.счета 03224643400000007200 в Северо-
+Западное ГУ Банка России//УФК по г. Санкт-Петербургу, г. Санкт-Петербург
+БИК 014030106 
+ОГРН 1027806874083 
+ОКОПФ 72 
+ОКПО 56298141 
+ОКТМО 40302000
+КБК 000 000 000 000 000 02 130
+Кор.счет 40102810945370000005</value>
+  </data>
+  <data name="xrLabel52.Text" xml:space="preserve">
+    <value>8.1. Сведения, указанные в Договоре, соответствуют информации, размещенной на официальном сайте Исполнителя в сети "Интернет" на дату заключения настоящего Договора.
+8.2. При изменении реквизитов, указанных в разделе IX настоящего Договора, Стороны в течение 3 (трех) рабочих дней с даты таких изменений обязаны уведомить об этом друг друга в письменном виде.
+8.3. Настоящий Договор составлен в 2 (двух) экземплярах, имеющих одинаковую юридическую силу, по одному экземпляру для каждой из Сторон. Изменения и дополнения настоящего Договора могут производиться только в письменной форме и подписываться уполномоченными представителями Сторон.
+8.4. Стороны пришли к соглашению о том, что электронные документы, подписанные в рамках настоящего Договора, имеют силу оригинала.
+8.5. По вопросам, не предусмотренным Договором, Стороны руководствуются действующим законодательством Российской Федерации.</value>
+  </data>
+  <data name="xrLabel47.Text" xml:space="preserve">
+    <value>6.1. За неисполнение или ненадлежащее исполнение своих обязательств по Договору Стороны несут ответственность, предусмотренную законодательством Российской Федерации и настоящим Договором.
+6.2. Стороны освобождаются от ответственности за полное или частичное неисполнение своих обязательств по настоящему Договору в случае, если оно явилось следствием обстоятельств непреодолимой силы, которые возникли после заключения настоящего Договора и непосредственно повлияли на исполнение Сторонами своих обязательств, а также которые Стороны были не в состоянии предвидеть и предотвратить.</value>
+  </data>
+  <data name="xrLabel46.Text" xml:space="preserve">
+    <value>5.1. Условия, на которых заключен настоящий Договор, могут быть изменены по соглашению Сторон или в соответствии с законодательством Российской Федерации.
+5.2. Настоящий Договор может быть расторгнут по соглашению Сторон.
+5.3. Настоящий Договор может быть расторгнут по инициативе Исполнителя в одностороннем порядке в случаях:
+- неисполнения со стороны Заказчика/Обучающегося условий п. 4.1. настоящего Договора;
+- невозможности надлежащего исполнения обязательства по оказанию платных образовательных услуг вследствие действий (бездействия) Обучающегося;
+- в иных случаях, предусмотренных законодательством Российской Федерации.
+5.4. В случае расторжения Договора по основаниям, за которые ответственен Исполнитель, Исполнитель возвращает денежные средства Заказчику за неоказанную услугу (неоказанную часть услуги).
+5.5. В случае расторжения настоящего Договора по инициативе Заказчика, Исполнитель осуществляет возврат денежных средств Заказчику за неоказанную часть услуги. Расчет суммы, подлежащей возврату, производится с момента получения Исполнителем заявления Заказчика о расторжении Договора. Возврат денежных средств осуществляется на расчетный счет, указанный Заказчиком в заявлении о расторжении Договора и возврате денежных средств.</value>
+  </data>
+  <data name="xrLabel30.Text" xml:space="preserve">
+    <value>4.2. В случае, если Договор между Сторонами заключается после начала обучения по соответствующей программе, Исполнитель осуществляет перерасчет стоимости платных образовательных услуг, исходя из количества пропущенных занятий на момент заключения Договора.
+4.3. Оплата услуг производится Заказчиком в размере и порядке, установленном настоящим Договором, путем перечисления денежных средств на расчетный счет Исполнителя по реквизитам, указанным в разделе IX настоящего Договора, не позднее 5 (пять) календарных дней с даты подписания Договора обеими Сторонами. Датой подписания Договора считается дата регистрации на соответствующую образовательную программу в личном кабинете Обучающегося на сайте https://dtt.ege.spb.ru.
+4.4. Стоимость пропущенных по вине Обучающегося академических часов Заказчику не возвращается.
+4.5. В стоимость услуг включены все расходы по оказанию услуг, в том числе уплату налогов, сборов и иных обязательных платежей, уплачиваемых Исполнителем.</value>
+  </data>
+</root>

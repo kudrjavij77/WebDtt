@@ -1,0 +1,52 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using WebDtt.Models
+@model IEnumerable<WebDtt.Models.Station>
+@{
+    ViewBag.Title = "ППЭ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <h2>Пункты проведения экзаменов</h2>
+
+    @(Html.DevExtreme().DataGrid<Station>()
+        .ShowColumnHeaders(true)
+        .ShowRowLines(true)
+        .ColumnAutoWidth(false)
+        .DataSource(ds => ds.WebApi()
+            .RouteName("StationsApi")
+            .LoadAction("Get")
+            .InsertAction("Post")
+            .UpdateAction("Put")
+            .DeleteAction("Delete")
+            .Key("StationID")
+        )
+        .RemoteOperations(true)
+        .Columns(columns =>
+        {
+            columns.AddFor(m => m.StationCode).Caption("Код ППЭ");
+            columns.AddFor(m => m.Ksa).Caption("Район");
+            columns.AddFor(m => m.StationName).Caption("Краткое наименование");
+            columns.AddFor(m => m.FullName).Caption("Полное название");
+            columns.AddFor(m => m.StationAddress).Caption("Адрес");
+            columns.AddFor(m => m.Capacity).Caption("Вместимость");
+            columns.AddFor(m => m.CreateDate);
+            columns.AddFor(m => m.UpdateDate);
+        })
+        .Editing(e =>
+        {
+            e.AllowAdding(true);
+            e.AllowUpdating(true);
+            e.AllowDeleting(true);
+            e.Mode(GridEditMode.Form);
+            e.UseIcons(true);
+            e.Form(f => f.Items(i =>
+            {
+                i.AddSimpleFor(m => m.StationCode);
+                i.AddSimpleFor(m => m.Ksa);
+                i.AddSimpleFor(m => m.StationName).IsRequired(true);
+                i.AddSimpleFor(m => m.FullName);
+                i.AddSimpleFor(m => m.StationAddress).IsRequired(true);
+                i.AddSimpleFor(m => m.Capacity);
+            }));
+        })
+        )

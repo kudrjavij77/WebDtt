@@ -1,0 +1,42 @@
+﻿@using WebDtt.Models
+@model WebDtt.Models.MessageViewModel
+
+@using (Html.BeginForm("PostMessage", "Home", FormMethod.Post))
+{
+
+    using (Html.DevExtreme().ValidationGroup())
+    {
+
+        @Html.AntiForgeryToken()
+        @(Html.DevExtreme().Form<MessageViewModel>()
+            .ID("form")
+            .ShowValidationSummary(true)
+            .FormData(Model)
+            .LabelLocation(FormLabelLocation.Top)
+            .ShowColonAfterLabel(true)
+            .Items(i =>
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    i.AddSimpleFor(m => m.Email).Editor(e => e.TextBox().Value(@User.Identity.Name));
+                }
+                else
+                {
+                    i.AddSimpleFor(m => m.Email);
+                }
+                
+                i.AddSimpleFor(m => m.SubjectString)
+                    .Editor(e => e.TextBox().Placeholder("Кратко опишите тему"))
+                    .ValidationRules(r=>r.AddStringLength().Max(50));
+                i.AddSimpleFor(m => m.MessageString)
+                    .Editor(e=>e.TextArea().AutoResizeEnabled(true).Placeholder("Опишите подробно проблему"));
+                i.AddButton()
+                    .HorizontalAlignment(HorizontalAlignment.Right)
+                    .ButtonOptions(b => b.Text("Отправить")
+                        .Type(ButtonType.Default)
+                        .UseSubmitBehavior(true));
+
+            })
+            )
+    }
+}

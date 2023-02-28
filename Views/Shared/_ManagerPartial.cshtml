@@ -1,0 +1,71 @@
+﻿
+@using Microsoft.AspNet.Identity
+@if (User.IsInRole("manager"))
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { @class = "navbar-left" }))
+    {
+        @Html.AntiForgeryToken()
+
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown ">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                ДТТ
+            </a>
+            <div class="dropdown-menu">
+                @Html.ActionLink("Договоры", "AllOrders", "Order", null, new { @class = "dropdown-item" })
+                @Html.ActionLink("Экзамены участников", "GetAllStudentExams", "StudentExam", null, new { @class = "dropdown-item" })
+                <div class="dropdown-divider"></div>
+                @Html.ActionLink("Эксперты", "Experts", "Person", null, new { @class = "dropdown-item" })
+                @Html.ActionLink("Статистика экспертизы", "AllStats", "CheckStudentExam", null, new { @class = "dropdown-item" })
+                @Html.ActionLink("Статистика по баллам", "StatByQuestion", "CheckStudentExam", null, new { @class = "dropdown-item" })
+            </div>
+        </li>
+        <li class="nav-item dropdown ">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Курсы
+            </a>
+            <div class="dropdown-menu">
+                <div class="dropdown-divider"></div>
+                @Html.ActionLink("Договоры", "AllOrdersKpc", "Order", null, new { @class = "dropdown-item" })
+                @Html.ActionLink("Журналы", "JournalView", "Journal", null, new { @class = "dropdown-item" })
+                @Html.ActionLink("Спам-рассылка ):", "EmailForm", "EmailSender", null, new { @class = "dropdown-item" })
+                @Html.ActionLink("Группы", "AllGroups", "Group", null, new { @class = "dropdown-item" })
+                @Html.ActionLink("Преподаватели", "Teachers", "Person", null, new { @class = "dropdown-item" })
+                @Html.ActionLink("Программы обучения", "AllCourses", "Curriculum", null, new { @class = "dropdown-item" })
+                <div class="dropdown-divider"></div>
+                @Html.ActionLink("Этапы оплаты", "Index", "DonateInfo", null, new { @class = "dropdown-item" })
+                @Html.ActionLink("Типы оплаты", "Index", "DonateType", null, new { @class = "dropdown-item" })
+            </div>
+        </li>
+        <li class="nav-item dropdown ">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Общее
+            </a>
+            <div class="dropdown-menu">
+                @Html.ActionLink("Обращения в техподдержку", "AllMessage", "Message", null, new { @class = "dropdown-item" })
+                @Html.ActionLink("Опросы", "Ankets", "AnyTest", null, new { @class = "dropdown-item" })
+            </div>
+        </li>
+        <li class="nav-item dropdown ">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Справочники
+            </a>
+            <div class="dropdown-menu">
+                @Html.ActionLink("Предметы", "Index", "Subject", null, new { @class = "dropdown-item" })
+                @Html.ActionLink("ППЭ", "Index", "Station", null, new { @class = "dropdown-item" })
+                <div class="dropdown-divider"></div>
+                @Html.ActionLink("Экзамены", "Index", "Exam", null, new { @class = "dropdown-item" })
+                @Html.ActionLink("Назначение ППЭ на экзамены", "Index", "StationExam", null, new { @class = "dropdown-item" })
+                @Html.ActionLink("Менеджер вариантов КИМ", "ExamKimManager", "ExamKim", null, new { @class = "dropdown-item" })
+                <div class="dropdown-divider"></div>
+                @Html.ActionLink("Дополнительные материалы", "ExamAddons", "ExamAddon", null, new { @class = "dropdown-item" })
+            </div>
+        </li>
+    </ul>
+    }
+}
+else
+{
+
+}
+

@@ -1,0 +1,258 @@
+﻿@using WebDtt.Models
+@using WebDtt.Models.Dto
+@model WebDtt.Models.Order
+
+@{
+    ViewBag.Title = "NewUserOrderKpc";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/my-script/NewUserOrderKpc.js"></script>
+
+<div style="color: red">@ViewBag.ErrorMessage</div>
+
+@(Html.DevExtreme().Popup()
+    .ID("popup")
+    .Width("90%")
+    .Height("80%")
+    .Visible(false)
+    .ShowTitle(false)
+    .DragEnabled(false)
+    .CloseOnOutsideClick(true)
+    .CloseOnBackButton(true)
+    .ShowCloseButton(true)
+    .ShowTitle(true)
+    .ContentTemplate(new TemplateName("popup-template"))
+)
+
+@using (Html.DevExtreme().NamedTemplate("popup-template"))
+{
+    @(Html.DevExtreme().ScrollView()
+        .Width("100%")
+        .Height("100%")
+        .Content(@<text>@Html.Partial("Templates/_PoliticConfirmed")</text>)
+    )
+}
+
+@(Html.DevExtreme().Popup()
+    .ID("popupRem")
+    .Width("90%")
+    .Height("80%")
+    .Visible(false)
+    .ShowTitle(false)
+    .DragEnabled(false)
+    .CloseOnOutsideClick(true)
+    .CloseOnBackButton(true)
+    .ShowCloseButton(true)
+    .ShowTitle(true)
+    .ContentTemplate(new TemplateName("popup-template-Rem"))
+    )
+
+@using (Html.DevExtreme().NamedTemplate("popup-template-Rem"))
+{
+    @(Html.DevExtreme().ScrollView()
+        .Width("100%")
+        .Height("100%")
+        .Content(@<text>@Html.Partial("Templates/_DonateTypeInfo")</text>)
+        )
+}
+
+<h2>Новый договор на курсы по подготовке к сдаче экзаменов</h2>
+<hr>
+<p style="font-size: 9pt">*заполняя форму, выбор группы оставьте напоследок. Сначала заполните все остальные поля</p>
+
+<div class="form-container">
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+        using (Html.DevExtreme().ValidationGroup())
+        {
+            @Html.AntiForgeryToken()
+            @(Html.DevExtreme().Form<Order>()
+                .ID("orderKpcForm")
+                .ShowValidationSummary(true)
+                .Items(items =>
+                {
+                    items.AddSimpleFor(m => m.StudentPersonID).IsRequired(true)
+                        .Label(l => l.Location(FormLabelLocation.Top).Text("Слушатель курсов"))
+                        .Editor(e => e.DropDownBox()
+                            .ID("dx_StudentBox")
+                            .OnValueChanged("onChangedStudent")
+                            .DataSourceOptions(dso => dso.Filter("[ 'PersonTypeID', '=', '1' ]"))
+                            .DataSource(ds => ds.WebApi()
+                                .Controller("Persons").LoadAction("Get").InsertAction("Post").Key("PersonID"))
+                            .DisplayExpr("ViewShortFio")
+                            .ValueExpr("PersonID")
+                            .ContentTemplate(new TemplateName("dxDataGridStudents")));
+
+                    items.AddSimpleFor(m => m.CreatorPersonID).IsRequired(true)
+                        .Label(l => l.Location(FormLabelLocation.Top).Text("Законный представитель"))
+                        .Editor(e => e.DropDownBox().ID("dx_CreatorBox")
+                            .OnValueChanged("onChangedDelegate")
+                            .DataSourceOptions(dso => dso.Filter("[ 'PersonTypeID', '=', '3' ]"))
+                            .DataSource(ds => ds.WebApi()
+                                .Controller("Persons").LoadAction("Get")
+                                .InsertAction("Post").Key("PersonID"))
+                            .DisplayExpr("ViewShortFio")
+                            .ValueExpr("PersonID")
+                            .ContentTemplate(new TemplateName("dxDataGridDelegates")));
+
+                    items.AddSimpleFor(m => m.EducationFormID).IsRequired(true)
+                        .Label(l => l.Location(FormLabelLocation.Top).Text("Форма обучения"))
+                        .Editor(e => e.Lookup().ID("dx_EducationFormBox")
+                            .OnValueChanged("onChangedEducationForm")
+                            .DataSource(ds => ds.WebApi().Controller("Lookups").LoadAction("EducationFormLookup").Key("EducationFormID"))
+                            .DisplayExpr("EducationFormName").ValueExpr("EducationFormID"));
+
+                    items.AddSimpleFor(m => m.SubjectID).IsRequired(true)
+                        .Label(l => l.Location(FormLabelLocation.Top).Text("Предмет"))
+                        .Editor(e => e.Lookup().ID("dx_SubjectsBox")
+                            .OnValueChanged("onChangedSubjects")
+                            .DataSourceOptions(dso => dso.Filter("[ 'SubjectCode', '<', '29' ]"))
+                            .DataSource(ds => ds.WebApi().Controller("Lookups").LoadAction("SubjectsLookup").Key("SubjectID"))
+                            .DisplayExpr("SubjectName")
+                            .ValueExpr("SubjectID"));
+
+                    items.AddSimpleFor(m => m.GroupID).IsRequired(true)
+                        .Label(l => l.Location(FormLabelLocation.Top).Text("Группа"))
+                        .Editor(e => e.DropDownBox().ID("dx_GroupBox")
+                            .OnValueChanged("onChangedGroup")
+                            //.OnInitialized("generatedFilters")
+                            //.OnOpened("groupsGridDisplayValues")
+                            .DataSource(ds => ds.WebApi().Controller("Lookups").LoadAction("GroupsLookup").Key("GroupID"))
+                            .DataSourceOptions(dso=>dso.Filter("[ 'FreePlaces', '>', '0' ]"))
+                            .DisplayExpr("GroupName")
+                            .ValueExpr("GroupID")
+                            .ContentTemplate(new TemplateName("dxDataGridGroups")));
+
+                    items.AddSimpleFor(m => m.MomBank)
+                        .Editor(e => e.Switch().ID("switchMom")
+                            .OnValueChanged("switchMomValueChanged")
+                            .SwitchedOnText("да")
+                            .SwitchedOffText("нет"))
+                        .Label(l => l.Text("Оплатить материнским капиталом").Location(FormLabelLocation.Top));
+
+                    items.AddSimpleFor(m => m.DonateTypeID).IsRequired(true)
+                        .Label(l => l.Location(FormLabelLocation.Top).Text("Варианты оплаты"))
+                        .Editor(e => e.Lookup().ID("dx_DonateTypesBox")
+                            //.OnValueChanged("onChangedDonateType")
+                            //.DataSource(new JS("getDonateTypes"))
+                            //.DataSource(ds=>ds.WebApi().Controller("Lookups").LoadAction("DonateTypesLookup").Key("DonateTypeID"))
+                            .DisplayExpr("ViewName").ValueExpr("DonateTypeID"));
+
+                    items.AddButton().ButtonOptions(bo => bo
+                        .ElementAttr("class", "button-info")
+                        .Type(ButtonType.Default)
+                        .StylingMode(ButtonStylingMode.Outlined)
+                        .Text("При выборе способа оплаты просим вас обратить внимание")
+                        .OnClick(@<text>
+                                    function showInfo(data) {
+                                    var popup = $("#popupRem").dxPopup("instance");
+                                    popup.show();
+                                    }
+                        </text>));
+
+   items.AddButton().HorizontalAlignment(HorizontalAlignment.Left)
+       .ButtonOptions(b => b.Text("Сформировать договор")
+           .Type(ButtonType.Success)
+           .UseSubmitBehavior(true));
+
+
+})
+.FormData(Model)
+.ShowColonAfterLabel(true)
+            )
+
+        }
+    }
+
+</div>
+
+
+@using (Html.DevExtreme().NamedTemplate("dxDataGridStudents"))
+{
+    @(Html.DevExtreme().ScrollView()
+        .Content(@<text>@Html.Partial("Templates/_UserStudentsGrid")</text>))
+}
+
+@using (Html.DevExtreme().NamedTemplate("dxDataGridDelegates"))
+{
+    @(Html.DevExtreme().ScrollView()
+        .Content(@<text>@Html.Partial("Templates/_UserDelegatesGrid")</text>))
+}
+
+@using (Html.DevExtreme().NamedTemplate("dxDataGridGroups"))
+{
+    @(Html.DevExtreme().ScrollView()
+        .Content(@<text>@Html.Partial("Templates/_UserGroupsGrid")</text>))
+}
+
+
+@(Html.DevExtreme().Popover()
+    .Target("#dx_StudentBox")
+    .ShowEvent("mouseenter")
+    .HideEvent("mouseleave")
+    .Position(Position.Top)
+    .Width(300)
+    .ContentTemplate(@<text>
+            Это вы, если сдаете экзамен сами, или ваш ребенок, если регистриуете его для прохождения тестирования.
+    </text>))
+
+@(Html.DevExtreme().Popover()
+    .Target("#dx_CreatorBox")
+    .ShowEvent("mouseenter")
+    .HideEvent("mouseleave")
+    .Position(Position.Top)
+    .Width(300)
+    .ContentTemplate(@<text>
+            Это человек, выступающий заказчиком в договоре. Должен быть совершеннолетним.
+    </text>))
+
+@(Html.DevExtreme().Popover()
+    .Target("#dx_EducationFormBox")
+    .ShowEvent("mouseenter")
+    .HideEvent("mouseleave")
+    .Position(Position.Top)
+    .Width(300)
+    .ContentTemplate(@<text>
+            <p>Необходимо выбрать форму прохождения обучения</p>
+            <p><span style="color: firebrick">* Очная</span> - занятия проводятся очно в здании ГБУ ДПО "СПб ЦОКОиИТ", согласно расписанию.</p>
+            <p>
+                <span style="color: firebrick">* Дистанционная</span> - занятия проводятся дистанционно (на дому). Средства связи для проведения занятий устанавливает преподаватель.
+            </p>
+
+    </text>))
+
+@(Html.DevExtreme().Popover()
+    .Target("#dx_SubjectsBox")
+    .ShowEvent("mouseenter")
+    .HideEvent("mouseleave")
+    .Position(Position.Top)
+    .Width(300)
+    .ContentTemplate(@<text>
+            Выберите предмет, по которому хотите пройти курс по подготовке к сдаче экзамена.
+    </text>))
+
+@(Html.DevExtreme().Popover()
+    .Target("#dx_GroupBox")
+    .ShowEvent("mouseenter")
+    .HideEvent("mouseleave")
+    .Position(Position.Top)
+    .Width(300)
+    .ContentTemplate(@<text>
+            Выберите группу, в которой хотели бы заниматься.
+            Обратите внимание, группы отфильтрованы согласно
+            выбранным параметрам (класс слушателя, форма обучения, предмет).
+    </text>))
+
+@(Html.DevExtreme().Popover()
+    .Target("#dx_DonateTypesBox")
+    .ShowEvent("mouseenter")
+    .HideEvent("mouseleave")
+    .Position(Position.Top)
+    .Width(300)
+    .ContentTemplate(@<text>
+            Выберите способ оплаты обучения. В списке указаны варианты,
+            доступные для выбранной группы, в формате: "полная стоимость
+            (количество этапов оплаты, на которое можно разбить внесение полной стоимости)".
+    </text>))

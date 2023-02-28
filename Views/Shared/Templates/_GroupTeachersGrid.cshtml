@@ -1,0 +1,87 @@
+﻿@using WebDtt.Models.Dto
+
+
+<div>
+    @(Html.DevExtreme().Button()
+        .Type(ButtonType.Default)
+        .StylingMode(ButtonStylingMode.Outlined)
+        .Icon("plus")
+        .Text("Добавить нового преподавателя")
+        .OnClick("function() {$('#gridTeachers').dxDataGrid('instance').addRow();"))
+</div>
+
+@(Html.DevExtreme()
+    .DataGrid<TeacherViewModel>()
+    .ID("gridTeachers")
+    .DataSource(new JS(@"component.getDataSource()"))
+    .Columns(c=>
+    {
+        c.AddFor(m => m.ViewFio).Caption("ФИО");
+        c.AddFor(m => m.PersonTypeID).Lookup(l => l
+            .DataSource(d => d.WebApi().Controller("Persons").LoadAction("PersonTypesLookup").Key("PersonTypeID"))
+            .DisplayExpr("PersonTypeDescription").ValueExpr("PersonTypeID")).Caption("Тип персоны");
+        c.AddFor(m => m.ParticipantClass).Lookup(l => l.DataSource(new JS("classArrayLookup"))
+            .DisplayExpr("name").ValueExpr("id"));
+        c.AddFor(m => m.Flags).Lookup(l => l.DataSource(new JS("personFlags"))
+            .DisplayExpr("name").ValueExpr("id"));
+        c.AddFor(m => m.LastName).Visible(false);
+        c.AddFor(m => m.FirstName).Visible(false);
+        c.AddFor(m => m.Patronymic).Visible(false);
+        c.AddFor(m => m.Sex).Lookup(l => l.DataSource(new JS("sexArrayLookup"))
+            .DisplayExpr("name").ValueExpr("id"));
+        c.AddFor(m => m.BirthDate).Visible(false);
+        c.AddFor(m => m.DocSeria).Visible(false);
+        c.AddFor(m => m.DocNumber).Visible(false);
+        c.AddFor(m => m.IssuedBy).Visible(false);
+        c.AddFor(m => m.IssedDate).Visible(false);
+        c.AddFor(m => m.RegistrationAddress).Visible(false);
+        c.AddFor(m => m.Phones);
+        c.AddFor(m => m.Email);
+        c.AddFor(m => m.Subjects).CellTemplate(new JS("subjectDisplayExpr"));
+    })
+    .Selection(s => s.Mode(SelectionMode.Multiple))
+        .SelectedRowKeys(new JS("component.option('value')"))
+        .OnSelectionChanged(@<text>
+                                function(selectedItems) {
+                                var keys = selectedItems.selectedRowKeys;
+                                component.option("value", keys);
+                                }
+                             </text>)
+    .Editing(editing =>
+    {
+        editing.UseIcons(true);
+        editing.AllowAdding(false);
+        editing.Mode(GridEditMode.Popup);
+        editing.Form(f =>
+        {
+            f.ShowValidationSummary(true);
+            f.LabelLocation(FormLabelLocation.Top);
+            f.Items(i =>
+            {
+                i.AddSimpleFor(m => m.LastName);
+                i.AddSimpleFor(m => m.FirstName);
+                i.AddSimpleFor(m => m.Patronymic);
+                i.AddSimpleFor(m => m.Sex);
+                i.AddSimpleFor(m => m.BirthDate);
+                i.AddSimpleFor(m => m.ParticipantClass);
+                i.AddSimpleFor(m => m.DocSeria);
+                i.AddSimpleFor(m => m.DocNumber);
+                i.AddSimpleFor(m => m.IssuedBy);
+                i.AddSimpleFor(m => m.IssedDate);
+                i.AddSimpleFor(m => m.RegistrationAddress);
+                i.AddSimpleFor(m => m.Phones).Editor(editor => editor.TextBox()
+                    .Mask("+7 (X00) 000-0000").MaskRules(new {X = new JS("/[02-9]/")})
+                    .MaskInvalidMessage("Номер телефона должен соответствовать формату").UseMaskedValue(true));
+                i.AddSimpleFor(m => m.Email);
+                i.AddSimpleFor(m => m.Subjects)
+                    //.Name("ExpertSubjects")
+                    .Editor(editor => editor.TagBox()
+                        .DataSource(d => d.WebApi().RouteName("SubjectsApi").LoadAction("Get").Key("SubjectID"))
+                        .DisplayExpr("SubjectViewName")
+                        .ApplyValueMode(EditorApplyValueMode.Instantly).ShowClearButton(true).ShowDropDownButton(true));
+
+            });
+        });
+    })
+
+    )

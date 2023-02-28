@@ -1,0 +1,55 @@
+﻿@{
+    ViewData["Title"] = "CheckedStudentExams";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Проверенные работы</h2>
+
+<script src="~/Scripts/my-script/CheckedStudentExams.js"></script>
+
+@(Html.DevExtreme().DataGrid<WebDtt.Models.StudentExam>()
+    .DataSource(ds => ds.WebApi()
+        .Controller("CheckStudentExams")
+        .LoadAction("GetStudentExamsAlreadyChecked")
+        .Key("StudentExamID")
+    )
+    .AllowColumnResizing(true)
+    .ColumnAutoWidth(true)
+    .RemoteOperations(true)
+    .FilterRow(f => f.Visible(true))
+    .ShowBorders(true)
+    .ShowRowLines(true)
+    .Sorting(s => s.Mode(GridSortingMode.Multiple))
+    .Height(800)
+    .Paging(p=>p.Enabled(false))
+    .Columns(columns =>
+    {
+
+        columns.AddFor(m => m.StudentExamID).Caption("Номер работы");
+
+        columns.AddFor(m => m.PersonID)
+            .Lookup(l => l
+                .DataSource(d => d.WebApi().Controller("Orders").LoadAction("GetPersonLookup").Key("PersonID"))
+                .ValueExpr("PersonID").DisplayExpr("ViewShortFio")).AllowEditing(false).Caption("Участник");
+
+        columns.AddFor(m => m.ExamID).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("CheckStudentExams").LoadAction("GetExpertExams").Key("ExamID"))
+            .ValueExpr("ExamID").DisplayExpr("ExamViewSubjectTypeClassDate")).Caption("Экзамен");
+
+        columns.AddFor(m => m.ExpertID).Lookup(l => l
+            .DataSource(d => d.WebApi().Controller("Persons").LoadAction("GetExperts").Key("ExpertID"))
+            .ValueExpr("PersonID").DisplayExpr("ViewShortFio")).AllowEditing(false).Caption("Эксперт");
+
+        columns.AddFor(m => m.CheckState)
+            .Lookup(l => l.DataSource(new JS("studentExamCheckState"))
+                .DisplayExpr("name").ValueExpr("id")).Caption("Статус проверки части С");
+
+        columns.AddFor(m => m.ElectronicKIMID).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("CheckStudentExams").LoadAction("ElectronicKimLookup").Key("ObjectID"))
+            .ValueExpr("ObjectID").DisplayExpr("Name")).Caption("Вариант КИМ");
+
+        columns.Add().Type(GridCommandColumnType.Buttons).Buttons(b => b.Add()
+            .Visible(true).Hint("Открыть результаты проверки").Text("Открыть").OnClick("openTestResult")).Caption("Открыть результат");
+
+    })
+)

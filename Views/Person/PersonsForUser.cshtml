@@ -1,0 +1,147 @@
+﻿
+@{
+    ViewBag.Title = "Участники";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using DevExtreme.AspNet.Mvc
+@using WebDtt.Models
+@using WebDtt.Models.Dto
+@model IEnumerable<WebDtt.Models.Dto.StudentViewModel>
+@{
+    ViewData["Title"] = "Участники";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string isUser = Request.IsAuthenticated && User.IsInRole("user") ? "true" : "false";
+    string isOperator = Request.IsAuthenticated && User.IsInRole("operator") ? "true" : "false";
+   
+}
+<script src="~/Scripts/my-script/DataArrays.js"></script>
+
+@(Html.DevExtreme().Popup()
+    .ID("popup")
+    .Width("90%")
+    .Height("80%")
+    .Visible(false)
+    .ShowTitle(false)
+    .DragEnabled(false)
+    .CloseOnOutsideClick(true)
+    .ContentTemplate(new TemplateName("popup-template"))
+)
+
+@using (Html.DevExtreme().NamedTemplate("popup-template"))
+{
+    @(Html.DevExtreme().ScrollView()
+        .Width("100%")
+        .Height("100%")
+        .Content(@<text>@Html.Partial("Templates/_PoliticConfirmed")</text>)
+    )
+}
+
+<h2>Участники</h2>
+
+@(Html.DevExtreme().DataGrid<StudentViewModel>
+    ()
+    .ID("dxDataGrid")
+    .DataSource(ds => ds.WebApi()
+    .Controller("Persons")
+    .LoadAction("Get")
+    .InsertAction("Post")
+        .Key("PersonID"))
+    .WordWrapEnabled(true)
+    .ShowBorders(false)
+    .ShowRowLines(false)
+    .ShowColumnLines(false)
+    .Editing(e =>
+    {
+        e.UseIcons(false);
+        e.AllowAdding(true);
+        e.Mode(GridEditMode.Popup);
+        e.Form(f =>
+        {
+            f.ColCount(Mode.Auto);
+            f.ID("editForm");
+            f.MinColWidth(250);
+            f.ColCount(1);
+            f.FormData(Model);
+            f.Items(i =>
+            {
+                i.AddSimpleFor(m => m.LastName);
+                i.AddSimpleFor(m => m.FirstName);
+                i.AddSimpleFor(m => m.Patronymic);
+                i.AddSimpleFor(m => m.BirthDate);
+                i.AddSimpleFor(m => m.Sex);
+                i.AddSimpleFor(m => m.PersonTypeID);
+                i.AddSimpleFor(m => m.ParticipantClass);
+                i.AddSimpleFor(m => m.DocSeria);
+                i.AddSimpleFor(m => m.DocNumber);
+                i.AddSimpleFor(m => m.IssuedBy)
+                    .Editor(editor => editor.TextArea().AutoResizeEnabled(true));
+                i.AddSimpleFor(m => m.IssedDate);
+                i.AddSimpleFor(m => m.RegistrationAddress)
+                    .Editor(editor => editor.TextArea().AutoResizeEnabled(true));
+                i.AddSimpleFor(m => m.Phones)
+                    .Editor(editor => editor.TextBox()
+                        .Mask("+7 (X00) 000-0000")
+                        .MaskRules(new {X = new JS("/[02-9]/")})
+                        .UseMaskedValue(true));
+                i.AddSimpleFor(m => m.Email)
+                    .Editor(editor => editor.TextBox());
+                i.AddSimpleFor(m => m.ConfirmedData)
+                    .Editor(editor => editor.CheckBox().Value(null)
+                        .Text("Пользователь подтверждает правильность введенных персональных данных"));
+                i.AddSimpleFor(m => m.ConfirmedPolicy)
+                    .Editor(editor => editor.CheckBox().Value(null)
+                        .Text("Пользователь выражает свое согласие с Политикой обработки персональных данных"));
+                i.AddButton().ButtonOptions(bo => bo
+                    .ElementAttr("class", "button-info")
+                    .Type(ButtonType.Default)
+                    .StylingMode(ButtonStylingMode.Outlined)
+                    .Text("Политика обработки персональных данных")
+                    .OnClick(@<text>
+                                 function showInfo(data) {
+                                 var popup = $("#popup").dxPopup("instance");
+                                 popup.show();
+                                 }
+                              </text>));
+
+            });
+
+        });
+    })
+.Columns(col =>
+{
+    col.AddFor(m => m.ViewFio).MinWidth(100).Caption("ФИО участника");
+    col.AddFor(m => m.LastName).Visible(false);
+    col.AddFor(m => m.FirstName).Visible(false);
+    col.AddFor(m => m.Patronymic).Visible(false);
+    col.AddFor(m => m.ParticipantClass).HidingPriority(11)
+        .Alignment(HorizontalAlignment.Center).Caption("Класс")
+        .Lookup(l => l.DataSource(new JS("classArrayLookup"))
+            .DisplayExpr("name").ValueExpr("id"));
+    col.AddFor(m => m.Sex).HidingPriority(7).Caption("Пол")
+        .Lookup(l => l.DataSource(new JS("sexArrayLookup"))
+            .DisplayExpr("name").ValueExpr("id"));
+    col.AddFor(m => m.BirthDate).HidingPriority(8)
+        .Alignment(HorizontalAlignment.Center).Caption("Дата рождения");
+    col.AddFor(m => m.DocSeria).HidingPriority(6)
+        .Alignment(HorizontalAlignment.Center).Caption("Серия документа");
+    col.AddFor(m => m.DocNumber).HidingPriority(5)
+        .Alignment(HorizontalAlignment.Center).Caption("Номер документа");
+    col.AddFor(m => m.IssuedBy).HidingPriority(2).Caption("Кем выдан");
+    col.AddFor(m => m.IssedDate).HidingPriority(1)
+        .Alignment(HorizontalAlignment.Center).Caption("Дата выдачи");
+    col.AddFor(m => m.RegistrationAddress)
+        .HidingPriority(0).Caption("Адрес регистрации");
+    col.AddFor(m => m.Phones).HidingPriority(4).Caption("Телефон");
+    col.AddFor(m => m.Email).HidingPriority(9).Caption("Email");
+    col.AddFor(m => m.PersonTypeID).Lookup(l => l.DataSource(ds => ds.WebApi()
+        .Controller("Persons").LoadAction("PersonTypesLookup").Key("Value"))
+        .ValueExpr("PersonTypeID").DisplayExpr("PersonTypeDescription"))
+        .HidingPriority(10).Caption("Тип персоны");
+    col.AddFor(m => m.Person1.ViewFio)
+        .HidingPriority(3).Caption("ФИО законного представителя");
+    col.AddFor(m => m.Flags).Visible(false);
+    col.AddFor(m => m.ConfirmedData).Visible(false);
+    col.AddFor(m => m.ConfirmedPolicy).Visible(false);
+}))
+

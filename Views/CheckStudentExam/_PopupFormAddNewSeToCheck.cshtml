@@ -1,0 +1,46 @@
+﻿@using WebDtt.Models
+@model WebDtt.Models.AddSeToCheckViewModel
+    
+<div style="color: red"><h4>@ViewBag.Message</h4></div>
+<br>
+
+@using (Html.BeginForm("_PopupFormAddNewSeToCheck", "CheckStudentExam", FormMethod.Post))
+{
+    using (Html.DevExtreme().ValidationGroup())
+    {
+        @Html.AntiForgeryToken()
+        @(Html.DevExtreme().Form<AddSeToCheckViewModel>()
+            .ShowValidationSummary(true)
+            .FormData(Model)
+            .LabelLocation(FormLabelLocation.Top)
+            .ShowColonAfterLabel(true)
+            .Items(i =>
+            {
+                i.AddSimpleFor(m => m.ExamID)
+                    .Editor(e => e.SelectBox()
+                        .DataSource(ds=>ds.WebApi()
+                            .Controller("CheckStudentExams").LoadAction("GetExpertExams").Key("ExamID"))
+                        .DisplayExpr("ExamViewSubjectTypeClassDate").ValueExpr("ExamID"));
+
+                i.AddSimpleFor(m => m.CountStudentExams)
+                    .Editor(e=>e.NumberBox()
+                        .Min(1).Max(10).Mode(NumberBoxMode.Number)
+                        .ShowSpinButtons(true).Step(1).Value(1));
+
+                i.AddGroup().ColCount(2).Items(ig =>
+                {
+                    ig.AddButton().ButtonOptions(bo => bo.OnClick("goToExpertWorkView")
+                        .Text("Вернуться к списку работ").Icon("undo")
+                        .Type(ButtonType.Default).StylingMode(ButtonStylingMode.Outlined)
+                        .OnClick("function(){ window.location.href='/CheckStudentExam/ExpertWorkView/';}"))
+                        .HorizontalAlignment(HorizontalAlignment.Left);
+
+                    ig.AddButton().ButtonOptions(bo => bo
+                        .Text("Выдать").Icon("check").UseSubmitBehavior(true).Type(ButtonType.Success));
+                });
+                
+            })
+            
+            )
+    }
+}

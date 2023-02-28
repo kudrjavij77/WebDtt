@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "ExamAddons";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Дополнительные материалы к экзаменам</h2>
+
+@(Html.DevExtreme().DataGrid<WebDtt.Models.ExamAddon>()
+    .DataSource(ds => ds.WebApi()
+        .RouteName("ExamAddonsApi")
+        .LoadAction("Get")
+        .InsertAction("Post")
+        .UpdateAction("Put")
+        .DeleteAction("Delete")
+        .Key("ExamAddonID")
+    )
+    .RemoteOperations(true)
+    .WordWrapEnabled(true)
+    .Columns(columns =>
+    {
+
+        columns.AddFor(m => m.ExamID).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().RouteName("ExamAddonsApi").LoadAction("ExamsLookup").Key("ExamID"))
+            .ValueExpr("ExamID")
+            .DisplayExpr("ExamViewSubjectTypeClassDate")
+            ).Caption("Экзамен");
+        columns.AddFor(m => m.AddonShortName).Caption("Краткое наименование");
+        columns.AddFor(m => m.AddonDescription).Caption("Описание");
+        columns.AddFor(m => m.LinkAddress).Caption("Ссылка");
+        columns.AddFor(m => m.StartDate).Caption("Дата начала");
+        columns.AddFor(m => m.StartTime).Caption("Время начала");
+        columns.AddFor(m => m.Flags).Lookup(l => l
+            .DataSource(new JS("examAddonFlags"))
+            .DisplayExpr("name")
+            .ValueExpr("id")).Caption("Флаг");
+    })
+    .Editing(e => e
+        .UseIcons(true)
+        .AllowAdding(true)
+        .AllowUpdating(true)
+        .AllowDeleting(true)
+        .Mode(GridEditMode.Popup)
+        .Form(f=>f
+            .ColCount(1)
+            .Items(i =>
+            {
+                i.AddSimpleFor(m => m.ExamID).IsRequired(true);
+                i.AddSimpleFor(m => m.AddonShortName).Editor(ed=>ed.TextBox().MaxLength(150)).IsRequired(true);
+                i.AddSimpleFor(m => m.AddonDescription).Editor(ed => ed.TextArea().AutoResizeEnabled(true));
+                i.AddSimpleFor(m => m.LinkAddress).IsRequired(true);
+                i.AddSimpleFor(m => m.StartDate).IsRequired(true);
+                i.AddSimpleFor(m => m.StartTime).Editor(ed => ed.DateBox()
+                    .Type(DateBoxType.Time).StylingMode(EditorStylingMode.Filled).PickerType(DateBoxPickerType.Rollers)).IsRequired(true);
+                i.AddSimpleFor(m => m.Flags).IsRequired(true);
+            }))
+    ))

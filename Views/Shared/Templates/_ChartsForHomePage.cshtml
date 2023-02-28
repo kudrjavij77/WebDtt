@@ -1,0 +1,23 @@
+﻿@using WebDtt.Models
+@(Html.DevExtreme().Chart()
+    .ID("StudentExamChart")
+    .ScrollBar(sb=>sb.Visible(true))
+    .AutoHidePointMarkers(true)
+    .CommonSeriesSettings(s=>s.Label(l => l
+        .Visible(true)
+        .Format(f => f
+            .Type(Format.FixedPoint)
+            .Precision(0)
+        )
+        ))
+    .DataSource(ds=>ds.WebApi()
+        .Controller("Charts")
+        .LoadAction("StudentExamsCountOnExam")
+    )
+    .Series(s=>
+    {
+        s.Add().ArgumentField("ExamViewSubjectDate")
+            .IgnoreEmptyPoints(true)
+            .ValueField("StudentExams").Name("huy")
+            .Type(SeriesType.Bar).Color("#ffaa66");
+    }))

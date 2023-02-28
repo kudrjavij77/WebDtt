@@ -1,0 +1,94 @@
+﻿@using System.Linq
+@using WebDtt.Models
+@model StudentExam
+
+
+@{
+    //ViewData["Title"] = "Договоры";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/my-script/ViewDetailForStudentExam.js"></script>
+<input type="hidden" id="customInput" data-value="@ViewBag.StudentExam" />
+
+
+@(Html.DevExtreme()
+    .Form<StudentExam>()
+    .ID("dxForm")
+    .Items(i =>
+    {
+        i.AddSimpleFor(m => m.Exam.ExamTypeID);
+    })
+        .FormData(Model)
+    .OnInitialized("initializedForm")
+    
+    )
+
+
+
+<div class="container">
+    @if (User.IsInRole("user"))
+    {
+        switch (@ViewBag.StudentExam.Exam.ExamTypeID)
+        {
+            case 1:
+                {
+                    break;
+                }
+            case 2:
+                {
+                    break;
+                }
+            case 3:
+                {
+                    if ((@ViewBag.StudentExam.Flags & 16) == 16)
+                    {
+                        <div>
+                            <div style="display: inline-block">
+                                <p>Тест завершен </p>
+                                <div style="display: inline-block">
+                                    @(Html.DevExtreme().DateBox().Width(280).ReadOnly(true)
+                                        .DisplayFormat(Format.LongDateLongTime)
+                                        .Value(@ViewBag.StudentExam.Exam.TestDateTime))
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div>
+                            <div style="display: inline-block">
+                                <p>Пройти тестирование необходимо с </p>
+                            </div>
+                            <div style="display: inline-block">
+                                @Html.DevExtreme().DateBox().Width(280).ReadOnly(true).DisplayFormat(Format.LongDateLongTime).Value(@ViewBag.StudentExam.Exam.TestDateTime)
+                            </div>
+                            <div style="display: inline-block">
+                                <p> по </p>
+                            </div>
+                            <div style="display: inline-block">
+                                @Html.DevExtreme().DateBox().Width(280).ReadOnly(true).DisplayFormat(Format.LongDateLongTime).Value((@ViewBag.StudentExam.Exam.TestDateTime + new TimeSpan(1, 23, 59, 59)))
+                            </div>
+                        </div>
+                        @(Html.DevExtreme().Button().Type(ButtonType.Default)
+                            .StylingMode(ButtonStylingMode.Outlined)
+                            .Text("Начать тест").OnClick("startTest")
+                            .Option("startDateTime", new { @ViewBag.StudentExam.Exam.TestDateTime })
+                            .Option("id", new { @ViewBag.StudentExam.StudentExamID }))
+                    }
+
+                    break;
+                }
+        }
+
+    }
+
+
+    @if (@ViewBag.StudentExam.Exam.ExamAddons != null)
+    {
+        <div id=""></div>
+    }
+
+
+</div>
+        

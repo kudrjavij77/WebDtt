@@ -1,0 +1,79 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using WebDtt.Models
+@model IEnumerable<WebDtt.Models.StationExam>
+@{
+    ViewBag.Title = "Экзамены в ППЭ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Прикрепление экзаменов к пунктам проведения экзаменов</h2>
+
+@(Html.DevExtreme().DataGrid<StationExam>()
+    .ShowColumnHeaders(true)
+    .ShowRowLines(true)
+    .ColumnChooser(ch=>ch.Enabled(true))
+    .DataSource(ds => ds.WebApi()
+        .RouteName("StationExamsApi")
+        .LoadAction("Get")
+        .InsertAction("Post")
+        .UpdateAction("Put")
+        .DeleteAction("Delete")
+        .Key("StationExamID")
+    )
+    .RemoteOperations(true)
+    .Columns(columns =>
+    {
+
+        columns.AddFor(m => m.StationID).Visible(false).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("StationExams").LoadAction("StationsLookup").Key("StationID"))
+            .ValueExpr("StationID").DisplayExpr("StationViewName")).Caption("ППЭ").Alignment(HorizontalAlignment.Center);
+
+        columns.AddFor(m => m.ExamID).Visible(false).Lookup(lookup => lookup
+            .DataSource(ds => ds.WebApi().Controller("StationExams").LoadAction("ExamsLookup").Key("ExamID"))
+            .ValueExpr("ExamID").DisplayExpr("ExamViewSubjectTypeClassDate")).Caption("Экзамен").Alignment(HorizontalAlignment.Center);
+
+        columns.AddFor(m => m.Station.StationCode).Caption("Код ППЭ").Alignment(HorizontalAlignment.Center);
+        columns.AddFor(m => m.Station.StationName).Visible(false).Caption("Название").Alignment(HorizontalAlignment.Center);
+        columns.AddFor(m => m.Station.StationAddress).Visible(false).Caption("Адресс").Alignment(HorizontalAlignment.Center);
+        columns.AddFor(m => m.Exam.Subject.SubjectCode).Visible(false).Caption("Код предмета").Alignment(HorizontalAlignment.Center);
+        columns.AddFor(m => m.Exam.Subject.SubjectName).Caption("Предмет").Alignment(HorizontalAlignment.Center);
+        columns.AddFor(m => m.Exam.TestDateTime).Caption("Дата экзамена").Alignment(HorizontalAlignment.Center);
+        columns.AddFor(m => m.Exam.Class).Caption("Класс").Alignment(HorizontalAlignment.Center);
+        columns.AddFor(m => m.ReservedCapacity).Caption("Зарезервировано мест").Alignment(HorizontalAlignment.Center);
+        columns.AddFor(m => m.StationPriority).Caption("Приоритет назначения").Alignment(HorizontalAlignment.Center);
+        columns.AddFor(m => m.ExamStartupTime).Caption("Время начала экзамена").Alignment(HorizontalAlignment.Center);
+        columns.AddFor(m => m.CreateDate).Visible(false).Caption("Дата создания").Alignment(HorizontalAlignment.Center);
+        columns.AddFor(m => m.UpdateDate).Visible(false).Caption("Дата обновления").Alignment(HorizontalAlignment.Center);
+    })
+    .Editing(e =>
+    {
+        e.AllowAdding(true);
+        e.AllowUpdating(true);
+        e.AllowDeleting(true);
+        e.Mode(GridEditMode.Form);
+        e.UseIcons(true);
+        e.Form(f => f.ColCount(2).Items(i =>
+        {
+            i.AddSimpleFor(m => m.StationID)
+                .Editor(ed => ed.SelectBox()
+                    .ValueExpr("StationID")
+                    .DisplayExpr("StationViewName")
+                    .DataSource(ds => ds.WebApi()
+                        .Controller("StationExams")
+                        .LoadAction("StationsLookup")
+                        .Key("StationID")));
+            i.AddSimpleFor(m => m.ExamID)
+                .Editor(ed => ed.SelectBox()
+                    .ValueExpr("ExamID")
+                    .DisplayExpr("ExamViewSubjectTypeClassDate")
+                    .DataSource(ds => ds.WebApi()
+                        .Controller("StationExams")
+                        .LoadAction("ExamsLookup")
+                        .Key("ExamID")));
+            i.AddSimpleFor(m => m.ReservedCapacity);
+            i.AddSimpleFor(m => m.StationPriority);
+            i.AddSimpleFor(m => m.ExamStartupTime)
+                .Editor(edit => edit.DateBox().Type(DateBoxType.Time).StylingMode(EditorStylingMode.Filled).PickerType(DateBoxPickerType.Rollers));
+        }));
+    }
+    ))

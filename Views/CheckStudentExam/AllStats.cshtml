@@ -1,0 +1,41 @@
+﻿@using DevExtreme.AspNet.Mvc
+@{
+    ViewData["Title"] = "AllStats";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Статистика экспертизы</h2>
+
+@(Html.DevExtreme().DataGrid<WebDtt.Models.ExpertStatsViewModel>()
+    .DataSource(ds => ds.WebApi()
+        .RouteName("CheckStudentExamsApi")
+        .LoadAction("GetCheckStats")
+    )
+    .RemoteOperations(true)
+    .Sorting(s=>s.Mode(GridSortingMode.Multiple))
+    .HeaderFilter(hf => hf.Visible(true).AllowSearch(true))
+    .FilterRow(fr=>fr.Visible(true))
+    .Columns(columns =>
+    {
+
+        columns.AddFor(m => m.TestDateTime);
+
+        columns.AddFor(m => m.Class);
+
+        columns.AddFor(m => m.SubjectCode);
+
+        columns.AddFor(m => m.SubjectName);
+
+        columns.AddFor(m => m.ExamTypeName);
+
+        columns.Add().Caption("Работы").Columns(c =>
+        {
+            c.AddFor(m => m.AllCount);
+
+            c.AddFor(m => m.OnHands);
+
+            c.AddFor(m => m.Checked);
+
+            c.AddFor(m => m.Ready);
+        });
+    }))

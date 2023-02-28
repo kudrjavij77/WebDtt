@@ -1,0 +1,47 @@
+﻿@using WebDtt.Models
+
+@(Html.DevExtreme().DataGrid<Group>()
+    .ID("groupsGrid")
+    .DataSource(new JS("component.getDataSource()"))
+    .WordWrapEnabled(true)
+    .ShowRowLines(true)
+    .Paging(p=>p.Enabled(false))
+    .ColumnAutoWidth(true)
+    //.DataSourceOptions(dso=>dso.Filter(new JS("component.option('filter')")))
+    .NoDataText("Нет групп, удовлетворяющих выбранным параметрам выше. ")
+    .Editing(ed =>
+    {
+        ed.AllowAdding(false);
+        ed.Mode(GridEditMode.Popup);
+        ed.Form(f =>
+            {
+                f.ColCount(6);
+            });
+        })
+        .Columns(c =>
+        {
+            c.AddFor(m => m.GroupID).Visible(false);
+            c.Add().DataField("DayOfWeekLesson").DataType(GridColumnDataType.Date).Format(f=>f.Type(Format.DayOfWeek)).Caption("День недели проведения занятий");
+            c.AddFor(m => m.GroupName).Caption("Группа");
+            c.AddFor(m => m.CurriculumID).Lookup(l => l.DataSource(ds => ds.WebApi()
+                .Controller("Curricula").LoadAction("Get").Key("CurriculumID"))
+                .ValueExpr("CurriculumID").DisplayExpr("CourseName")).Caption("Программа");
+            c.Add().DataField("Description.Description").Caption("Описание программы");
+            c.Add().DataField("FirstLesson").DataType(GridColumnDataType.Date).Format(f=>f.Type(Format.ShortDate)).Caption("1-ое занятие");
+            c.Add().DataField("TimeLesson").DataType(GridColumnDataType.Date).Format(f=>f.Type(Format.ShortTime)).Caption("Время начала занятий");
+            c.AddFor(m => m.Duration).Caption("Кол-во часов");
+            c.AddFor(m => m.Price).Caption("Стоимость");
+            c.Add().DataField("FreePlaces").Caption("Осталось мест");
+            c.AddFor(m => m.Station).CalculateDisplayValue("Station").Caption("Место проведения занятий");
+
+        })
+    .Selection(s => s.Mode(SelectionMode.Single))
+    .SelectedRowKeys(new JS("component.option('value')"))
+    .OnSelectionChanged(@<text>
+                            function(selectedItems) {
+                            var keys = selectedItems.selectedRowKeys;
+                            component.option("value", keys);
+                            }
+                         </text>)
+
+)

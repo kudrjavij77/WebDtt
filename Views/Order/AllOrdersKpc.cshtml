@@ -1,0 +1,323 @@
+﻿@using System.Net.Http.Formatting
+@using DevExpress.Utils.Extensions
+@using DevExtreme.AspNet.Mvc
+@using WebDtt.Models
+@using WebDtt.Models.Dto
+@model IEnumerable<WebDtt.Models.Order>
+@{
+    ViewData["Title"] = "Договоры";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/my-script/OrdersForUser.js"></script>
+
+
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/3.3.1/exceljs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>*@
+<script src="~/Scripts/foreighnResource/exceljs.min.js"></script>
+<script src="~/Scripts/foreighnResource/FileSaver.min.js"></script>
+<script src="~/Scripts/foreighnResource/polyfill.min.js"></script>
+
+
+@{
+    var filterValue = new object[] {
+        new object[] { "CreateDate", FilterBuilderFieldFilterOperations.GreaterThan, "2022/09/01" },
+    };
+}
+
+
+
+@(Html.DevExtreme().DataGrid<WebDtt.Models.Order>()
+    .FilterPanel(fp=>fp.Visible(true))
+    .FilterValue(filterValue)
+    .DataSourceOptions(dso => dso.Filter("[ 'OrderTypeID', '=', '2' ]"))
+    .Scrolling(scr=>scr.Mode(GridScrollingMode.Virtual).RowRenderingMode(GridRowRenderingMode.Virtual))
+    .DataSource(ds => ds.WebApi()
+        .Controller("Orders")
+        .LoadAction("GetOrdersKpc")
+        .UpdateAction("Put")
+        .DeleteAction("Delete")
+        .Key("OrderID"))
+    .ID("gridOrdersKpc")
+    .RemoteOperations(true)
+    .ColumnChooser(cc=>cc.Enabled(true))
+    .Sorting(s=>s.Mode(GridSortingMode.Multiple ))
+    .HeaderFilter(hf=>hf.Visible(true))
+    .FilterRow(fr=>fr.Visible(true))
+    .Paging(p=>p.Enabled(false))
+    .ShowRowLines(true)
+    .SearchPanel(s => s.Visible(true))
+    .Selection(s => s.Mode(SelectionMode.Multiple).SelectAllMode(SelectAllMode.Page))
+    .HeaderFilter(hf => hf.Visible(true).AllowSearch(true))
+    .Summary(sum => sum
+        .TotalItems(ti =>
+        {
+            ti.AddFor(m => m.OrderID).SummaryType(SummaryType.Count);
+            ti.Add().Column("Red").SummaryType(SummaryType.Sum);
+            ti.Add().Column("Green").SummaryType(SummaryType.Sum);
+            ti.AddFor(m => m.Discount).SummaryType(SummaryType.Count);
+        }))
+    .Paging(p=>p.Enabled(false))
+    .Height(800)
+    .WordWrapEnabled(true)
+    .OnToolbarPreparing("gridKpcToolbar")
+    .Editing(edit => edit
+        .AllowAdding(false)
+        .AllowDeleting(true)
+        .AllowUpdating(true)
+        .UseIcons(true)
+        .Mode(GridEditMode.Batch)
+        .Form(f=>f.Items(i =>
+        {
+            i.AddSimpleFor(m => m.Discount).Editor(e => e.NumberBox().Min(0).Max(100));
+        })))
+    .Columns(c =>
+    {
+        c.AddFor(m => m.OrderID).Caption("Номер договора").AllowEditing(false);
+        c.AddFor(m => m.CreatorPersonID).Visible(false).AllowEditing(false);
+        c.AddFor(m => m.StudentPersonID).Visible(false).AllowEditing(false);
+        //c.AddFor(m => m.OrderNumber).Caption("Номер договора");
+        c.AddFor(m => m.GroupID)
+            .Lookup(l => l.DataSource(ds => ds.WebApi()
+                .Controller("Lookups").LoadAction("GroupsToAllOrdersKpc").Key("GroupID"))
+                .ValueExpr("GroupID").DisplayExpr("GroupName")).Caption("Группа").AllowEditing(false);
+        c.Add().DataField("Student.Fio").Caption("ФИО слушателя").AllowEditing(false);
+        c.Add().DataField("Student.Phones").Caption("Тел. слушателя").Visible(false).AllowEditing(false);
+        c.Add().DataField("Student.Email").Caption("Email слушателя").Visible(false).AllowEditing(false);
+        c.Add().DataField("Parent.Fio").Caption("ФИО заказчика").Visible(false).AllowEditing(false);
+        c.Add().DataField("Parent.Phones").Caption("Тел. заказчика").Visible(false).AllowEditing(false);
+        c.Add().DataField("Parent.Email").Caption("Email заказчика").Visible(false).AllowEditing(false);
+        c.AddFor(m => m.Flags).AllowEditing(false).Visible(false);
+        c.Add().DataField("MomDonate").Caption("Материнский капитал").AllowEditing(false)
+            .CellTemplate(new JS("function (container, options) " +
+                                 "{ $('<div>').dxCheckBox({ value: options.value ? true : false, disabled: true })" +
+                                 ".appendTo(container); }"));
+        c.Add().DataField("AllPayed").Caption("Оплачен полностью").AllowEditing(false)
+            .CellTemplate(new JS("function (container, options) " +
+                                 "{ $('<div>').dxCheckBox({ value: options.value ? true : false, disabled: true })" +
+                                 ".appendTo(container); }"));
+        c.Add().DataField("Vozvrat").Caption("Возврат").AllowEditing(false)
+            .CellTemplate(new JS("function (container, options) " +
+                                 "{ $('<div>').dxCheckBox({ value: options.value ? true : false, disabled: true })" +
+                                 ".appendTo(container); }"))
+            .EditCellTemplate(new JS("function (e, i) { " +
+                                     "var t = $('<div>').dxCheckBox({ " +
+                                     "value: i.value ? true : false, onValueChanged: " +
+                                     "function (v) { i.setValue(v.value ? true : false); } }); return t;}"));
+        c.Add().DataField("Deleted").Caption("Удален").AllowEditing(false)
+            .CellTemplate(new JS("function (container, options) " +
+                                 "{ $('<div>').dxCheckBox({ value: options.value ? true : false, disabled: true })" +
+                                 ".appendTo(container); }"))
+            .EditCellTemplate(new JS("function (e, i) { " +
+                                     "var t = $('<div>').dxCheckBox({ " +
+                                     "value: i.value ? true : false, onValueChanged: " +
+                                     "function (v) { i.setValue(v.value ? true : false); } }); return t;}"));
+        c.Add().DataField("EndEducation").Caption("Отчислен").AllowEditing(false)
+            .CellTemplate(new JS("function (container, options) " +
+                                 "{ $('<div>').dxCheckBox({ value: options.value ? true : false, disabled: true })" +
+                                 ".appendTo(container); }"));
+        c.Add().DataField("DonateToProcess").Caption("Новые чеки").AllowEditing(false);
+        c.AddFor(m => m.CreateDate).Caption("Дата создания").AllowEditing(false);
+        c.AddFor(m => m.OrderTypeID)
+            .Lookup(l => l
+                .DataSource(ds => ds.WebApi()
+                    .Controller("Orders").LoadAction("OrderTypesLookup").Key("OrderTypeID"))
+                .DisplayExpr("OrderTypeDescription").ValueExpr("OrderTypeID"))
+            .Caption("Тип договора").Visible(false).AllowEditing(false);
+        c.Add().DataField("Green").Caption("Оплачено (подтверждено)").AllowEditing(false);
+        c.Add().DataField("Pereplata").Caption("Переплата").AllowEditing(false)
+            .CalculateDisplayValue(new JS("function(e){ if(e.Pereplata < 0) return Math.abs(e.Pereplata); }"));
+        c.Add().DataField("Red").Caption("Неоплачено в срок").AllowEditing(false);
+        c.AddFor(m => m.Discount).Caption("Скидка (%)");
+        c.AddFor(m => m.UpdateDate).Caption("Дата изменения").Visible(false).AllowEditing(false);
+        c.Add().DataField("DeleteDate").Caption("Дата удаления").AllowEditing(false).Visible(false);
+        c.Add().DataField("EndEducationDate").Caption("Дата возврата средств").AllowEditing(false).Visible(false);
+        c.Add().DataField("Comment").AllowEditing(true).Caption("Комментарий");
+        c.Add().Type(GridCommandColumnType.Buttons).Buttons(b =>
+        {
+            b.Add().Icon("airplane").Text("Переформировать отчеты договора, реквизитов ... и отправить пользователю").OnClick("reSendReports");
+            b.Add().Icon("doc").Text("Скачать справку").OnClick("downloadSpravka");
+            b.Add().Icon("download").Text("Скачать договор").OnClick("downloadOrderKPC");
+            b.Add().Icon("download").Text("Скачть доп. соглашение").OnClick("downloadMomBlank").Visible(new JS("function(e){return e.row.data.MomDonate}"));
+            b.Add().Icon("money").Text("Возврат средств").OnClick("vozvratKpc").Visible(new JS("function(e){return (e.row.data.Flags&128)!==128 && (e.row.data.Flags&4)!==4}"));
+            b.Add().Name("delete");
+        }).AllowEditing(false);
+    })
+    .MasterDetail(m => m
+        .Enabled(true)
+        .Template(new TemplateName("gridKpcContainer-details"))
+    ))
+
+
+
+@using (Html.DevExtreme().NamedTemplate("gridKpcContainer-details"))
+{
+    @(Html.DevExtreme().TabPanel()
+        .Items(item =>
+        {
+            //item.Add()
+            //    .Title("Информация о группе")
+            //    .Template(new JS("getGroupInfoForm"))
+            //    .Option("tabExtras", new { orderID = new JS("data.OrderID") })
+            //    .Icon("group");
+
+            item.Add()
+                .Title("Оплата")
+                .Template(new TemplateName("getDonatesForm"))
+                .Option("tabExtras", new { orderID = new JS("data.OrderID") })
+                .Icon("money");
+
+            item.Add()
+                .Title("Участник")
+                .Option("tabExtras", new { order = new JS("data") })
+                .Template(new JS("getStudentForm"))
+                .Icon("card");
+
+            item.Add()
+                .Title("Законный представитель")
+                .Option("tabExtras", new { order = new JS("data") })
+                .Template(new JS("getDelegateForm"))
+                .Icon("card");
+        })
+    )
+}
+
+
+@using (Html.DevExtreme().NamedTemplate("getDonatesForm"))
+{
+    <div style="margin: 15px;">
+        @(Html.DevExtreme().DataGrid<DonateInfo>()
+            .ShowBorders(true)
+            .ShowRowLines(true)
+            .ColumnAutoWidth(true)
+            .RemoteOperations(true)
+            .ID(new JS("'donateInfoesGrid' + tabExtras.orderID"))
+            .Editing(ed => ed.UseIcons(true))
+            .DataSource(ds => ds.WebApi()
+                .Controller("Lookups")
+                .LoadAction("GetDonateInfosToOrder")
+                .Key("DonateInfoID")
+                .LoadParams(new { orderId = new JS("tabExtras.orderID") }))
+            .Columns(c =>
+            {
+                c.AddFor(m => m.DonateInfoID).Visible(false);
+                c.AddFor(m => m.DonateNumber).Caption("Этап оплаты");
+                c.AddFor(m => m.Total).Caption("Сумма");
+                c.AddFor(m => m.EndDate).Caption("Оплатить не позднее");
+                c.Add().Caption("Скачать реквизиты").Type(GridCommandColumnType.Buttons).Buttons(b =>
+                {
+                    b.Add()
+                        .Hint("Скачать реквизиты")
+                        .Icon("download")
+                        .Text("Скачать реквизиты")
+                        .Option("orderId", new JS("tabExtras.orderID"))
+                        .OnClick("downLoadReceipt")
+                        .Visible(true);
+                });
+            })
+            )
+    </div>
+
+    @(Html.DevExtreme().Chart()
+        .ID(new JS("'chart' + tabExtras.orderID"))
+        .Rotated(true)
+        .OnInitialized("initDonateBar")
+        .DataSource(ds=>ds.WebApi()
+            .Controller("Lookups").LoadAction("GetDonateBarData")
+            .LoadParams(new { orderId = new JS("tabExtras.orderID") }))
+        .CommonSeriesSettings(s=>s
+            .ArgumentField("Info")
+            .Type(SeriesType.StackedBar))
+        .Series(s =>
+        {
+            s.Add().ValueField("Green").Name("Подтверждено").Color("PaleGreen");
+            s.Add().ValueField("Yellow").Name("В обработке").Color("yellow");
+            s.Add().ValueField("Red").Name("Неоплачено (истекает срок)").Color("#ff7c7c");
+            s.Add().ValueField("Grey").Name("Неоплачено").Color("grey");
+        })
+        .Legend(l=>l
+            .VerticalAlignment(VerticalEdge.Bottom)
+            .HorizontalAlignment(HorizontalAlignment.Center)
+            .ItemTextPosition(Position.Right))
+        .Title(t=>t.Text("Прогресс оплаты"))
+        .Tooltip(t=>t
+            .Enabled(true)
+            .CustomizeTooltip(@<text>function(arg) {return {text: arg.percentText + " - " + arg.valueText + " руб. "};}</text>))
+
+
+
+        )
+
+    <div style="margin: 15px;">
+        <div id="fileuploader" style="padding-top: 10px">
+            <div class="widget-container">
+                <hr>
+                @(Html.DevExtreme().FileUploader()
+                    .Hint("Название файла не должно содержать специальных символов (\\ '' / : * ? < > | )")
+                    .ElementAttr("id", new JS("tabExtras.orderID"))
+                    //.ID("file-uploader")
+                    .Name("myFile")
+                    .SelectButtonText("Выберите файл, подтверждающий оплату")
+                    .Multiple(false)
+                    .Accept("*")
+                    .MaxFileSize(104857600)
+                    .UploadMode(FileUploadMode.Instantly)
+                    .UploadUrl(Url.Action("Upload", "Order"))
+                    .OnInitialized("unVisibility")
+                    .OnValueChanged("valueChangedUploaderKpc"))
+            </div>
+        </div>
+
+        @(Html.DevExtreme().DataGrid<DonateStatu>()
+            .ShowBorders(true)
+            .ShowRowLines(true)
+            .ColumnAutoWidth(true)
+            .RemoteOperations(true)
+            .OnRowUpdated("updateDonateBar")
+            .ID(new JS("'donateStatusGrid' + tabExtras.orderID"))
+            .DataSource(ds => ds.WebApi()
+                .Controller("DonateStatus")
+                .LoadAction("GetDonateStatusToOrder")
+                .InsertAction("Post")
+                .UpdateAction("Put")
+                .DeleteAction("Delete")
+                .Key("DonateID")
+                .LoadParams(new { orderId = new JS("tabExtras.orderID") }))
+            .Editing(ed => ed
+                .UseIcons(true)
+                .AllowUpdating(true)
+                .AllowDeleting(true)
+                .Mode(GridEditMode.Batch)
+                .Form(f =>
+                    f.Items(i =>
+                                    {
+                                        i.AddSimpleFor(m => m.DonateDate).Editor(e => e.DateBox());
+                                        i.AddSimpleFor(m => m.PartOfDonate).Editor(e => e.NumberBox().Min(1));
+                                        i.AddSimpleFor(m => m.Total).Editor(e => e.NumberBox().Min(0));
+
+                                    }))
+                            )
+                            .Columns(c =>
+                            {
+                                c.AddFor(m => m.OrderID).Visible(false);
+                        c.AddFor(m => m.DonateID).Visible(false);
+                        c.AddFor(m => m.PartOfDonate).Caption("Этап оплаты").DataType(GridColumnDataType.Number);
+                        c.AddFor(m => m.Total).Caption("Сумма по чеку");
+                        c.AddFor(m => m.DonateDate).Caption("Дата платежа по чеку");
+                        c.AddFor(m => m.Flags).Lookup(l => l
+                            .DataSource(new JS("donateStatusFlags"))
+                            .DisplayExpr("name")
+                            .ValueExpr("id")).Caption("Статус");
+                        c.AddFor(m => m.File.FileName).Caption("Имя файла").AllowEditing(false);
+                        c.AddFor(m => m.CreateDate).Caption("Дата создания").AllowEditing(false);
+                        c.AddFor(m => m.UpdateDate).Caption("Дата изменения").AllowEditing(false);
+                        c.Add().Type(GridCommandColumnType.Buttons).Caption("Действия").Buttons(b =>
+                        {
+                            b.Add().Icon("download").Text("Скачать чек").OnClick("downloadBillKpc");
+                            b.Add().Name("edit");
+                            b.Add().Name("delete");
+                        });
+                    }))
+    </div>
+}

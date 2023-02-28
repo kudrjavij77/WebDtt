@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ee33c6e1ab1c4dfd860a0c3063ddfb89" Name="Diagram1" ZoomLevel="77">
+        <EntityTypeShape EntityType="AISExam_testingModel.BAnswerType" Width="1.5" PointX="10.75" PointY="9.75" />
+        <EntityTypeShape EntityType="AISExam_testingModel.BQuestion" Width="1.5" PointX="13" PointY="10.25" />
+        <EntityTypeShape EntityType="AISExam_testingModel.ContentType" Width="1.5" PointX="13" PointY="16.375" />
+        <EntityTypeShape EntityType="AISExam_testingModel.CQuestion" Width="1.5" PointX="8.25" PointY="17.875" />
+        <EntityTypeShape EntityType="AISExam_testingModel.CQuestionRate" Width="1.5" PointX="10.5" PointY="6.25" />
+        <EntityTypeShape EntityType="AISExam_testingModel.Discipline" Width="1.5" PointX="3.75" PointY="17.875" />
+        <EntityTypeShape EntityType="AISExam_testingModel.dtproperty" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AISExam_testingModel.ElectronicKIM" Width="1.5" PointX="10.75" PointY="20" />
+        <EntityTypeShape EntityType="AISExam_testingModel.ElectronicKIMTask" Width="1.5" PointX="13" PointY="19.875" />
+        <EntityTypeShape EntityType="AISExam_testingModel.ElectronicKIMTaskFile" Width="1.5" PointX="15.25" PointY="20" />
+        <EntityTypeShape EntityType="AISExam_testingModel.KIM" Width="1.5" PointX="6" PointY="17.75" />
+        <EntityTypeShape EntityType="AISExam_testingModel.KSA" Width="1.5" PointX="8.25" PointY="9" />
+        <EntityTypeShape EntityType="AISExam_testingModel.School" Width="1.5" PointX="6" PointY="6.5" />
+        <EntityTypeShape EntityType="AISExam_testingModel.BAnswer" Width="1.5" PointX="15.25" PointY="32.625" />
+        <EntityTypeShape EntityType="AISExam_testingModel.BQuestionKey" Width="1.5" PointX="14.25" PointY="41.125" />
+        <EntityTypeShape EntityType="AISExam_testingModel.CAnswerFile" Width="1.5" PointX="18.25" PointY="34.625" />
+        <EntityTypeShape EntityType="AISExam_testingModel.CRate" Width="1.5" PointX="10.5" PointY="28.125" />
+        <EntityTypeShape EntityType="AISExam_testingModel.Curriculum" Width="1.5" PointX="9.75" PointY="49.5" />
+        <EntityTypeShape EntityType="AISExam_testingModel.DonateStatu" Width="1.5" PointX="9.75" PointY="36.375" />
+        <EntityTypeShape EntityType="AISExam_testingModel.EducationForm" Width="1.5" PointX="9.75" PointY="53.75" />
+        <EntityTypeShape EntityType="AISExam_testingModel.ExamAddon" Width="1.5" PointX="12" PointY="54.5" />
+        <EntityTypeShape EntityType="AISExam_testingModel.ExamKim" Width="1.5" PointX="12" PointY="43.5" />
+        <EntityTypeShape EntityType="AISExam_testingModel.Exam" Width="1.5" PointX="9.75" PointY="44.5" />
+        <EntityTypeShape EntityType="AISExam_testingModel.ExamType" Width="1.5" PointX="7.5" PointY="42.375" />
+        <EntityTypeShape EntityType="AISExam_testingModel.FileMapping" Width="1.5" PointX="13" PointY="23.875" />
+        <EntityTypeShape EntityType="AISExam_testingModel.File" Width="1.5" PointX="10.75" PointY="15.5" />
+        <EntityTypeShape EntityType="AISExam_testingModel.Group" Width="1.5" PointX="12" PointY="48.75" />
+        <EntityTypeShape EntityType="AISExam_testingModel.JournalField" Width="1.5" PointX="16.5" PointY="52.375" />
+        <EntityTypeShape EntityType="AISExam_testingModel.KimMedia" Width="1.5" PointX="17.25" PointY="44.125" />
+        <EntityTypeShape EntityType="AISExam_testingModel.Lesson" Width="1.5" PointX="14.25" PointY="49.125" />
+        <EntityTypeShape EntityType="AISExam_testingModel.Message" Width="1.5" PointX="5.25" PointY="39.125" />
+        <EntityTypeShape EntityType="AISExam_testingModel.News" Width="1.5" PointX="5.25" PointY="35.625" />
+        <EntityTypeShape EntityType="AISExam_testingModel.Order" Width="1.5" PointX="7.5" PointY="27.75" />
+        <EntityTypeShape EntityType="AISExam_testingModel.OrderType" Width="1.5" PointX="5.25" PointY="22.875" />
+        <EntityTypeShape EntityType="AISExam_testingModel.PersonGroup" Width="1.5" PointX="15.25" PointY="36.75" />
+        <EntityTypeShape EntityType="AISExam_testingModel.Person" Width="1.5" PointX="5.25" PointY="25.75" />
+        <EntityTypeShape EntityType="AISExam_testingModel.PersonType" Width="1.5" PointX="3" PointY="24.875" />
+        <EntityTypeShape EntityType="AISExam_testingModel.Role" Width="1.5" PointX="0.75" PointY="28.875" />
+        <EntityTypeShape EntityType="AISExam_testingModel.StationExam" Width="1.5" PointX="15" PointY="44.625" />
+        <EntityTypeShape EntityType="AISExam_testingModel.Station" Width="1.5" PointX="9.75" PointY="56.5" />
+        <EntityTypeShape EntityType="AISExam_testingModel.StudentExam" Width="1.5" PointX="13" PointY="33.25" />
+        <EntityTypeShape EntityType="AISExam_testingModel.Subject" Width="1.5" PointX="7.5" PointY="45.125" />
+        <EntityTypeShape EntityType="AISExam_testingModel.Topic" Width="1.5" PointX="17.5" PointY="48.625" />
+        <EntityTypeShape EntityType="AISExam_testingModel.User" Width="1.5" PointX="3" PointY="28.375" />
+        <AssociationConnector Association="AISExam_testingModel.BQuestion_AnswerType" />
+        <AssociationConnector Association="AISExam_testingModel.BQuestion_KIM" />
+        <AssociationConnector Association="AISExam_testingModel.FK__BAnswers__BQuest__48C51750" />
+        <AssociationConnector Association="AISExam_testingModel.FK__BQuestion__BQues__58075AE0" />
+        <AssociationConnector Association="AISExam_testingModel.FK__Electroni__Conte__3E7C9307" />
+        <AssociationConnector Association="AISExam_testingModel.CQuestion_KIM" />
+        <AssociationConnector Association="AISExam_testingModel.CQuestionRate_CQuestion" />
+        <AssociationConnector Association="AISExam_testingModel.FK__CRates__CQuestio__3F3BAD16" />
+        <AssociationConnector Association="AISExam_testingModel.KIM_Discipline" />
+        <AssociationConnector Association="AISExam_testingModel.School_DeepDiscipline" />
+        <AssociationConnector Association="AISExam_testingModel.FK__Electroni__Elect__330AE05B" />
+        <AssociationConnector Association="AISExam_testingModel.FK__ElectronicK__KIM__2E462B3E" />
+        <AssociationConnector Association="AISExam_testingModel.FK__ExamKims__Electr__5436C9FC" />
+        <AssociationConnector Association="AISExam_testingModel.FK__StudentEx__Elect__45E8AAA5" />
+        <AssociationConnector Association="AISExam_testingModel.FK__Electroni__Elect__3D886ECE" />
+        <AssociationConnector Association="AISExam_testingModel.FK__ExamKims__KIM__60D1AB0B" />
+        <AssociationConnector Association="AISExam_testingModel.KSA_School" />
+        <AssociationConnector Association="AISExam_testingModel.School_KSA" />
+        <AssociationConnector Association="AISExam_testingModel.School_SchoolCenter" />
+        <AssociationConnector Association="AISExam_testingModel.FK__BAnswers__Studen__49B93B89" />
+        <AssociationConnector Association="AISExam_testingModel.FK__BQuestion__ExamK__58FB7F19" />
+        <AssociationConnector Association="AISExam_testingModel.FK__CAnswerFi__FileI__20B725F6" />
+        <AssociationConnector Association="AISExam_testingModel.FK__CAnswerFi__Stude__21AB4A2F" />
+        <AssociationConnector Association="AISExam_testingModel.FK__CRates__ExpertID__3E4788DD" />
+        <AssociationConnector Association="AISExam_testingModel.FK__CRates__StudentE__3D5364A4" />
+        <AssociationConnector Association="AISExam_testingModel.FK__Curriculu__Subje__6FA9DA47" />
+        <AssociationConnector Association="AISExam_testingModel.FK__Groups__Curricul__719222B9" />
+        <AssociationConnector Association="AISExam_testingModel.FK__Topics__Curricul__709DFE80" />
+        <AssociationConnector Association="AISExam_testingModel.FK__DonateSta__Order__41E30F97" />
+        <AssociationConnector Association="AISExam_testingModel.FK__Groups__Educatio__3859A55D" />
+        <AssociationConnector Association="AISExam_testingModel.FK__ExamAddon__ExamI__63AE17B6" />
+        <AssociationConnector Association="AISExam_testingModel.FK__ExamKims__ExamID__5FDD86D2" />
+        <AssociationConnector Association="AISExam_testingModel.FK__ExamKims__Parent__59EFA352" />
+        <AssociationConnector Association="AISExam_testingModel.FK__KimMedias__ExamK__257BDB13" />
+        <AssociationConnector Association="AISExam_testingModel.FK__StudentEx__ExamK__5AE3C78B" />
+        <AssociationConnector Association="AISExam_testingModel.FK__Exams__ExamTypeI__5A24AD7C" />
+        <AssociationConnector Association="AISExam_testingModel.FK__Exams__SubjectID__5B18D1B5" />
+        <AssociationConnector Association="AISExam_testingModel.FK__StationEx__ExamI__1269069F" />
+        <AssociationConnector Association="AISExam_testingModel.FK__StudentEx__ExamI__1916042E" />
+        <AssociationConnector Association="AISExam_testingModel.FK__FileMappi__FileI__6872CCD3" />
+        <AssociationConnector Association="AISExam_testingModel.FK__KimMedias__FileI__266FFF4C" />
+        <AssociationConnector Association="AISExam_testingModel.FK__Orders__ReceiptF__0326C30F" />
+        <AssociationConnector Association="AISExam_testingModel.FK__StudentEx__FileI__1A0A2867" />
+        <AssociationConnector Association="AISExam_testingModel.FK__Groups__StationI__37658124" />
+        <AssociationConnector Association="AISExam_testingModel.FK__Lessons__GroupID__4984315F" />
+        <AssociationConnector Association="AISExam_testingModel.FK__PersonGro__Group__3A41EDCF" />
+        <AssociationConnector Association="AISExam_testingModel.FK__JournalFi__Lesso__5D8B2A0C" />
+        <AssociationConnector Association="AISExam_testingModel.FK__Messages__UserID__2FF96986" />
+        <AssociationConnector Association="AISExam_testingModel.FK__News__Creator__68FCDCB8" />
+        <AssociationConnector Association="AISExam_testingModel.FK__Orders__CreatorP__013E7A9D" />
+        <AssociationConnector Association="AISExam_testingModel.FK__Orders__OrderTyp__02329ED6" />
+        <AssociationConnector Association="AISExam_testingModel.FK__Orders__StudentP__041AE748" />
+        <AssociationConnector Association="AISExam_testingModel.FK__PersonGro__Order__7562B39D" />
+        <AssociationConnector Association="AISExam_testingModel.FK__StudentEx__Order__1AFE4CA0" />
+        <AssociationConnector Association="AISExam_testingModel.FK__PersonGro__Perso__3B361208" />
+        <AssociationConnector Association="AISExam_testingModel.FK__Persons__ParentP__799D58D5" />
+        <AssociationConnector Association="AISExam_testingModel.FK__Persons__PersonT__7A917D0E" />
+        <AssociationConnector Association="AISExam_testingModel.FK__Persons__UserID__7B85A147" />
+        <AssociationConnector Association="AISExam_testingModel.FK__StudentEx__Perso__1BF270D9" />
+        <AssociationConnector Association="AISExam_testingModel.FK__StationEx__Stati__135D2AD8" />
+        <AssociationConnector Association="AISExam_testingModel.FK__StudentEx__Stati__1CE69512" />
+        <AssociationConnector Association="AISExam_testingModel.Expert_Subject" />
+        <AssociationConnector Association="AISExam_testingModel.User_UserRole" />
+        <EntityTypeShape EntityType="AISExam_testingModel.DonateInfo" Width="1.5" PointX="4.5" PointY="43.125" />
+        <EntityTypeShape EntityType="AISExam_testingModel.DonateType" Width="1.5" PointX="2.25" PointY="39.25" />
+        <AssociationConnector Association="AISExam_testingModel.FK__DonateInf__Donat__7C0FB12C" />
+        <AssociationConnector Association="AISExam_testingModel.FK__Orders__DonateTy__7FE04210" />
+        <AssociationConnector Association="AISExam_testingModel.Group_DonateType" />
+        <EntityTypeShape EntityType="AISExam_testingModel.HistoryLog" Width="1.5" PointX="5.25" PointY="46.625" />
+        <AssociationConnector Association="AISExam_testingModel.FK__HistoryLo__Execu__03B0D2F4" />
+        <AssociationConnector Association="AISExam_testingModel.FK__DonateSta__FileI__04A4F72D" />
+        <EntityTypeShape EntityType="AISExam_testingModel.JournalFieldValue" Width="1.5" PointX="19.75" PointY="44.625" />
+        <EntityTypeShape EntityType="AISExam_testingModel.LessonMaterial" Width="1.5" PointX="17.5" PointY="30.375" />
+        <AssociationConnector Association="AISExam_testingModel.FK__LessonMat__FileI__55EA0844" />
+        <AssociationConnector Association="AISExam_testingModel.FK__JournalFi__Journ__615BBAF0" />
+        <AssociationConnector Association="AISExam_testingModel.FK__JournalFi__Perso__214135DB" />
+        <AssociationConnector Association="AISExam_testingModel.FK__LessonMat__Lesso__5401BFD2" />
+        <AssociationConnector Association="AISExam_testingModel.FK__LessonMat__Perso__22355A14" />
+        <AssociationConnector Association="AISExam_testingModel.Lessons_Topics" />
+        <EntityTypeShape EntityType="AISExam_testingModel.LessonAddon" Width="1.5" PointX="16.5" PointY="56.5" />
+        <AssociationConnector Association="AISExam_testingModel.FK__LessonAdd__Lesso__2511C6BF" />
+        <EntityTypeShape EntityType="AISExam_testingModel.Scale" Width="1.5" PointX="9.75" PointY="41.25" />
+        <AssociationConnector Association="AISExam_testingModel.FK__Scale__SubjectID__34540A4F" />
+        <EntityTypeShape EntityType="AISExam_testingModel.AnketAnswer" Width="1.5" PointX="19.75" PointY="39" />
+        <EntityTypeShape EntityType="AISExam_testingModel.Anket" Width="1.5" PointX="15.25" PointY="29.125" />
+        <EntityTypeShape EntityType="AISExam_testingModel.ObjectAnket" Width="1.5" PointX="20.5" PointY="33.375" />
+        <AssociationConnector Association="AISExam_testingModel.FK__AnketAnsw__Perso__7DC2EF74" />
+        <AssociationConnector Association="AISExam_testingModel.FK__ObjectAnk__Anket__73456101" />
+        <AssociationConnector Association="AISExam_testingModel.FK__ObjectAnk__Perso__752DA973" />
+        <AssociationConnector Association="AISExam_testingModel.FK__ObjectAnk__Stude__7715F1E5" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

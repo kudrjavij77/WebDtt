@@ -1,0 +1,39 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using WebDtt.Models
+@model IEnumerable<WebDtt.Models.Subject>
+
+@{
+    ViewBag.Title = "Предметы";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <h2>Предметы</h2>
+
+@(Html.DevExtreme().DataGrid<Subject>()
+    .ShowColumnHeaders(true)
+    .ShowRowLines(true)
+    .ColumnAutoWidth(true)
+    .DataSource(ds => ds.WebApi()
+        .RouteName("SubjectsApi")
+        .LoadAction("Get")
+        .InsertAction("Post")
+        .UpdateAction("Put")
+        .DeleteAction("Delete")
+        .Key("SubjectID")
+    )
+    .RemoteOperations(true)
+    .Columns(columns =>
+    {
+        columns.AddFor(m => m.SubjectCode).Caption("Код предмета");
+        columns.AddFor(m => m.SubjectName).Caption("Название");
+        columns.AddFor(m => m.ShortSubjectName).Caption("Краткое наименование");
+    })
+    .Editing(e =>
+    {
+        e.AllowAdding(true);
+        e.AllowUpdating(true);
+        e.AllowDeleting(true);
+        e.Mode(GridEditMode.Row);
+        e.UseIcons(true);
+    })
+)

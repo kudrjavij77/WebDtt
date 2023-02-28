@@ -1,0 +1,24 @@
+﻿@using DevExtreme.AspNet.Mvc
+@{
+    ViewData["Title"] = "AllMessage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>AllMessages</h2>
+
+@(Html.DevExtreme().DataGrid<WebDtt.Models.Message>()
+    .DataSource(ds => ds.WebApi()
+        .Controller("Messages")
+        .LoadAction("Get")
+        .Key("MessageID"))
+    .WordWrapEnabled(true)
+    .RemoteOperations(true)
+    .Columns(columns =>
+    {
+        columns.AddFor(m => m.Email).Caption("Email отправителя");
+        columns.AddFor(m => m.SubjectString).Caption("Тема");
+        columns.AddFor(m => m.MessageString).Caption("Сообщение");
+        columns.AddFor(m => m.CreateDate).Caption("Дата создания");
+        columns.AddFor(m => m.Flags);
+    })
+)

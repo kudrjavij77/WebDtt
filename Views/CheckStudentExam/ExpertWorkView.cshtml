@@ -1,0 +1,86 @@
+﻿@using DevExpress.XtraRichEdit.Model
+@using WebDtt.Models
+@model IEnumerable<WebDtt.Models.StudentExam>
+
+
+
+@{
+    ViewBag.Title = "ExpertWorkView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/my-script/ExpertWorkView.js"></script>
+
+
+<div class="widget-container">
+    @(Html.DevExtreme().Popup()
+        .ID("popupFormAddNewSeToCheck").Width(600).Height(350)
+        .ShowTitle(true).Title("Выдать новые работы на проверку")
+        .Visible(false).DragEnabled(false).CloseOnOutsideClick(true)
+        .ContentTemplate(new TemplateName("popup-template"))
+        )
+
+    @using (Html.DevExtreme().NamedTemplate("popup-template"))
+    {
+        @(Html.DevExtreme().ScrollView().Width("100%").Height("100%")
+            .Content(@<text>@Html.Partial("_PopupFormAddNewSeToCheck")</text>))
+    }
+
+</div>
+
+<div style="display: flex; justify-content: space-between">
+    <div>
+        <h2>Выданные работы на проверку</h2>
+    </div>
+    <div>
+        @(Html.DevExtreme().Button()
+            .StylingMode(ButtonStylingMode.Outlined).Type(ButtonType.Default)
+            .Icon("plus").Text("Выдать новые работы на проверку")
+            .OnClick("getNewStudentExamsToCheck"))
+    </div>
+</div>
+
+@(Html.DevExtreme().DataGrid<StudentExam>()
+    .DataSource(ds => ds.WebApi()
+        .Controller("CheckStudentExams")
+        .LoadAction("GetStudentExamsInWork")
+        .Key("StudentExamID"))
+    .ID("stedentExamsInChecking")
+    .ShowBorders(true)
+    .ShowColumnLines(true)
+    .ShowRowLines(true)
+    .OnRowClick("rowClick")
+    .Columns(c =>
+    {
+        c.AddFor(m => m.StudentExamID).Caption("Номер работы").Alignment(HorizontalAlignment.Center).Width(120);
+        c.AddFor(m => m.ExamID)
+            //.Lookup(l => l
+            //.DataSource(ds => ds.WebApi()
+            //    .Controller("Exams").LoadAction("Get").Key("ExamID"))
+            //.DisplayExpr("ExamViewSubjectTypeClassDate").ValueExpr("ExamID"))
+            .CalculateCellValue("function(e){ var date = new Date(e.Exam.TestDateTime); return e.Subject.SubjectCode + ' - ' + e.Subject.ShortSubjectName + ' - ' + e.ExamType.ExamTypeName + ' - ' + e.Exam.Class + ' класс - ' + date.toLocaleDateString()}")
+            .Alignment(HorizontalAlignment.Left)
+            .Caption("Экзамен");
+        c.AddFor(m => m.CheckState).Lookup(l => l
+            .DataSource(new JS("studentExamCheckState"))
+            .DisplayExpr("name")
+            .ValueExpr("id")).Caption("Статус проверки");
+    })
+    .MasterDetail(m=>m
+        .Enabled(false)
+        .Template(new JS("editStudentExamCRatesTemplate")))
+    )
+
+
+
+<style>
+    .checkContainer {
+        display: flex; 
+        justify-content: space-between;
+        max-height: 600px;
+    }
+    .cAnswerFiles {
+        margin-right: 5px;
+    }
+    
+</style>

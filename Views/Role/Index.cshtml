@@ -1,0 +1,40 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using WebDtt.Models
+@model IEnumerable<WebDtt.Models.Role>
+
+@{
+    ViewBag.Title = "Роли пользователей";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <h2>Роли пользователей</h2>
+
+    @(Html.DevExtreme().DataGrid<Role>()
+        .ShowColumnHeaders(true)
+        .ShowRowLines(true)
+        .ColumnAutoWidth(true)
+        .DataSource(ds => ds.WebApi()
+            .Controller("RolesApi")
+            .LoadAction("Get")
+            .InsertAction("Post")
+            .UpdateAction("Put")
+            .DeleteAction("Delete")
+            .Key("RoleID")
+        )
+        .RemoteOperations(true)
+        .Columns(columns =>
+        {
+            columns.AddFor(m => m.RoleName).Caption("Название");
+            columns.AddFor(m => m.RoleDescription).Caption("Описание");
+        })
+        .Editing(e =>
+        {
+            e.AllowAdding(true);
+            e.AllowUpdating(true);
+            e.AllowDeleting(true);
+            e.Mode(GridEditMode.Row);
+            e.UseIcons(true);
+        })
+        )
+        
+        

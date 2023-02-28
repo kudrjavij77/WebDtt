@@ -1,0 +1,10 @@
+﻿
+@{
+    ViewBag.Title = "SendSuccess";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Сообщение успешно отправлено!</h2>
+<br>
+@Html.ActionLink("Написать еще письмо?", "EmailForm", "EmailSender", null, new { @class = "btn btn-outline-primary" })
+

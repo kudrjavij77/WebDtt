@@ -1,0 +1,26 @@
+﻿@model WebDtt.Models.Order
+
+@(Html.DevExtreme().TabPanel()
+       .Items(items =>
+       {
+           items.Add()
+               .Title("Договор")
+               .Template(new TemplateName("details-tabOrderTemplate"));
+
+           items.Add()
+               .Title("Предметы");
+               //.Template(new TemplateName("gridContainer-details-tabOrderTemplate"));
+
+           items.Add()
+               .Title("Участник");
+               //.Template(new TemplateName("gridContainer-details-tabStudentTemplate"));
+
+           items.Add()
+               .Title("Законный представитель");
+           //.Template(new TemplateName("gridContainer-details-tabDelegateTemplate"));
+       }))
+
+@using (Html.DevExtreme().NamedTemplate("details-tabOrderTemplate"))
+{
+    @Html.ActionLink("Договор", "OrderDtt","Order")
+}

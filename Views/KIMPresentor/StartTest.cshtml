@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewBag.Title = "StartTest";
+    Layout = "~/Views/Shared/_KIMPresentorLayot.cshtml";
+}
+
+<script type="text/javascript" src="~/Scripts/my-script/ElectronicKIMViewerClass.js"></script>
+<script type="text/javascript">
+    var id = "@ViewBag.Id";
+    var options = { id: id };
+    var ekv = new ElectronicKIMViewerClass(null, '/api/ElectronicKIMView', options);
+</script>

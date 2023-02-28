@@ -1,0 +1,257 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using WebDtt.Models
+@using WebDtt.Models.Dto
+@model IEnumerable<WebDtt.Models.Dto.StudentViewModel>
+@{
+    ViewData["Title"] = "Участники";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string isUser = Request.IsAuthenticated && User.IsInRole("user") ? "true" : "false";
+    string isOperator = Request.IsAuthenticated && User.IsInRole("operator") ? "true" : "false";
+   
+}
+
+
+@(Html.DevExtreme().Popup()
+    .ID("popup")
+    .Width("90%")
+    .Height("80%")
+    .Visible(false)
+    .ShowTitle(false)
+    .DragEnabled(false)
+    .CloseOnOutsideClick(true)
+    .ContentTemplate(new TemplateName("popup-template"))
+)
+
+@using (Html.DevExtreme().NamedTemplate("popup-template"))
+{
+    @(Html.DevExtreme().ScrollView()
+        .Width("100%")
+        .Height("100%")
+        .Content(@<text>@Html.Partial("_PoliticConfirmed")</text>)
+    )
+}
+
+@*Кнопка вывзова попапа с политкой безопасности*@
+@*@(Html.DevExtreme().Button()
+        .ElementAttr("class", "button-info")
+        .Text("Политика безопасности")
+        .OnClick(@<text>
+                function showInfo(data) {
+                var popup = $("#popup").dxPopup("instance");
+                popup.show();
+                }
+        </text>)
+)*@
+
+<h2>Участники</h2>
+
+@(Html.DevExtreme().DataGrid<StudentViewModel>
+    ()
+    .ID("dxDataGrid")
+    .DataSource(ds => ds.WebApi()
+    .Controller("Persons")
+    .LoadAction("Get")
+    .InsertAction("Post")
+    .UpdateAction("Put")
+    .DeleteAction("Delete")
+    .Key("PersonID"))
+    .ShowColumnHeaders(true)
+    .WordWrapEnabled(true)
+    .ShowBorders(true)
+    .ShowRowLines(true)
+    .ShowColumnLines(true)
+    .Sorting(sorting => sorting.Mode(GridSortingMode.Multiple))
+    .OnCellPrepared("showUserGrid")
+    //.ColumnChooser(ch=>ch.Enabled(true))
+    .Editing(e =>
+    {
+        e.UseIcons(false);
+        e.AllowAdding(true);
+        e.AllowUpdating(true);
+        e.AllowDeleting(true);
+        e.Mode(GridEditMode.Popup);
+        e.Form(f =>
+        {
+            f.ColCount(Mode.Auto);
+            f.ID("editForm");
+            f.MinColWidth(250);
+            f.ColCount(1);
+            //f.ColCountByScreen(c => c.Lg(3).Md(2).Sm(1));
+            //f.ScreenByWidth("screenByWidth");
+            f.FormData(Model);
+            f.Items(i =>
+            {
+                i.AddSimpleFor(m => m.LastName);
+                i.AddSimpleFor(m => m.FirstName);
+                i.AddSimpleFor(m => m.Patronymic);
+                i.AddSimpleFor(m => m.BirthDate);
+                i.AddSimpleFor(m => m.Sex);
+                i.AddSimpleFor(m => m.ParticipantClass);
+                i.AddSimpleFor(m => m.DocSeria);
+                i.AddSimpleFor(m => m.DocNumber);
+                i.AddSimpleFor(m => m.IssuedBy)
+                    .Editor(editor => editor.TextArea().AutoResizeEnabled(true));
+                i.AddSimpleFor(m => m.IssedDate);
+                i.AddSimpleFor(m => m.RegistrationAddress)
+                    .Editor(editor => editor.TextArea().AutoResizeEnabled(true));
+                i.AddSimpleFor(m => m.Phones)
+                    .Editor(editor => editor.TextBox()
+                        .Mask("+7 (X00) 000-0000")
+                        .MaskRules(new {X = new JS("/[02-9]/")})
+                        .UseMaskedValue(true));
+                i.AddSimpleFor(m => m.Email)
+                    .Editor(editor => editor.TextBox());
+                i.AddSimpleFor(m => m.ConfirmedData)
+                    .Editor(editor => editor.CheckBox()
+                        .Text("Пользователь подтверждает правильность введенных персональных данных"));
+                i.AddSimpleFor(m => m.ConfirmedPolicy)
+                    .Editor(editor => editor.CheckBox()
+                        .Text("Пользователь выражает свое согласие с Политикой обработки персональных данных"));
+                i.AddSimpleFor(m => m.IsDeleted)
+                    .Editor(editor => editor.Switch().SwitchedOnText("да").SwitchedOffText("нет"));
+                i.AddSimpleFor(m => m.UserID);
+                i.AddButton().ButtonOptions(bo => bo
+                    .ElementAttr("class", "button-info")
+                    .Type(ButtonType.Default)
+                    .StylingMode(ButtonStylingMode.Outlined)
+                    .Text("Политика безопасности")
+                    .OnClick(@<text>
+                                 function showInfo(data) {
+                                 var popup = $("#popup").dxPopup("instance");
+                                 popup.show();
+                                 }
+                              </text>));
+
+            });
+
+        });
+    })
+.Columns(col =>
+{
+    col.AddFor(m => m.ViewFio).MinWidth(100).Caption("ФИО участника");
+    col.AddFor(m => m.LastName).Visible(false);
+    col.AddFor(m => m.FirstName).Visible(false);
+    col.AddFor(m => m.Patronymic).Visible(false);
+    col.AddFor(m => m.ParticipantClass).HidingPriority(11)
+        .Alignment(HorizontalAlignment.Center).Caption("Класс")
+        .Lookup(l => l.DataSource(new JS("classArrayLookup"))
+            .DisplayExpr("name").ValueExpr("id"));
+    col.AddFor(m => m.Sex).HidingPriority(7).Caption("Пол")
+        .Lookup(l => l.DataSource(new JS("sexArrayLookup"))
+            .DisplayExpr("name").ValueExpr("id"));
+    col.AddFor(m => m.BirthDate).HidingPriority(8)
+        .Alignment(HorizontalAlignment.Center).Caption("Дата рождения");
+    col.AddFor(m => m.DocSeria).HidingPriority(6)
+        .Alignment(HorizontalAlignment.Center).Caption("Серия документа");
+    col.AddFor(m => m.DocNumber).HidingPriority(5)
+        .Alignment(HorizontalAlignment.Center).Caption("Номер документа");
+    col.AddFor(m => m.IssuedBy).HidingPriority(2).Caption("Кем выдан");
+    col.AddFor(m => m.IssedDate).HidingPriority(1)
+        .Alignment(HorizontalAlignment.Center).Caption("Дата выдачи");
+    col.AddFor(m => m.RegistrationAddress)
+        .HidingPriority(0).Caption("Адрес регистрации");
+    col.AddFor(m => m.Phones).HidingPriority(4).Caption("Телефон");
+    col.AddFor(m => m.Email).HidingPriority(9).Caption("Email");
+    col.AddFor(m => m.PersonType.PersonTypeDescription)
+        .HidingPriority(10).Caption("Тип персоны");
+    col.AddFor(m => m.Person1.ViewFio)
+        .HidingPriority(3).Caption("ФИО законного представителя");
+    col.AddFor(m => m.Flags).Visible(false);
+    col.AddFor(m => m.ConfirmedData).Visible(false);
+    col.AddFor(m => m.ConfirmedPolicy).Visible(false);
+    col.AddFor(m => m.IsDeleted);
+    col.AddFor(m => m.UserID)
+        .Lookup(l => l.DataSource(ds => ds.WebApi()
+            .Controller("Persons").LoadAction("GetUsersLookup").Key("Value"))
+            .ValueExpr("UserID").DisplayExpr("UserName"))
+        .Caption("Пользователь");
+}))
+
+
+<script>
+    function screenByWidth(width) {
+
+        return width < 900 ? "sm" : width < 1800 ? "md" : "lg";
+    }
+
+    function showUserGrid() {
+
+        var dxDataGrid = $('#dxDataGrid').dxDataGrid('instance');
+        var isUser = @Html.Raw(@isUser);
+        var isOperator = @Html.Raw(@isOperator);
+
+        if (isUser) {
+            dxDataGrid._options.editing.allowUpdating = false;
+            dxDataGrid._options.editing.allowDeleting = false;
+            dxDataGrid._options.showBorders = false;
+            dxDataGrid._options.showRowLines = false;
+            dxDataGrid._options.showColumnLines = false;
+            //dxDataGrid._options.editing.useIcons = true;
+            dxDataGrid._options.searchPanel.visible = false;
+            dxDataGrid._options.headerFilter.visible = false;
+            dxDataGrid._options.sorting.mode = "none";
+            $('#dxDataGrid').dxDataGrid("columnOption", "IsDeleted", "visible", false);
+            $('#dxDataGrid').dxDataGrid("columnOption", "IsDeleted", "visible", false);
+            $('#dxDataGrid').dxDataGrid("columnOption", "UserID", "visible", false);
+        }
+        else {
+            if (isOperator) {
+                dxDataGrid._options.editing.allowDeleting = false;
+            }
+            else {
+                dxDataGrid._options.searchPanel.visible = true;
+                dxDataGrid._options.headerFilter.visible = true;
+                dxDataGrid._options.sorting.mode = "multiple";
+                dxDataGrid._options.editing.useIcons = true;
+            }
+        }
+    }
+
+
+    //function exportToPDF() {
+    //    var doc = new jsPDF();
+    //    var dataGrid = $("#textBlock");
+    //    DevExpress.pdfExporter.exportDataGrid({
+    //        jsPDFDocument: doc,
+    //        component: dataGrid
+    //    }).then(function() {
+    //        doc.save("Customers.pdf");
+    //    });
+    //}
+
+
+    var sexArrayLookup = [
+        {
+            id: 1,
+            name: "Мужской"
+        },
+        {
+            id: 2,
+            name: "Женский"
+        }
+    ];
+
+    var classArrayLookup = [
+        {
+            id: 9,
+            name: "ОГЭ (9 класс)"
+        },
+        {
+            id: 11,
+            name: "ЕГЭ (11 класс)"
+        }
+    ];
+
+
+
+</script>
+
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.0.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.9/jspdf.plugin.autotable.min.js"></script>
+<script src="~Scripts/foreighnResource/jspdf.umd.min.js"></script>
+<script src="~Scripts/foreighnResource/jspdf.plugin.autotable.min.js"></script>
+
+<script>
+    window.jsPDF = window.jspdf.jsPDF;
+    applyPlugin(window.jsPDF);
+</script>*@

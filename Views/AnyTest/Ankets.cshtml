@@ -1,0 +1,102 @@
+﻿@using DevExtreme.AspNet.Mvc
+@{
+    ViewData["Title"] = "Ankets";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/my-script/Ankets.js"></script>
+
+<h2>Опросы</h2>
+
+@{
+    if (User.IsInRole("user"))
+    {
+        @(Html.DevExtreme().DataGrid<WebDtt.Models.ObjectAnket>()
+            .DataSource(ds => ds.WebApi()
+                .Controller("ObjectAnkets")
+                .LoadAction("Get")
+            )
+            .RemoteOperations(true)
+            .Columns(columns =>
+            {
+
+                columns.AddFor(m => m.ObjectAnketID).Visible(false);
+
+                columns.AddFor(m => m.AnketID).Lookup(lookup => lookup
+                    .DataSource(ds => ds.WebApi().Controller("ObjectAnkets").LoadAction("AnketsLookup").Key("Value"))
+                    .ValueExpr("Value")
+                    .DisplayExpr("Text")
+                    ).Caption("Назавание анкеты");
+
+                columns.Add().DataField("StudentId").Caption("Слушатель/участник");
+
+                columns.AddFor(m => m.PersonGroupID).Lookup(lookup => lookup
+                    .DataSource(ds => ds.WebApi().Controller("ObjectAnkets").LoadAction("PersonGroupsLookup").Key("Value"))
+                    .ValueExpr("Value")
+                    .DisplayExpr("Text")
+                    ).Caption("Предмет курса");
+
+                columns.AddFor(m => m.StudentExamID).Lookup(lookup => lookup
+                    .DataSource(ds => ds.WebApi().Controller("ObjectAnkets").LoadAction("StudentExamsLookup").Key("Value"))
+                    .ValueExpr("Value")
+                    .DisplayExpr("Text")
+                    ).Caption("Предмет тестирования");
+
+                columns.Add().Type(GridCommandColumnType.Buttons).Buttons(b =>
+                    b.Add().Text("Заполнить анкету").OnClick("StartTest").Icon("edit")).Caption("Пройти опрос");
+
+            })
+        )
+    }
+    else
+    {
+        <div id="alerts"></div>
+
+        @(Html.DevExtreme().DataGrid<WebDtt.Models.ObjectAnket>()
+            .DataSource(ds => ds.WebApi()
+                .Controller("ObjectAnkets")
+                .LoadAction("Get")
+            )
+            .ID("objectAnketsGrid")
+            .RemoteOperations(true)
+            .Scrolling(scr=>scr.Mode(GridScrollingMode.Virtual))
+            .HeaderFilter(hf=>hf.Visible(true))
+            .OnToolbarPreparing("OnToolbarPreparing")
+            .Selection(s => s.Mode(SelectionMode.Multiple).SelectAllMode(SelectAllMode.Page))
+            .Columns(columns =>
+            {
+
+                columns.AddFor(m => m.ObjectAnketID).Visible(false);
+
+                columns.AddFor(m => m.AnketID).Lookup(lookup => lookup
+                    .DataSource(ds => ds.WebApi().Controller("ObjectAnkets").LoadAction("AnketsLookup").Key("Value"))
+                    .ValueExpr("Value")
+                    .DisplayExpr("Text")
+                    ).Caption("Назавание анкеты");
+
+                columns.AddFor(m => m.PersonGroupID).Lookup(lookup => lookup
+                    .DataSource(ds => ds.WebApi().Controller("ObjectAnkets").LoadAction("PersonGroupsLookup").Key("Value"))
+                    .ValueExpr("Value")
+                    .DisplayExpr("Text")
+                    ).Caption("Предмет курса");
+
+                columns.AddFor(m => m.StudentExamID).Lookup(lookup => lookup
+                    .DataSource(ds => ds.WebApi().Controller("ObjectAnkets").LoadAction("StudentExamsLookup").Key("Value"))
+                    .ValueExpr("Value")
+                    .DisplayExpr("Text")
+                    ).Caption("Предмет тестирования");
+
+                columns.Add().DataField("StudentId").Caption("Слушатель/участник");
+
+                columns.AddFor(m => m.StartDateTime).Caption("Дата начала заполнения");
+
+                columns.AddFor(m => m.EndDateTime).Caption("Дата окончания заполнения");
+
+                columns.AddFor(m => m.Flags).Visible(false);
+
+                columns.Add().DataField("EmailSend").Caption("Оповощение отправлено");
+
+            }))
+    }
+
+}

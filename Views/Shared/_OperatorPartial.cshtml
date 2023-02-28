@@ -1,0 +1,27 @@
+﻿
+@using Microsoft.AspNet.Identity
+@if (User.IsInRole("operator"))
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { @class = "navbar-left" }))
+    {
+        @Html.AntiForgeryToken()
+
+    <ul class="navbar-nav mr-auto">
+        @*<li class="nav-item ">
+            @Html.ActionLink("Участники", "Students", "Person", null, new { @class = "nav-link" })
+        </li>*@
+        <li class="nav-item ">
+            @Html.ActionLink("Договоры", "AllOrders", "Order", null, new { @class = "nav-link" })
+        </li>
+        @*<li class="nav-item ">
+            @Html.ActionLink("Рассадка", "Index", "ParticipantExamOnStations", null, new { @class = "nav-link" })
+        </li>*@
+    </ul>
+    }
+}
+else
+{
+
+}
+
+

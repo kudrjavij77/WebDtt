@@ -1,0 +1,43 @@
+﻿@using DevExpress.XtraRichEdit.Model
+@using WebDtt.Models
+@model IEnumerable<WebDtt.Models.Exam>
+@{
+    ViewBag.Title = "StatByQuestion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/my-script/StatByQuestion.js"></script>
+
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/3.3.1/exceljs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>*@
+<script src="~/Scripts/foreighnResource/exceljs.min.js"></script>
+<script src="~/Scripts/foreighnResource/FileSaver.min.js"></script>
+<script src="~/Scripts/foreighnResource/polyfill.min.js"></script>
+
+
+<h2>Статистика по баллам</h2>
+
+@(Html.DevExtreme().DataGrid<Exam>()
+    .DataSource(d => d.WebApi()
+        .Controller("Exams")
+        .LoadAction("Get")
+        .Key("ExamID"))
+    .ShowBorders(true)
+    .ShowColumnLines(true)
+    .ShowRowLines(true)
+    .OnRowClick("rowClick")
+    .ColumnAutoWidth(true)
+    .Columns(c =>
+    {
+        c.AddFor(m => m.ExamType.ExamTypeName);
+        c.AddFor(m => m.TestDateTime);
+        c.AddFor(m => m.Subject.SubjectCode);
+        c.AddFor(m => m.Subject.SubjectName);
+    })
+    .MasterDetail(m => m
+        .Enabled(false)
+        .Template(new JS("viewStatByQuestionTemplate")))
+
+
+)

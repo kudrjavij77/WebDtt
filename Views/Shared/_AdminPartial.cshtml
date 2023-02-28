@@ -1,0 +1,22 @@
+﻿@using Microsoft.AspNet.Identity
+@if (User.IsInRole("admin"))
+{
+    using (Html.BeginForm("Index","Role", new { @class = "navbar-left" }))
+    {
+        @Html.AntiForgeryToken()
+
+    <ul  class="navbar-nav mr-auto">
+        <li class="nav-item ">
+            @Html.ActionLink("Politic", "PoliticConfirmed", "Home", null, new { @class = "nav-link" })
+        </li>
+        <li class="nav-item ">
+            @Html.ActionLink("Роли", "Index", "Role", null, new { @class = "nav-link" })
+        </li>
+    </ul>
+    }
+}
+else
+{
+
+}
+

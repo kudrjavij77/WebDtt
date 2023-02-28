@@ -1,0 +1,87 @@
+﻿@using WebDtt.Models
+@model IEnumerable<WebDtt.Models.Person>
+
+@{
+    ViewBag.Title = "Experts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/my-script/Experts.js"></script>
+
+<h2>Эксперты</h2>
+
+@(Html.DevExtreme().DataGrid<WebDtt.Models.Dto.ExpertViewModel>()
+    .ID("ExpertGrid")
+    .DataSource(ds=>ds.WebApi()
+        .Controller("Persons")
+        .OnBeforeSend("addNewExpert")
+        .LoadAction("GetExperts")
+        .InsertAction("Post")
+        .UpdateAction("Put")
+        .DeleteAction("")
+        .Key("PersonID"))
+    .FilterRow(f => f.Visible(true))
+    .SearchPanel(s => s.Visible(true))
+    .Sorting(s => s.Mode(GridSortingMode.Multiple))
+    .Selection(s => s.Mode(SelectionMode.Multiple))
+    .Editing(e=>e
+        .UseIcons(true)
+        .AllowAdding(true)
+        .AllowUpdating(true)
+        .Mode(GridEditMode.Popup)
+        .Form(f => f
+            .ShowValidationSummary(true)
+            .LabelLocation(FormLabelLocation.Top)
+            .Items(i =>
+            {
+                i.AddSimpleFor(m => m.LastName);
+                i.AddSimpleFor(m => m.FirstName);
+                i.AddSimpleFor(m => m.Patronymic);
+                i.AddSimpleFor(m => m.Sex);
+                i.AddSimpleFor(m => m.BirthDate);
+                i.AddSimpleFor(m => m.ParticipantClass);
+                i.AddSimpleFor(m => m.DocSeria);
+                i.AddSimpleFor(m => m.DocNumber);
+                i.AddSimpleFor(m => m.IssuedBy);
+                i.AddSimpleFor(m => m.IssedDate);
+                i.AddSimpleFor(m => m.RegistrationAddress);
+                i.AddSimpleFor(m => m.Phones).Editor(editor => editor.TextBox()
+                    .Mask("+7 (X00) 000-0000").MaskRules(new {X = new JS("/[02-9]/")})
+                    .MaskInvalidMessage("Номер телефона должен соответствовать формату").UseMaskedValue(true));
+                i.AddSimpleFor(m => m.Email);
+                i.AddSimpleFor(m => m.Subjects)
+                    //.Name("ExpertSubjects")
+                    .Editor(editor => editor.TagBox()
+                        .DataSource(d => d.WebApi().RouteName("SubjectsApi").LoadAction("Get").Key("SubjectID"))
+                        .DisplayExpr("SubjectViewName")
+                        .ApplyValueMode(EditorApplyValueMode.Instantly).ShowClearButton(true).ShowDropDownButton(true));
+
+            }))
+    )
+    .Columns(c=> {
+
+                     c.AddFor(m => m.ViewFio).Caption("ФИО");
+                     c.AddFor(m => m.PersonTypeID).Lookup(l=>l
+                         .DataSource(d=>d.WebApi().Controller("Persons").LoadAction("PersonTypesLookup").Key("PersonTypeID"))
+                         .DisplayExpr("PersonTypeDescription").ValueExpr("PersonTypeID")).Caption("Тип персоны");
+                     c.AddFor(m=>m.ParticipantClass).Lookup(l => l.DataSource(new JS("classArrayLookup"))
+                         .DisplayExpr("name").ValueExpr("id"));
+                     c.AddFor(m=>m.Flags).Lookup(l => l.DataSource(new JS("personFlags"))
+                         .DisplayExpr("name").ValueExpr("id"));
+                     c.AddFor(m => m.LastName).Visible(false);
+                     c.AddFor(m => m.FirstName).Visible(false);
+                     c.AddFor(m => m.Patronymic).Visible(false);
+                     c.AddFor(m=>m.Sex).Lookup(l => l.DataSource(new JS("sexArrayLookup"))
+                         .DisplayExpr("name").ValueExpr("id"));
+                     c.AddFor(m => m.BirthDate).Visible(false);
+                     c.AddFor(m => m.DocSeria).Visible(false);
+                     c.AddFor(m => m.DocNumber).Visible(false);
+                     c.AddFor(m => m.IssuedBy).Visible(false);
+                     c.AddFor(m => m.IssedDate).Visible(false);
+                     c.AddFor(m => m.RegistrationAddress).Visible(false);
+                     c.AddFor(m => m.Phones);
+                     c.AddFor(m => m.Email);
+                     c.AddFor(m => m.Subjects).CellTemplate(new JS("subjectDisplayExpr"));
+
+    }))
+

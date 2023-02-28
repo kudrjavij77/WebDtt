@@ -1,0 +1,6 @@
+{
+  "dumpStorePath": "D:\\aisexam8filestore\\_dumps",
+  "logBase": "D:\\aisexam8filestore\\_logs",
+  "base": "D:\\aisexam8filestore",
+  "dumpeeInterval": 5000
+}

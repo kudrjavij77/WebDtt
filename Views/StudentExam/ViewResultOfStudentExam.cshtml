@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewBag.Title = "ViewResultOfStudentExam";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/my-script/ViewResultOfStudentExam.js"></script>
+
+<h2>Результаты проверки тренировочного тестирования</h2>
+<br>
+
+@(Html.DevExtreme().Form()
+    .ColCount(3)
+    .Width(1000)
+    .ReadOnly(true)
+    .Items(i =>
+{
+    i.AddSimple().DataField("ExamDate").Label(l => l.Text("Дата экзамена")).IsRequired(false);
+    i.AddSimple().DataField("SubjectName").Label(l => l.Text("Предмет"));
+    i.AddSimple().DataField("FinishDateTime").Label(l => l.Text("Тест завершен"));
+    i.AddSimple().DataField("StudentLastName").Label(l => l.Text("Фамилия участника"));
+    i.AddSimple().DataField("StudentFirstName").Label(l => l.Text("Имя участника"));
+    i.AddSimple().DataField("StudentPatronymic").Label(l => l.Text("Отчество участника"));
+    i.AddSimple().DataField("VariantKim").Label(l => l.Text("Вариант КИМ")).ColSpan(2);
+    i.AddSimple().DataField("CheckState")
+        .Editor(e => e.Lookup().DataSource(new JS("studentExamCheckState")).DisplayExpr("name").ValueExpr("id"))
+        .Label(l => l.Text("Статус проверки части C")).IsRequired(false);
+})
+    .FormData(@ViewBag.StudentExam)
+
+)
+<br>
+
+<h4>Тестовый балл</h4>
+<p style="font-size: 80px; font-weight: bold; margin-top: -20px; margin-left: 35px;">@ViewBag.TestRate</p>
+
+
+<h4>Файлы, содержащие ответы на задания "с развернутым ответом"</h4>
+<div id="cAnswerFiles"></div>
+
+<br>
+<div class="rateContainer">
+
+    <div>
+        <h4>Задания "с кратким ответом"</h4>
+        <div id="gridBAnswers"></div>
+    </div>
+
+    <div class="afterRateContainer">
+        <h4>Задания "с развернутым ответом"</h4>
+        <div id="gridCRates"></div>
+    </div>
+
+    @*<div class="afterRateContainer">
+            <h4>Задания "аудирования"</h4>
+            <div id="gridDRates" class="afterRateContainer"></div>
+        </div>*@
+</div>
+
+
+
+
+<input type="hidden" id="inputId" data-value="@ViewBag.StudentExamId" />
+
+<style>
+    .rateContainer {
+        display: flex;
+        justify-content: space-between;
+        max-height: 450px;
+    }
+
+    .afterRateContainer {
+        margin-left: 15px;
+    }
+</style>

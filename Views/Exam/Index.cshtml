@@ -1,0 +1,96 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using WebDtt.Models
+@model IEnumerable<WebDtt.Models.Exam>
+    @{
+        ViewBag.Title = "Экзамены";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+@{
+    var filterValue = new object[]
+    {
+        new object[] { "TestDateTime", FilterBuilderFieldFilterOperations.GreaterThan, "2022/09/01" },
+    };
+}
+
+
+<h2>Экзамены</h2>
+
+    @(Html.DevExtreme().DataGrid<Exam>()
+        .ShowColumnHeaders(true)
+        .ShowRowLines(true)
+        .ColumnAutoWidth(true)
+        .DataSource(ds => ds.WebApi()
+            .RouteName("ExamsApi")
+            .LoadAction("Get")
+            .InsertAction("Post")
+            .UpdateAction("Put")
+            .DeleteAction("Delete")
+            .Key("ExamID")
+        )
+        .RemoteOperations(true)
+        .Columns(columns =>
+            {
+                columns.AddFor(m => m.SubjectID)
+                    .Lookup(lookup => lookup
+                .DataSource(ds => ds.WebApi()
+                    .RouteName("ExamsApi")
+                    .LoadAction("SubjectsLookup")
+                    .Key("SubjectID"))
+                .ValueExpr("SubjectID").DisplayExpr("SubjectViewName")).Caption("Предмет");
+                columns.AddFor(m => m.ExamTypeID)
+                    .Lookup(lookup => lookup
+                        .DataSource(ds=>ds.WebApi()
+                            .RouteName("ExamsApi")
+                            .LoadAction("ExamTypesLookup")
+                            .Key("ExamTypeID"))
+                        .ValueExpr("ExamTypeID").DisplayExpr("ViewName")).Caption("Тип экзамена");
+                columns.AddFor(m => m.Class)
+                    .Alignment(HorizontalAlignment.Center).Caption("Класс")
+                    .Lookup(l => l.DataSource(new JS("classArrayLookup"))
+                        .DisplayExpr("name").ValueExpr("id"))
+                    .Caption("Класс");
+                columns.AddFor(m => m.Price).DataType(GridColumnDataType.Number).Caption("Стоимость");
+                columns.AddFor(m => m.TestDateTime).Caption("Дата экзамена");
+                columns.AddFor(m => m.Duration).Caption("Продолжительность экзамена (в мин.)");
+                columns.AddFor(m => m.Flags)
+                    .Lookup(l => l.DataSource(new JS("examFlags"))
+                        .DisplayExpr("name").ValueExpr("id"));
+            })
+        .Editing(e =>
+        {
+            e.AllowAdding(true);
+            e.AllowUpdating(true);
+            e.AllowDeleting(true);
+            e.Mode(GridEditMode.Batch);
+            e.UseIcons(true);
+            e.Form(f => f.Items(i =>
+            {
+                i.AddSimpleFor(m => m.SubjectID);
+                i.AddSimpleFor(m => m.ExamTypeID);
+                i.AddSimpleFor(m => m.Class);
+                i.AddSimpleFor(m => m.Price);
+                i.AddSimpleFor(m => m.TestDateTime);
+                i.AddSimpleFor(m => m.Duration).Editor(ed => ed
+                    .Slider().Min(0).Max(600).Tooltip(t=>t
+                        .Enabled(true).Position(VerticalEdge.Bottom)
+                        .ShowMode(SliderTooltipShowMode.Always)
+                        .Format(new JS("function(value){  return value + ' минут'; }"))));
+                i.AddSimpleFor(m => m.Flags);
+            }));
+        }
+        )
+        )
+
+<script>
+    var classArrayLookup = [
+        {
+            id: 9,
+            name: "ОГЭ (9 класс)"
+        },
+        {
+            id: 11,
+            name: "ЕГЭ (11 класс)"
+        }
+    ];
+</script>

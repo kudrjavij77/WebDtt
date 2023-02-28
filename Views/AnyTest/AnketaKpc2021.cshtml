@@ -1,0 +1,245 @@
+﻿@using DevExpress.Utils.MVVM
+@using DevExpress.XtraEditors
+@using WebDtt.Models.Dto
+@model WebDtt.Models.Dto.AnketsKpc2021
+
+@{
+    ViewBag.Title = "AnketaKpc2021";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    //TODO: send PersonObjectAnketID from ViewBag to post method!!!!!
+}
+
+<script src="~/Scripts/my-script/AnketaKpc2021.js"></script>
+
+
+
+
+<h2>Анкета ОС для слушателей курсов</h2>
+<div><p><i>Привет!</i></p></div>
+<div><p><i>Мы просим тебя ответить на несколько вопросов, чтобы сделать нашу работу еще лучше.</i></p></div>
+<div><p><i>Ниже ответь, пожалуйста, на вопросы о занятиях по предмету @ViewBag.SubjectName</i></p></div>
+
+@using (Html.BeginForm())
+{
+    @Html.Hidden("PersonObjectAnketID", (int)ViewBag.PersonObjectAnketID);
+
+
+    using (Html.DevExtreme().ValidationGroup())
+    {
+        @Html.AntiForgeryToken()
+
+@(Html.DevExtreme().Form<AnketsKpc2021>()
+.FormData(Model)
+.ColCount(4).LabelLocation(FormLabelLocation.Top)
+.ID("form").Items(item =>
+{
+    item.AddGroup().ColCount(6).ColSpan(4).Caption("1.	Оцени, пожалуйста, занятия на курсах по следующим параметрам:").Items(i =>
+    {
+        i.AddSimpleFor(m => m.Q_1_1).IsRequired(true)
+            .Label(l => l.Text("Информативность наглядного материала"))
+            .Editor(e => e.RadioGroup().DataSource(new JS("radioArray1")).ValueExpr("value"));
+
+        i.AddSimpleFor(m => m.Q_1_2).IsRequired(true)
+            .Label(l => l.Text("Структурированность подачи материала"))
+            .Editor(e => e.RadioGroup().DataSource(new JS("radioArray1")).ValueExpr("value"));
+
+        i.AddSimpleFor(m => m.Q_1_3).IsRequired(true)
+            .Label(l => l.Text("Интерес, вызываемый преподавателем к предмету"))
+            .Editor(e => e.RadioGroup().DataSource(new JS("radioArray1")).ValueExpr("value"));
+
+        i.AddSimpleFor(m => m.Q_1_4).IsRequired(true)
+            .Label(l => l.Text("Понятность речи преподавателя"))
+            .Editor(e => e.RadioGroup().DataSource(new JS("radioArray1")).ValueExpr("value"));
+
+        i.AddSimpleFor(m => m.Q_1_5).IsRequired(true)
+            .Label(l => l.Text("Качество теоретического материала"))
+            .Editor(e => e.RadioGroup().DataSource(new JS("radioArray1")).ValueExpr("value"));
+
+        i.AddSimpleFor(m => m.Q_1_6).IsRequired(true)
+            .Label(l => l.Text("Качество проработки практических заданий"))
+            .Editor(e => e.RadioGroup().DataSource(new JS("radioArray1")).ValueExpr("value"));
+
+    });
+
+    item.AddGroup().ColSpan(4).Caption("2. Преподаватель всегда развернуто отвечает на вопросы слушателей?").Items(i =>
+    {
+        i.AddSimpleFor(m => m.Q_2_1).IsRequired(true)
+            .Label(l => l.Visible(false))
+            .Editor(e => e.RadioGroup().DataSource(new JS("radioTask2")).ValueExpr("value"));
+    });
+
+    item.AddGroup().ColCount(3).ColSpan(4).Caption("3.	Отметь, пожалуйста, на бегунке следующие характеристики учебного процесса:").Items(i =>
+    {
+        i.AddSimpleFor(m => m.Q_3_1).IsRequired(true)
+            .Label(l => l.Text("преобладает").Visible(true))
+            .Editor(e => e.Slider().Min(1).Max(10).Value(5)
+                .Label(l => l.Visible(true).Format(new JS("formatLabel31")).Position(VerticalEdge.Top)));
+        i.AddSimpleFor(m => m.Q_3_2).IsRequired(true)
+            .Label(l => l.Text("ДЗ").Visible(true))
+            .Editor(e => e.Slider().Min(1).Max(10).Value(5)
+                .Label(l => l.Visible(true).Format(new JS("formatLabel32")).Position(VerticalEdge.Top)));
+        i.AddSimpleFor(m => m.Q_3_3).IsRequired(true)
+            .Label(l => l.Text("преподаватель").Visible(true))
+            .Editor(e => e.Slider().Min(1).Max(10).Value(5)
+                .Label(l => l.Visible(true).Format(new JS("formatLabel33")).Position(VerticalEdge.Top)));
+    });
+
+    item.AddGroup().ColSpan(4).Caption("4.	Какие сложности у тебя возникают в процессе подготовки к ЕГЭ? и как ты с ними справляешься?").Items(i =>
+    {
+        i.AddSimpleFor(m => m.Q_4_1).Label(l => l.Visible(false)).IsRequired(true)
+            .Editor(e => e.TextArea().MaxLength(200).AutoResizeEnabled(true).Placeholder("200 символов"));
+    });
+
+    item.AddGroup().ColSpan(4).Caption("5.	Как ты справляешься с перечисленными трудностями?").Items(i =>
+    {
+        i.AddSimpleFor(m => m.Q_5_1).Label(l => l.Visible(false)).IsRequired(true)
+            .Editor(e => e.TextArea().MaxLength(200).AutoResizeEnabled(true).Placeholder("200 символов"));
+    });
+
+    item.AddGroup().ColSpan(4).ColCount(4).Caption("6.	Укажи, пожалуйста, на линейке следующие значения:").Items(i =>
+    {
+        i.AddSimpleFor(m => m.Q_6_1).IsRequired(true)
+            .Label(l => l.Text("уровень знаний, необходимый для сдачи ЕГЭ"))
+            .Editor(e => e.Slider().Min(0).Max(10).Value(1).ShowRange(true)
+                .Tooltip(t => t.Enabled(true).Position(VerticalEdge.Bottom).ShowMode(SliderTooltipShowMode.Always)));
+        i.AddSimpleFor(m => m.Q_6_2).IsRequired(true)
+            .Label(l => l.Text("уровень знаний, который был у тебя в сентябре"))
+            .Editor(e => e.Slider().Min(0).Max(10).Value(1).ShowRange(true)
+                .Tooltip(t => t.Enabled(true).Position(VerticalEdge.Bottom).ShowMode(SliderTooltipShowMode.Always)));
+        i.AddSimpleFor(m => m.Q_6_3).IsRequired(true)
+            .Label(l => l.Text("уровень знаний, которого ты хочешь достичь к окончанию курсов"))
+            .Editor(e => e.Slider().Min(0).Max(10).Value(1).ShowRange(true)
+                .Tooltip(t => t.Enabled(true).Position(VerticalEdge.Bottom).ShowMode(SliderTooltipShowMode.Always)));
+        i.AddSimpleFor(m => m.Q_6_4).IsRequired(true)
+            .Label(l => l.Text("уровень твоих знаний сегодня"))
+            .Editor(e => e.Slider().Min(0).Max(10).Value(1).ShowRange(true)
+                .Tooltip(t => t.Enabled(true).Position(VerticalEdge.Bottom).ShowMode(SliderTooltipShowMode.Always)));
+    });
+
+    item.AddGroup().ColSpan(4).Caption("7.	Какие плюсы и минусы возникают в обучении при дистанционной форме?").Items(i =>
+    {
+        i.AddSimpleFor(m => m.Q_7_1).Label(l => l.Visible(false)).IsRequired(true)
+            .Editor(e => e.TextArea().MaxLength(200).AutoResizeEnabled(true).Placeholder("200 символов"));
+    });
+
+    item.AddGroup().ColSpan(4).ColCount(4).Caption("8.	Удобно ли тебе использовать в личном кабинете слушателя курсов на нашем сайте?").Items(i =>
+    {
+        i.AddSimpleFor(m => m.Q_8_1).IsRequired(true).ColSpan(4)
+            .Label(l => l.Text("он-лайн регистрацию на курсы"))
+            .Editor(e => e.RadioGroup().DataSource(new JS("radioArray2")).ValueExpr("value"));
+
+        i.AddSimpleFor(m => m.Q_8_1_1).ColSpan(4)
+            //.Visible(false)
+            .Label(l => l.Text("Уточни, пожалуйста, что именно вызвало трудности (если возникли)"))
+            .Editor(e => e.TextArea().MaxLength(200).AutoResizeEnabled(true).Placeholder("200 символов"));
+
+        i.AddSimpleFor(m => m.Q_8_2).IsRequired(true).ColSpan(4)
+            .Label(l => l.Text("расписание занятий"))
+            .Editor(e => e.RadioGroup().DataSource(new JS("radioArray2")).ValueExpr("value"));
+
+        i.AddSimpleFor(m => m.Q_8_2_1).ColSpan(4)
+            //.Visible(false)
+            .Label(l => l.Text("Уточни, пожалуйста, что именно вызвало трудности (если возникли)"))
+            .Editor(e => e.TextArea().MaxLength(200).AutoResizeEnabled(true).Placeholder("200 символов"));
+
+        i.AddSimpleFor(m => m.Q_8_3).IsRequired(true).ColSpan(4)
+            .Label(l => l.Text("график платежей"))
+            .Editor(e => e.RadioGroup().DataSource(new JS("radioArray2")).ValueExpr("value"));
+
+        i.AddSimpleFor(m => m.Q_8_3_1).ColSpan(4)
+            //.Visible(false)
+            .Label(l => l.Text("Уточни, пожалуйста, что именно вызвало трудности (если возникли)"))
+            .Editor(e => e.TextArea().MaxLength(200).AutoResizeEnabled(true).Placeholder("200 символов"));
+
+        i.AddSimpleFor(m => m.Q_8_4).IsRequired(true).ColSpan(4)
+            .Label(l => l.Text("материалы от преподавателя (домашние задания, раздаточный материал, прочее)"))
+            .Editor(e => e.RadioGroup().DataSource(new JS("radioArray2")).ValueExpr("value"));
+
+        i.AddSimpleFor(m => m.Q_8_4_1).ColSpan(4)
+            //.Visible(false)
+            .Label(l => l.Text("Уточни, пожалуйста, что именно вызвало трудности (если возникли)"))
+            .Editor(e => e.TextArea().MaxLength(200).AutoResizeEnabled(true).Placeholder("200 символов"));
+    });
+
+
+    //TODO: несколько вариантов
+    item.AddGroup().ColSpan(4).Items(i =>
+    {
+        i.AddSimpleFor(m => m.Q_9_1).IsRequired(true)
+            .Label(l => l.Visible(false))
+            .Editor(e => e.RadioGroup().DataSource(new JS("radioTask91")).ValueExpr("value"));
+
+        //i.AddSimpleFor(m => m.Q_9_1).IsRequired(true).Label(l => l.Visible(false))
+        //    .Template(new JS("templateQ_9_1"));
+
+        i.AddSimpleFor(m => m.Q_9_1_1).Label(l => l.Text("Уточни, пожалуйста, какие именно?").Location(FormLabelLocation.Top))
+        .Editor(e => e.TextArea().AutoResizeEnabled(true).MaxLength(200).Placeholder("200 символов"));
+    }).Caption("9.	Занимаешься ли ты дополнительно по предмету " + @ViewBag.SubjectName);
+
+
+    //TODO: несколько вариантов
+    item.AddGroup().ColSpan(4).Items(i =>
+    {
+        i.AddSimpleFor(m => m.Q_10_1).IsRequired(true)
+            .Label(l => l.Visible(false))
+            .Editor(e => e.RadioGroup().DataSource(new JS("radioTask101")).ValueExpr("value"));
+
+        //i.AddSimpleFor(m => m.Q_10_1).IsRequired(true).Label(l => l.Visible(false))
+        //    .Template(new JS("templateQ_10_1"));
+
+        i.AddSimpleFor(m => m.Q_10_1_1).Label(l => l.Text("Уточни, пожалуйста, чего именно?").Location(FormLabelLocation.Top))
+            .Editor(e => e.TextArea().AutoResizeEnabled(true).MaxLength(200).Placeholder("200 символов"));
+    }).Caption("10.	Чего тебе не хватает в подготовке к ЕГЭ:");
+
+    item.AddGroup().ColSpan(4).Items(i =>
+    {
+        i.AddSimpleFor(m => m.Q_11_1).IsRequired(true)
+            .Label(l => l.Visible(false))
+            .Editor(e => e.RadioGroup().DataSource(new JS("radioTask111")).ValueExpr("value"));
+        i.AddSimpleFor(m => m.Q_11_1_1).IsRequired(true)
+            .Label(l => l.Text("Уточни, пожалуйста, почему?").Location(FormLabelLocation.Top))
+            .Editor(e => e.TextArea().AutoResizeEnabled(true).MaxLength(200).Placeholder("200 символов"));
+    }).Caption("11 Ты бы порекомендовал наши курсы своим друзьям?");
+
+    item.AddGroup().ColSpan(4).Items(i =>
+    {
+        i.AddSimpleFor(m => m.Q_12_1).Label(l => l.Visible(false)).IsRequired(true)
+            .Editor(e => e.TextArea().AutoResizeEnabled(true).MaxLength(200).Placeholder("200 символов"));
+    }).Caption("12.	Укажи 2-3 темы, которые были хорошо тобой усвоены и до курсов:");
+
+    item.AddGroup().ColSpan(4).Items(i =>
+    {
+        i.AddSimpleFor(m => m.Q_13_1).Label(l => l.Visible(false)).IsRequired(true)
+            .Editor(e => e.TextArea().AutoResizeEnabled(true).MaxLength(200).Placeholder("200 символов"));
+    }).Caption("13.	Укажи 2-3 темы, которые ты хотел бы изучить углубленно:");
+
+    item.AddGroup().ColSpan(4).Items(i =>
+    {
+        i.AddSimpleFor(m => m.Q_14_1).Label(l => l.Visible(false)).IsRequired(true)
+            .Editor(e => e.TextArea().AutoResizeEnabled(true).MaxLength(200).Placeholder("200 символов"));
+    }).Caption("14.	Что мы можем сделать для того, чтобы наши курсы были еще эффективнее?");
+
+    item.AddGroup().ColSpan(4).Items(i =>
+    {
+        i.AddSimpleFor(m => m.Q_15_1).IsRequired(true)
+            .Label(l => l.Visible(false))
+            .Editor(e => e.RadioGroup().DataSource(new JS("radioTask151")).ValueExpr("value"));
+
+        i.AddSimpleFor(m => m.Q_15_1_1)
+            .Label(l => l.Visible(false))
+            .Editor(e => e.TextArea().AutoResizeEnabled(true).MaxLength(200).Placeholder("200 символов"));
+    }).Caption("15.	Откуда ты узнал о наших курсах?");
+
+    item.AddButton()
+        .HorizontalAlignment(HorizontalAlignment.Left)
+        .ColSpan(4)
+        .ButtonOptions(bo => bo.UseSubmitBehavior(true)
+            .StylingMode(ButtonStylingMode.Contained)
+            .Text("Отправить").Type(ButtonType.Success));
+
+
+
+}))
+}
+}

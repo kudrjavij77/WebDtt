@@ -1,0 +1,99 @@
+﻿
+<div>
+    @(Html.DevExtreme().Button()
+        .Type(ButtonType.Default)
+        .StylingMode(ButtonStylingMode.Outlined)
+        .Icon("plus")
+        .Text("Добавить нового законного представителя")
+        .OnClick("addNewDelegate"))
+</div>
+@(Html.DevExtreme().DataGrid<WebDtt.Models.Dto.DelegateViewModel>()
+        .ID("gridDelegates")
+        .DataSource(new JS("component.option('dataSource')"))
+        .Editing(editing =>
+        {
+            editing.AllowAdding(false);
+            editing.Mode(GridEditMode.Popup);
+            editing.Form(f =>
+            {
+                f.ShowValidationSummary(true);
+                f.ColCount(1);
+                f.Items(i =>
+                {
+                    i.AddSimpleFor(m => m.LastName);
+                    i.AddSimpleFor(m => m.FirstName);
+                    i.AddSimpleFor(m => m.Patronymic);
+                    i.AddSimpleFor(m => m.BirthDate)
+                        .Editor(e=>e.DateBox()
+                            .Max(new DateTime(DateTime.Now.Year - 18, DateTime.Now.Month, DateTime.Now.Day))
+                            .Placeholder("Законный представитель должен быть совершеннолетним"));
+                    i.AddSimpleFor(m => m.Sex);
+                    i.AddSimpleFor(m => m.DocSeria);
+                    i.AddSimpleFor(m => m.DocNumber);
+                    i.AddSimpleFor(m => m.IssuedBy)
+                        .Editor(editor => editor.TextArea().AutoResizeEnabled(true));
+                    i.AddSimpleFor(m => m.IssedDate);
+                    i.AddSimpleFor(m => m.RegistrationAddress)
+                        .Editor(editor => editor.TextArea().AutoResizeEnabled(true));
+                    i.AddSimpleFor(m => m.Phones)
+                        .Editor(editor => editor.TextBox()
+                            .Mask("+7 (X00) 000-0000")
+                            .MaskRules(new {X = new JS("/[02-9]/")})
+                            .MaskInvalidMessage("Номер телефона должен соответствовать формату")
+                            .UseMaskedValue(true));
+                    i.AddSimpleFor(m => m.Email)
+                        .Editor(editor => editor.TextBox());
+                    i.AddSimpleFor(m => m.ConfirmedData)
+                        .Editor(editor => editor.CheckBox().Value(null)
+                            .Text("Пользователь подтверждает правильность введенных персональных данных"));
+                    i.AddSimpleFor(m => m.ConfirmedPolicy)
+                        .Editor(editor => editor.CheckBox().Value(null)
+                            .Text("Пользователь выражает свое согласие с Политикой обработки персональных данных"));
+
+
+                    i.AddButton().ButtonOptions(bo => bo
+                    .ElementAttr("class", "button-info")
+                    .Type(ButtonType.Default)
+                    .StylingMode(ButtonStylingMode.Outlined)
+                    .Text("Политика обработки персональных данных")
+                    .OnClick(@<text>
+                                 function showInfo(data) {
+                                 var popup = $("#popup").dxPopup("instance");
+                                 popup.show();
+                                 }
+                              </text>));
+                });
+                f.ShowColonAfterLabel(true);
+            });
+        })
+        .Columns(col =>
+        {
+            col.AddFor(m => m.PersonTypeID).Visible(false);
+            col.Add().DataField("ViewFioTypeClass").Caption("Законный представитель");
+            col.AddFor(m => m.FirstName).Visible(false);
+            col.AddFor(m => m.LastName).Visible(false);
+            col.AddFor(m => m.Patronymic).Visible(false);
+            col.AddFor(m => m.Sex).Visible(false)
+                .Lookup(l => l.DataSource(new JS("sexArrayLookup"))
+                    .DisplayExpr("name").ValueExpr("id"));
+            col.AddFor(m => m.BirthDate).Visible(false);
+            col.AddFor(m => m.DocSeria).Visible(false);
+            col.AddFor(m => m.DocNumber).Visible(false);
+            col.AddFor(m => m.IssuedBy).Visible(false);
+            col.AddFor(m => m.IssedDate).Visible(false);
+            col.AddFor(m => m.RegistrationAddress).Visible(false);
+            col.AddFor(m => m.Phones).Visible(false);
+            col.AddFor(m => m.Email).Visible(false);
+            col.AddFor(m => m.Flags).Visible(false);
+            col.AddFor(m => m.ConfirmedData).Visible(false);
+            col.AddFor(m => m.ConfirmedPolicy).Visible(false);
+        })
+        .Selection(s => s.Mode(SelectionMode.Single))
+        .SelectedRowKeys(new JS("component.option('value')"))
+        .OnSelectionChanged(@<text>
+                                function(selectedItems) {
+                                var keys = selectedItems.selectedRowKeys;
+                                component.option("value", keys);
+                                }
+                             </text>)
+        )

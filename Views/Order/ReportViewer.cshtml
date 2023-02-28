@@ -1,0 +1,17 @@
+﻿@(
+    Layout =null
+)
+
+@Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Report }
+    )
+@Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.Report }
+    )
+
+
+@model DevExpress.XtraReports.UI.XtraReport
+@Html.DevExpress().WebDocumentViewer(settings =>
+{
+    settings.Name = "ReportDesigner";
+}).Bind(Model).GetHtml()

@@ -1,0 +1,244 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="xrLabel23.Text" xml:space="preserve">
+    <value>1. 80 ак.ч. 40 000,00 (сорок тысяч рублей 00 копеек)
+     1) В один этап
+	- Единовременная оплата - 40000 руб., в срок не
+	превышающий 5 (пять) календарных дней с даты
+	подписания Договора обеими Сторонами.
+     2) В два этапа
+	- 1 этап - 20000 руб., в срок не превышающий 5 (пять)
+	календарных дней с даты подписания Договора обеими
+	Сторонами.
+	- 2 этап - 20000 руб., в период ТОЛЬКО с 02.01.2023 года 	по 13.01.2023 года
+
+2. 58 ак.ч. 29 000,00 (двадцать девять тысяч рублей. 00 копеек)
+     1) В один этап
+	- Единовременная оплата - 29000 руб., в срок не
+	превышающий 5 (пять) календарных дней с даты
+	подписания Договора обеими Сторонами.
+     2) В два этапа
+	- 1 этап - 14500 руб., в срок не превышающий 5 (пять)
+	календарных дней с даты подписания Договора обеими
+	Сторонами.
+	- 2 этап - 14500 руб., в период ТОЛЬКО с 02.01.2023 года 	по 13.01.2023 года
+
+3. 48 ак.ч. 24 000,00 (двадцать четыре тысячи рублей. 00 копеек)
+     1) В один этап
+	- Единовременная оплата - 24000 руб., в срок не
+	превышающий 5 (пять) календарных дней с даты
+	подписания Договора обеими Сторонами.
+     2) В два этапа
+	- 1 этап - 12000 руб., в срок не превышающий 5 (пять)
+	календарных дней с даты подписания Договора обеими
+	Сторонами.
+	- 2 этап - 12000 руб., в период ТОЛЬКО с 02.01.2023 года 	по 13.01.2023 года
+
+4. 40 ак.ч. 20 000,00 (двадцать тысяч рублей 00 копеек)
+     1) В один этап
+	- Единовременная оплата - 20000 руб., в срок не
+	превышающий 5 (пять) календарных дней с даты
+	подписания Договора обеими Сторонами.
+
+5. 32 ак.ч. 16 000,00 (шестнадцать тысяч рублей 00 копеек)
+     1) В один этап
+	- Единовременная оплата - 16000 руб., в срок не
+	превышающий 5 (пять) календарных дней с даты
+	подписания Договора обеими Сторонами.</value>
+  </data>
+  <data name="xrLabel10.Text" xml:space="preserve">
+    <value>Стоимость обучения на семинарах составляет 16 000 рублей. (единовременно)
+Курс рассчитан на 32 академических часа, это 8 занятий по 4 академических часа (октябрь-ноябрь).
+Занятия проводятся один раз в неделю (4 академических часа / с 17 до 20.10).
+!!! Форма обучения ОЧНАЯ /с применением дистанционных образовательных технологий в периоды перехода государственных общеобразовательных организаций Санкт-Петербурга на исключительно дистанционное обучение.</value>
+  </data>
+  <data name="xrLabel22.Text" xml:space="preserve">
+    <value>Курсы завершаются контрольной работой в формате ГИА (работа проводится на предпоследнем занятии).
+Стоимость обучения по составляет 20 000 рублей, оплата единовременная.
+Курс рассчитан на 40 академических часов, это 10 занятий по 4 академических часа (ноябрь - февраль).
+Занятия проводятся один раз в неделю (4 академических часа, с 11 до 14.00)</value>
+  </data>
+  <data name="xrLabel19.Text" xml:space="preserve">
+    <value>Стоимость обучения по одному предмету составляет 24 000 рублей.
+Оплатить обучение можно в 1 или в 2 этапа, в зависимости от выбранного при заключении договора порядка оплаты.
+Курс рассчитан на 48 академических часов, это 24 занятия по 2 академических часа (октябрь – апрель !!!).
+Занятия проводятся один раз в неделю (по 2 академических часа).</value>
+  </data>
+  <data name="xrLabel18.Text" xml:space="preserve">
+    <value>Описание программы: Особенности выполнения заданий высокого и повышенного уровней сложности в ЕГЭ по обществознанию
+Стоимость обучения составляет 29 000 рублей.
+Оплатить обучение можно в 1 или в 2 этапа, в зависимости от выбранного при заключении договора порядка оплаты.
+Курс рассчитан на 58 академических часов, это 29 занятий по 2 академических часа (октябрь – май !!!).
+Занятия проводятся один раз в неделю (по 2 академических часа).</value>
+  </data>
+  <data name="xrLabel16.Text" xml:space="preserve">
+    <value>Для участия в дистанционном обучении вам понадобится компьютер
+с подключением к интернету, камерой и микрофоном. Занятия будут проходить на платформе Discord, Сферум, Zoom и др.
+Мы просим вас использовать ваши настоящие имя и фамилию для профилей.
+Участие в занятиях разрешено только с компьютеров. Также информируем вас о том, что во время занятия камера всегда должна быть включена!</value>
+  </data>
+  <data name="xrLabel14.Text" xml:space="preserve">
+    <value>!!!Рекомендации:
+С 2021 года ЕГЭ по информатике проходит в компьютерной форме. Для решения некоторых заданий необходимо написать работающую программу на одном из следующих языков программирования: Pascal, C/C++, C#, Java, Python, школьный алгоритмический язык (Кумир). Решение некоторых задач заметно упрощается, если для их решения написать программу. Так, например, 18 из 27 задач ЕГЭ-2021 можно было решить, написав программы (и получить 21 первичный балл из 30). На курсах эти программные способы решения будут разбираться, для чего необходимо знание языка программирования. 
+В случае, если Вы не владеете языком программирования из следующего списка: Pascal, C/C++, C#, Java, Python, или знаете его плохо, рекомендуем начать самостоятельное изучение языка Python, как наиболее удобного при сдаче ЕГЭ. Для этого рекомендуем следующие онлайн курсы: https://informatics.msk.ru/course/view.php?id=156 и https://pythontutor.ru/ . Содержание этих курсов примерно одинаковое, отличается способ проверки заданий.
+Если же Вы владеете языком программирования из вышеуказанного списка, то рекомендуем освежить свои знания.
+Начиная с 5 занятия потребуется знание языка программирования в следующем объёме: ввод/вывод, арифметические операции, логические операции, ветвление (условный оператор), циклы.</value>
+  </data>
+  <data name="xrLabel7.Text" xml:space="preserve">
+    <value>1) Стоимость обучения по одному предмету составляет 40 000 рублей.
+2) Оплатить обучение можно в 1 или в 2 этапа, в зависимости от выбранного при заключении договора порядка оплаты.
+
+Курс рассчитан на 80 академических часов, это 20 занятий по 4 академических часа (октябрь – середина марта !!!).
+
+3) Занятия проводятся один раз в неделю (4 академических часа, с 17 до 20.10).
+
+Курсы завершаются контрольной работой в формате ЕГЭ (работа проводится на предпоследнем занятии).
+
+!!! Форма обучения ОЧНАЯ /с применением дистанционных образовательных технологий в периоды перехода государственных общеобразовательных организаций Санкт-Петербурга на исключительно дистанционное обучение.
+
+Обучающиеся с признаками ОРВИ до занятий не допускаются. Просим Вас воздержаться от посещения занятий при наличии у Вас симптомов простудных заболеваний.
+
+В случае перехода на дистанционное обучение, вам понадобится компьютер с подключением к интернету, камерой и микрофоном. Занятия будут проходить в программах видеоконференций: Skype, Moodle, Сферум, Zoom и др.
+
+Мы просим вас использовать ваши настоящие имя и фамилию для профилей. 
+
+Участие в занятиях возможно только с компьютеров. Также напоминаем, что на занятиях камера всегда должна быть включена.</value>
+  </data>
+  <data name="xrLabel6.Text" xml:space="preserve">
+    <value>!!! НА ОСЕННИХ КАНИКУЛАХ ЗАНЯТИЯ БУДУТ !!!
+
+!!! ЗАНЯТИЯ НЕ БУДУТ ПРОВОДИТЬСЯ с 26 декабря 2022 г. по 08 января 2023 г. (включительно)
+
+!!! Даты начала занятий и номера аудиторий могут быть изменены, следите за информацией на стендах и на сайте.</value>
+  </data>
+  <data name="xrLabel5.Text" xml:space="preserve">
+    <value>5. Информацию о посещаемости слушателем занятий можно получить по тел. 576-34-38 и в личном кабинете.
+6. При посещении занятий необходимо иметь сменную обувь или бахилы.
+Ознакомиться с Уставом, лицензией на осуществление образовательной деятельности, Правилами внутреннего распорядка обучающихся, с учебной документацией и другими документами, регламентирующими организацию и осуществление образовательной деятельности Исполнителем можно на официальном сайте Исполнителя: https://rcokoit.ru</value>
+  </data>
+  <data name="xrLabel3.Text" xml:space="preserve">
+    <value>1. Внимательно прочитайте договор.
+2. Оформляя договор, обратите внимание на номер группы, день занятий, время и адрес проведения занятий.
+3. Обучающийся считается зачисленным в группу только с момента прикрепления в личном кабинете обучающегося документа, подтверждающего оплату.
+4. Подтверждение оплаты (квитанция, платёжное поручение) необходимо загрузить в личный кабинет обучающегося в виде фото /скана чека или платёжного поручения.
+Оплатить квитанцию можно в любом банке, а также используя мобильные приложения банков / интернет-банков.
+Кроме того, оплата обучения возможна из средств материнского капитала.</value>
+  </data>
+</root>

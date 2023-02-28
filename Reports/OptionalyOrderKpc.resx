@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="xrLabel10.Text" xml:space="preserve">
+    <value>«4.1. Полная стоимость платных образовательных услуг за весь период обучения, с учетом определенного Сторонами порядка оплаты составляет [DonateType.FullTotal] ([DonateType.FullTotalString]) рублей 00 коп, НДС не облагается, является твердой и определена на весь срок исполнения Договора.
+Порядок оплаты: оплата производится в безналичном порядке путем перечисления денежных средств за счет средств Материнского (семейного) капитала.»
+«4.3. Оплата производится в установленные действующим законодательством сроки. В случае расторжения Договора денежные средства будут возвращены на счет Плательщика (Пенсионного Фонда РФ).»
+</value>
+  </data>
+  <data name="xrLabel8.Text" xml:space="preserve">
+    <value>	ГБУ ДПО «Санкт-Петербургский центр оценки качества образования и информационных технологий», действующее на основании лицензии на право ведения образовательной деятельности рег. № 1198 от 15 декабря 2011 года, выданной Правительством Санкт-Петербурга Комитетом образования на срок – бессрочно (бланк 78 № 001467), свидетельства о государственной аккредитации № 145 от 13.01.2012 года, в лице ИДиректора П.С.Розова, действующего на основании Устава, допускает оплату обучения на курсах подготовки к государственной итоговой аттестации выпускников [Group.Curriculum.Class] классов (ГИА) без выдачи документов государственного образца, форма обучения – [Group.EducationForm.Description], за счет средств Материнского (семейного) капитала.
+
+Обучающийся: [StudentPerson.LastName] [StudentPerson.FirstName] [StudentPerson.Patronymic]</value>
+  </data>
+  <data name="xrPictureBox1.ImageSource" xml:space="preserve">
+    <value>iVBORw0KGgoAAAANSUhEUgAAAD4AAABACAIAAADNi1OiAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwwAADsMBx2+oZAAADdpJREFUaEPt2nm0lVMfB/AbmTJWxkTJkClT0oAVlRCSWYVkSChjMg8RknnIEJEpZWVMxmQsQ2TKlAyZvQgZKtN9P/f8ns4699xzznPuWnq91vL946599rOfvb/7t3/Dd59zKyr/sViA1P+TQfJhAWBBUf/ll186dux4+OGHJ58XANKp//bbb1999VXyoWwMGjSobt26yyyzTN++fZOusjF79uykVRLp1N94441NNtnkkUceST6Xh/79+1dksN566yVdZYCZhg0bttdeez3wwANJV3EUpW6Wxx57jPGCwVJLLXXMMcf88ccfyePi+PHHHydPnjxr1qx+/fodffTRr7322qOPPvrtt98mj4vjww8/bNGiRSy32GKL3XbbbQ8++GDyrBCKUv/5558bNmy4yCKLxFywyiqrlD7K7777buzYseuuu27Lli133XXX1VZbzXHtt99+66+//gYbbDBixAgBkAwthCFDhiQrZYD9gAEDkmeFUJj6nDlzmHzxxRffYYcdkpkqKurXr8+EyYgaYOmePXvGyCuvvPLss8/WWH755bfZZptx48Zpr7DCCttvv/19992XvFAD++yzz0ILLWSYddu2bWv/Av2uu+5KHtdAYepTp07lIdZjsCouGdSpU4cVJ0yYkAzKwSuvvNK4ceODDz740EMPFZ3WM4NXGjVqxHf5XswASy655O233568loMvv/yyd+/enTp1MqZdu3YiRIhrL7fccsmIGihMfcyYMZmFqmGJJZbw9+STT04GzcfcuXOZB+OhQ4fOnDlzxRVXRJ3jWt45xEF17979nnvu2XDDDffcc8+11177gw8+iHezuOaaa3bfffc+ffpYgqNmFqwCt/n444+TQdVRmPqoUaOSV3OAnL+ffvppMmg+brnlloUXXthZ28Bzzz0nJFDn961bt95qq61iDFf56KOPNt10U8Hg9C655JLoz+Kqq66KVfLAXsVCvDD1H374QT7GxssYWywmgm+++SYZNB9XXHGFBYDZrr766qZNm+Ihw3Tt2rVbt26meuutt5zAHXfcMXLkyK233tok5513XvLyfDz00EMxfy5E/PPPP5+MqIHC1EGOGz169BZb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</value>
+  </data>
+  <data name="xrLabel60.Text" xml:space="preserve">
+    <value>Государственное бюджетное учреждение дополнительного профессионального образования
+«Санкт-Петербургский центр оценки качества образования и информационных технологий»
+Место нахождения: 190068, Санкт-Петербург, Вознесенский проспект, д.34, литер Н
+ИНН 7813151217
+КПП 783801001
+Наименование получателя: Комитет финансов СПб (ГБУ ДПО «СПбЦОКОиИТ», л/сч 0191102)
+Банковские реквизиты:
+Номер казн.счета 03224643400000007200 в Северо-Западное ГУ Банка России//УФК по г. Санкт-
+Петербургу, г. Санкт-Петербург
+БИК 014030106 ОГРН 1027806874083 ОКОПФ 72
+КБК 000 000 000 000 000 02 130
+Кор.счет 40102810945370000005
+
+</value>
+  </data>
+</root>

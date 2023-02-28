@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNet.Identity
+@if (User.IsInRole("user"))
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new {@class = "navbar-left" }))
+    {
+        @Html.AntiForgeryToken()
+
+    <ul class="navbar-nav mr-auto">
+        @*<li class="nav-item ">
+            @Html.ActionLink("Выбрать курсы", "NewUserOrderDtt", "Order", null, new { @class = "button-primary" })
+            @(Html.DevExtreme().Button()
+                .Type(ButtonType.Default)
+                .Text("Добавить договор ДТТ")
+                .OnClick("function(){window.location.href = '/Order/NewUserOrderDtt';}")
+            )
+        </li>*@
+        @*<li class="nav-item ">
+            @Html.ActionLink("Выбрать курсы", "NewUserOrderCourse", "Order", null, new { @class = "button-default" })
+        </li>*@
+        @*<li class="nav-item ">
+            @Html.ActionLink("Участники", "PersonsForUser", "Person", null, new { @class = "nav-link" })
+        </li>*@
+        <li class="nav-item ">
+            @Html.ActionLink("Договоры", "OrdersForUser", "Order", null, new { @class = "nav-link" })
+        </li>
+        <li class="nav-item ">
+            @Html.ActionLink("Журнал занятий", "JournalView", "Journal", null, new { @class = "nav-link" })
+        </li>
+        <li class="nav-item ">
+            @Html.ActionLink("Опросы", "Ankets", "AnyTest", null, new { @class = "nav-link" })
+        </li>
+    </ul>
+    }
+}
+else
+{
+
+}
+

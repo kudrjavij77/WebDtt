@@ -1,0 +1,305 @@
+﻿html {
+    background: #e6e9e9;
+    background-image: linear-gradient(270deg, rgb(230, 233, 233) 0%, rgb(216, 221, 221) 100%);
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background: #fff;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.06);
+    color: black;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0 auto;
+    max-width: 1000px;
+}
+
+h1 {
+    color: #2e5188;
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: 100;
+    font-size: 35px;
+    font-family: impact;
+}
+
+.intro {
+    color: black;
+    font-size: 18px;
+    text-align: center;
+    margin-top: 15px;
+    width: 900px;
+    margin: auto;
+}
+
+.write {
+    display: flex;
+    justify-content: space-between;
+    margin: 30px;
+}
+
+.box {
+    text-align: center;
+    width: 450px;
+    height: 150px;
+    background-color: #309565;
+    border-radius: 20px;
+    display: inline-block;
+}
+
+    .box p {
+        margin: 46px;
+        font-size: 35px;
+        color: white;
+        font-weight: 700;
+    }
+
+    .box a {
+        font-size: 35px;
+        color: white;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+.date {
+    text-align: center;
+    width: 220px;
+    height: 180px;
+    ;
+    border-radius: 20px;
+    display: inline-block;
+    border-color:;
+    border-style: solid;
+    border-width: 4px;
+    border-color: #2e5188;
+    margin-right: 15px;
+}
+
+.text {
+    width: 100%;
+    height: 180px;
+    ;
+    border-radius: 20px;
+    display: inline-block;
+    border-color:;
+    border-style: solid;
+    border-width: 4px;
+    border-color: #2e5188;
+}
+
+.allnews {
+    font-size: 15px;
+    color: #2e5188;
+    font-weight: normal;
+    font-family: arial;
+    text-align: right;
+    width: 95%;
+    margin-top: -20px;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+h2 {
+    color: #2e5188;
+    text-align: center;
+    margin-bottom: 10px;
+    font-weight: 20;
+    font-size: 30px;
+    font-family: impact;
+    margin-top: 45px;
+}
+
+h3 {
+    color: #2e5188;
+    text-align: left;
+    margin-bottom: 10px;
+    font-weight: 400;
+    font-size: 25px;
+    font-family: arial;
+    margin-top: 20px;
+}
+
+.course_calendar {
+    width: 850px;
+    height: 450px;
+    background-color: red;
+    margin: auto;
+}
+
+.DTT_calendar {
+    width: 850px;
+    height: 450px;
+    background-color: red;
+    margin: auto;
+}
+
+.metrics {
+    width: 900px;
+    height: 600px;
+    margin: auto;
+}
+
+.metr {
+    width: 180px;
+    height: 285px;
+    float: left;
+    margin: 22.5px;
+    margin-bottom: 10px;
+    color: #2e5188;
+    font-size: 15px;
+    text-align: center;
+    font-family: arial;
+    font-weight: bold;
+}
+
+    .metr p {
+        margin: 17px -17px;
+    }
+
+    .metr img {
+        width: 180px;
+        height: auto;
+    }
+
+.stat {
+    width: 900px;
+    height: 350px;
+    margin: auto;
+}
+
+.stat1 {
+    text-align: center;
+    width: 280px;
+    height: 150px;
+    background-color: #309565;
+    border-radius: 20px;
+    display: inline-block;
+    float: left;
+    margin: 10px;
+    font-size: 20px;
+    color: white;
+    font-weight: 400;
+    margin: 10px;
+}
+
+    .stat1 p {
+        font-size: 45px;
+        color: white;
+        font-weight: 700;
+        margin: 8px;
+    }
+hr {
+    margin: 12px 40px;
+}
+
+
+.questions {
+    width: 900px;
+    margin: auto;
+}
+
+.quest {
+    font-size: 15px;
+    color: #2e5188;
+    font-weight: normal;
+    margin: 8px 0px 12px;
+    font-family: arial;
+}
+
+    .quest ul {
+        font-size: 15px;
+        color: #2e5188;
+        font-weight: normal;
+        font-family: arial;
+    }
+
+.listTitle {
+    font-size: 15px;
+    color: #2e5188;
+    font-weight: bold;
+    font-family: arial;
+}
+
+.attention {
+    font-size: 20px;
+    color: #2e5188;
+    font-weight: bold;
+    font-family: arial;
+    margin: 20px;
+}
+
+.map {
+    width: 900px;
+    margin: 80px auto 30px auto;
+    color: #2e5188;
+    font-size: 15px;
+    text-align: left;
+    font-family: arial;
+    font-weight: bold;
+}
+
+.map1 {
+    margin-top: 40px;
+}
+
+    .map1 li {
+        list-style-type: none;
+        margin-left: -40px;
+    }
+
+.footer {
+    min-width: 100%;
+    height: 380px;
+    margin-top: 100px;
+    padding-top: 10px;
+}
+
+    .footer hr {
+        min-width: 100%;
+        margin: 15px auto;
+    }
+
+.foot {
+    width: 200px;
+    height: 180px;
+    float: left;
+    color: #2e5188;
+    font-size: 12px;
+    text-align: center;
+    font-family: arial;
+    font-weight: normal;
+}
+
+    .foot p {
+        margin: 10px;
+    }
+
+    .foot img {
+        margin: auto;
+        width: 90px;
+        display: inline-block;
+        margin: auto;
+    }
+
+
+
+b, strong {
+    font-weight: 600;
+}
+
+samp {
+    display: none;
+}
+
+@keyframes colorize {
+    0% {
+        -webkit-filter: grayscale(100%);
+        filter: grayscale(100%);
+    }
+
+    100% {
+        -webkit-filter: grayscale(0%);
+        filter: grayscale(0%);
+    }
+}

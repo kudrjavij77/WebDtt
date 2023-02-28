@@ -1,0 +1,99 @@
+﻿@using WebDtt.Models.Controllers
+@{
+    ViewData["Title"] = "Менеджер вариантов КИМ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <h2>Менеджер вариантов КИМ</h2>
+
+@(Html.DevExtreme().DataGrid<WebDtt.Models.ExamKim>()
+    .DataSource(ds => ds.WebApi()
+        .RouteName("ExamKimsApi")
+        .LoadAction("Get")
+        .InsertAction("Post")
+        //.UpdateAction("Put")
+        .DeleteAction("Delete")
+        .Key("ExamKimID")
+    )
+    .ID("ExamKimsGrid")
+    .RemoteOperations(true)
+    .FilterRow(f => f.Visible(true))
+    .ShowBorders(true)
+    .ShowRowLines(true)
+    .SearchPanel(s => s.Visible(true))
+    .Sorting(s => s.Mode(GridSortingMode.Multiple))
+    .Selection(s => s.Mode(SelectionMode.Multiple).SelectAllMode(SelectAllMode.Page))
+    .HeaderFilter(hf => hf.Visible(true).AllowSearch(true))
+    .Paging(p=>p.Enabled(false))
+    .Height(770)
+    .WordWrapEnabled(true)
+    .Editing(e =>
+    {
+        e.UseIcons(true);
+        e.AllowAdding(true);
+        e.AllowUpdating(true);
+        e.AllowDeleting(true);
+        e.Mode(GridEditMode.Popup);
+        e.Form(f =>
+        {
+            f.ShowColonAfterLabel(true);
+            f.ShowValidationSummary(true);
+            f.Items(i =>
+            {
+                i.AddSimpleFor(m => m.ExamID).Editor(exam=>exam.Lookup()
+                    .DataSource(ds=>ds.WebApi().Controller("ExamKims").LoadAction("ExamsLookup").Key("ExamID"))
+                    .DisplayExpr("ExamViewSubjectTypeClassDate").ValueExpr("ExamID"));
+
+                i.AddSimpleFor(m => m.KIM).Editor(kim=>kim.Lookup()
+                    .DataSource(ds=>ds.WebApi().Controller("ExamKims").LoadAction("KimsLookup").Key("KIM"))
+                    .DisplayExpr("Name").ValueExpr("ObjectID"));
+
+                i.AddSimpleFor(m => m.VariantNumber);
+
+                i.AddSimpleFor(m => m.ElectronicKIMID).Editor(elk=>elk.Lookup()
+                    .DataSource(ds=>ds.WebApi().Controller("ExamKims").LoadAction("ElectronicKimsLookup").Key("ElectronicKIMID"))
+                    .DisplayExpr("Name").ValueExpr("ObjectID"));
+
+                i.AddSimpleFor(m => m.ParentExamKimID).Editor(pek=>pek.Lookup()
+                    .DataSource(ds=>ds.WebApi().Controller("ExamKims").LoadAction("Get").Key("ParentExamKimID"))
+                    .DisplayExpr("ExamKimID").ValueExpr("ExamKimID")).Label(l=>l.Text("Вариант КИМ, из котрого использовать ключи"));
+
+            });
+        });
+    })
+    .ColumnChooser(cc=>cc
+        .Mode(GridColumnChooserMode.DragAndDrop)
+        .Enabled(true))
+    .ColumnAutoWidth(true)
+    .Columns(c =>
+    {
+        c.Add().DataField("ExamKimID").Visible(false);
+        c.Add().DataField("VariantNumber").Caption("Номер варианта");
+        c.Add().DataField("ExamID").Visible(false);
+        c.Add().DataField("Exam.ExamID").Visible(false);
+        c.Add().DataField("Exam.ExamTypeID").Visible(false);
+        c.Add().DataField("Exam.ExamType.ExamTypeName").Caption("Форма экзамена");
+        c.Add().DataField("Exam.ExamType.ExamTypeDescription").Caption("Описание формы экзамена").Visible(false);
+        c.Add().DataField("Exam.TestDateTime").DataType(GridColumnDataType.Date).Caption("Дата начала экзамена");
+        c.Add().DataField("Exam.Class").Lookup(l => l.DataSource(new JS("classArrayLookup")).DisplayExpr("name").ValueExpr("id"));
+        c.Add().DataField("Exam.Flags").Lookup(l => l.DataSource(new JS("examFlags")).DisplayExpr("name").ValueExpr("id"));
+        c.Add().DataField("Exam.Subject.SubjectCode").Caption("Код предмета");
+        c.Add().DataField("Exam.Subject.SubjectName").Caption("Предмет(fullName)").Visible(false);
+        c.Add().DataField("Exam.Subject.ShortSubjectName").Caption("Предмет");
+        c.Add().DataField("KIM").Visible(false);
+        c.Add().DataField("KIMObject.Name").Caption("Название структуры КИМ");
+        c.Add().DataField("KIMObject.Class").Visible(false);
+        c.Add().DataField("KIMObject.Discipline.Code").Visible(false);
+        c.Add().DataField("ElectronicKIMID").Visible(false);
+        c.Add().DataField("ElectronicKIM.Name");
+        c.Add().DataField("ElectronicKIM.Flags").Visible(false);
+        c.Add().DataField("ElectronicKIM.KIMID").Visible(false);
+        c.Add().DataField("ElectronicKIM.KIM.Name");
+        c.Add().DataField("ElectronicKIM.KIM.Class").Visible(false);
+        c.Add().DataField("ElectronicKIM.KIM.Discipline.Code").Visible(false);
+
+
+    })
+    
+    
+    )

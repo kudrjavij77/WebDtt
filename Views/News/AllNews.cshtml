@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "AllNews";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <script src="~/Scripts/my-script/AllNews.js"></script>
+    <h2>Новости</h2>
+
+@(Html.DevExtreme().DataGrid<WebDtt.Models.News>()
+        .ID("gridNews")
+    .DataSource(ds => ds.WebApi()
+        .RouteName("News1Api")
+        .LoadAction("Get")
+        .Key("NewsID")
+    )
+    .Width(1000)
+    .WordWrapEnabled(true)
+    .RemoteOperations(true)
+
+    
+    .Columns(columns => {
+
+
+        columns.AddFor(m => m.Title).Width(100).Caption("Название");
+        columns.AddFor(m => m.CreateDate).Width(100).Caption("Дата Создания").SortOrder(SortOrder.Desc);
+        columns.AddFor(m => m.Body).Alignment(HorizontalAlignment.Center).Caption("Содержание").Alignment(HorizontalAlignment.Left);
+        columns.Add().Type(GridCommandColumnType.Buttons).Caption("Скачать материалы")
+        .Buttons(b => {
+            b.Add().Text("Скачать").Hint("").Icon("download").OnClick("pushthebutton");
+        });
+
+    })
+)
+<style>
+    h2 {
+        text-align: center;
+    }
+
+    #gridNews {
+        margin: auto;
+    }
+
+</style>

@@ -1,0 +1,84 @@
+﻿
+@{
+    ViewBag.Title = "Журнал";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/my-script/JournalView.js"></script>
+<script src="~/Scripts/my-script/UserJournal.js"></script>
+
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/3.3.1/exceljs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.0/polyfill.min.js"></script>*@
+<script src="~/Scripts/foreighnResource/exceljs.min.js"></script>
+<script src="~/Scripts/foreighnResource/FileSaver.min.js"></script>
+<script src="~/Scripts/foreighnResource/polyfill.min.js"></script>
+
+@if (User.IsInRole("user"))
+{
+    <h2>Журнал</h2>
+    <br>
+    <div id="content">
+        <div id="userLessonsGrid"></div>
+    </div>
+}
+else
+{
+    <h2>Журнал</h2>
+    <div id="content">
+        <div id="journalHeader">
+            <hr>
+            <div id="visibleEver">
+                <div id="dxSelectBoxGroups" style="display: inline-block"></div>
+                <div id="dxSelectBoxLessons" style="display: inline-block; width: 600px"></div>
+                <div id="exportToExcel" style="display: none"></div>
+            </div>
+
+            <div id="accordion" style="display: none">
+                <hr>
+                <div class="card">
+                    <div id="headingOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"></div>
+                    <div id="collapseOne" class="collapse" style="color: #2e5188" aria-labelledby="headingOne" data-parent="#accordion">
+                        <div class="card-body">
+                            <div id="addTopic"></div>
+                            <div id="dxTopicsGrid"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div id="headingTwo" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"></div>
+                    <div id="collapseTwo" class="collapse" style="color: #2e5188" aria-labelledby="headingTwo" data-parent="#accordion">
+                        <div class="card-body">
+                            <h5>Прикрепленные к занятию файлы</h5>
+                            <div id="addFile"></div>
+                            <div id="dxLessonMaterialsGrid"></div>
+                            <hr>
+                            <h5>Прикрепленные к занятию ссылки</h5>
+                            <div id="addLink"></div>
+                            <div id="dxLessonAddonsGrid"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div id="headingThree" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree"></div>
+                    <div id="collapseThree" class="collapse" style="color: #2e5188" aria-labelledby="headingThree" data-parent="#accordion">
+                        <div class="card-body">
+                            <div id="addJornalField"></div>
+                            <div id="dxFieldsGrid"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <hr>
+        <div id="dxDataGridJournalFields"></div>
+        <div id="popup"></div>
+        <script type="text/javascript">
+            var journal = new JournalView();
+        </script>
+    </div>
+}
+
+

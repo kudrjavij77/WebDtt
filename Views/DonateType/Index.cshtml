@@ -1,0 +1,50 @@
+﻿@using DevExtreme.AspNet.Mvc
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Типы оплаты</h2>
+<script src="~/Scripts/my-script/DonateTypeIndex.js"></script>
+
+@(Html.DevExtreme().DataGrid<WebDtt.Models.DonateType>()
+    .DataSource(ds => ds.WebApi()
+        .Controller("DonateTypes")
+        .LoadAction("Get")
+        .InsertAction("Post")
+        .UpdateAction("Put")
+        .DeleteAction("Delete")
+        .Key("DonateTypeID")
+    )
+    .ID("gridDonateTypes")
+    .RemoteOperations(true)
+    .Columns(columns =>
+    {
+
+        columns.AddFor(m => m.DonateTypeID);
+
+        columns.AddFor(m => m.FullTotal);
+
+        columns.AddFor(m => m.CountDonates);
+
+        columns.AddFor(m => m.Flags);
+
+        columns.AddFor(m => m.FullTotalString);
+
+        columns.AddFor(m => m.DonateInfoes).CellTemplate(new JS("donateInfoDisplayExpr"));
+    })
+    .Editing(e => e
+        .AllowAdding(true)
+        .AllowUpdating(true)
+        .AllowDeleting(true)
+        .Mode(GridEditMode.Batch)
+        .Form(f=>f
+            .ID("gridForm")
+            .Items(i =>
+            {
+                i.AddSimpleFor(m => m.FullTotal);
+                i.AddSimpleFor(m => m.FullTotalString);
+                i.AddSimpleFor(m => m.CountDonates);
+
+            }))
+    ))

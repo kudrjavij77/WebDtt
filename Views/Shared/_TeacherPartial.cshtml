@@ -1,0 +1,23 @@
+﻿@using Microsoft.AspNet.Identity
+@if (User.IsInRole("teacher"))
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { @class = "navbar-left" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item dropdown ">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Курсы
+                </a>
+                <div class="dropdown-menu">
+                    @Html.ActionLink("Журнал", "JournalView", "Journal", null, new { @class = "dropdown-item" })
+                </div>
+            </li>
+        </ul>
+    }
+}
+else
+{
+
+}

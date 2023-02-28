@@ -1,0 +1,514 @@
+﻿@using DevExpress.DataProcessing
+@using DevExpress.Utils.Drawing.Helpers
+@using WebDtt.Models
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<body class="row pb-0">
+<script src="~/Scripts/my-script/IndexHome.js"></script>
+<div class="w-75 mx-auto">
+
+<h1 class="text-center font-weight-bolder" style="color:#2e5188">ПОДГОТОВКА К СДАЧЕ ГИА @(ViewBag.Year)</h1>
+<div class="w-75 mx-auto">
+    <hr size="8" color=#a61717>
+    <div class="row">
+        <div class="h5 text-center mx-auto mb-5">
+            Здесь вы можете записаться на добровольное тренировочное тестирование (ДТТ), а также записаться на курсы подготовки к сдаче ГИА.
+        </div>
+    </div>
+
+    <div class="row justify-content-between mx-0">
+
+        <div class="col" id="buttonDTT"></div>
+            <div class="col" id="buttonCourse"></div>
+
+    </div>
+
+
+    @if (ViewBag.lastNews != null)
+    {
+        <div class="mb-5 mt-5">
+            <h2 class="text-center font-weight-bolder mt-5 mb-2" style="color:#2e5188">Новости</h2>
+            <div class="write">
+
+
+                <div style="border-radius:3px">
+                    <p class="font-weight-bold h5" style="color:#2e5188">@ViewBag.lastNews.Title</p>
+                    <p class="h5">@ViewBag.lastNews.Body ...</p>
+
+                    @*@if (ViewBag.lastNews.ToString().Length() > 350)
+                    {
+                        <p class="h5">@ViewBag.lastNews.ToString().Substring(0, 350) ...</p>
+                    }
+                    else
+                    {
+                        <p class="h5">@ViewBag.lastNews</p>
+                    }*@
+                    
+                </div>
+                <div class="row justify-content-between mx-0 mt-3 mb-5 text-">
+                    <div class="date">
+                        <p class="h6">@ViewBag.lastNews.CreateDate.ToString("dd MMMM yyyy")</p>
+                    </div>
+                    <div class="h6" style="text-align:right"><u>@Html.ActionLink("Все новости", "AllNews", "News", null, new { @class = "link text-info" })</u></div>
+
+                </div>
+            </div>
+
+        </div>
+    }
+
+<br>
+<h2>Календарь курсов подготовки к сдаче ГИА</h2>
+<div table-responsive>
+    @(Html.DevExtreme().DataGrid<Group>()
+        .DataSource(ds => ds.WebApi()
+            .Controller("Lookups")
+            .LoadAction("SchedularGroups")
+            .Key("GroupID"))
+        .RemoteOperations(true)
+        .ID("Courses")
+        .ColumnAutoWidth(true)
+        .Grouping(g=>g.AutoExpandAll(false).ExpandMode(GridGroupingExpandMode.RowClick))
+        .Paging(p => p.Enabled(false))
+        //.SortByGroupSummaryInfo(i => i.Add().SummaryItem("count").SortOrder(SortOrder.Desc))
+        //.HeaderFilter(hf=>hf.Visible(true))
+        .Columns(c =>
+        {
+            c.Add().DataField("DayOfWeek")
+                .DataType(GridColumnDataType.Date).Format(f => f.Type(Format.DayOfWeek))
+                .Caption("День недели проведения занятий").GroupIndex(0);
+            c.Add().DataField("SubjectName").Caption("Предмет").Alignment(HorizontalAlignment.Left);
+            c.AddFor(m => m.GroupName).Caption("Группа").Alignment(HorizontalAlignment.Center);
+            c.Add().DataField("FreePlaces").Caption("Мест свободно")
+                .CalculateDisplayValue(new JS("function(e){ return (e.Flags&1)==1 ? 'Набор окончен' : e.FreePlaces }")).Alignment(HorizontalAlignment.Center);
+            c.Add().DataField("FirstLesson").DataType(GridColumnDataType.Date)
+                .Format(f => f.Type(Format.ShortDate)).Caption("1-ое занятие").Alignment(HorizontalAlignment.Center);
+            c.Add().DataField("Инфо")
+                .CalculateCellValue("function(e){ return e.Class + ' класс - ' + e.EducationFormName + ' форма - ' + e.Duration + ' а.ч.';}")
+                .Alignment(HorizontalAlignment.Center);
+            c.Add().DataField("Adress").Caption("Место проведения").Alignment(HorizontalAlignment.Center);
+
+        }))
+
+    <br>
+    <h2>Календарь добровольного тренировочного тестирования</h2>
+
+    <h5>Очное тестирование</h5>
+    @(Html.DevExtreme().DataGrid<Exam>()
+        .DataSource(ds => ds.WebApi()
+            .Controller("Exams")
+            .LoadAction("GetExamsOchWithPlaces")
+            .Key("ExamID"))
+        //.DataSourceOptions(dso => dso.Filter("[ 'Flags', '<', '2' ]"))
+        .RemoteOperations(true)
+        .ColumnAutoWidth(true)
+        .Grouping(g=>g.AutoExpandAll(false).ExpandMode(GridGroupingExpandMode.RowClick))
+        .Paging(p => p.Enabled(false))
+        //.SortByGroupSummaryInfo(i => i.Add().SummaryItem("count").SortOrder(SortOrder.Desc))
+        //.HeaderFilter(hf=>hf.Visible(true))
+        .Columns(c =>
+        {
+            c.Add().DataField("Date").DataType(GridColumnDataType.Date)
+                .Format(f => f.Type(Format.ShortDate))
+                .Caption("Дата проведения").GroupIndex(0);
+            c.Add().DataField("SubjectName").Caption("Предмет").Alignment(HorizontalAlignment.Left);
+            c.Add().DataField("Class").Lookup(l => l.DataSource(new JS("classArrayLookup"))
+                .DisplayExpr("name").ValueExpr("id")).Caption("Класс").Alignment(HorizontalAlignment.Center);
+            c.Add().DataField("ExamType.ExamTypeName").Caption("Форма проведения").Alignment(HorizontalAlignment.Center);
+            c.Add().DataField("Price").Caption("Стоимость")
+                .CalculateDisplayValue(new JS("function(value){return value.Price + ' руб.';}")).Alignment(HorizontalAlignment.Center);
+            c.Add().DataField("Places").Caption("Кол-во свободных мест").CalculateDisplayValue(new JS("function(e){return e.Flags>0 ? 'Регистрация закончена' : e.Places - e.StudentExams;}")).Alignment(HorizontalAlignment.Center);
+        }))
+
+    <br>
+    <h5>Дистанционное тестирование</h5>
+    @(Html.DevExtreme().DataGrid<Exam>()
+        .DataSource(ds => ds.WebApi()
+            .Controller("Exams")
+            .LoadAction("GetExamsDistant")
+            .Key("ExamID"))
+        .DataSourceOptions(dso => dso.Filter("[ 'Flags', '<', '2' ]"))
+        .RemoteOperations(true)
+        .ColumnAutoWidth(true)
+        .Grouping(g=>g.AutoExpandAll(false).ExpandMode(GridGroupingExpandMode.RowClick))
+        .Paging(p => p.Enabled(false))
+        //.SortByGroupSummaryInfo(i => i.Add().SummaryItem("count").SortOrder(SortOrder.Desc))
+        //.HeaderFilter(hf=>hf.Visible(true))
+        .Columns(c =>
+        {
+            c.AddFor(m => m.TestDateTime)
+                .Format(f => f.Type(Format.LongDateLongTime))
+                .Caption("Дата начала").GroupIndex(0);
+            c.AddFor(m => m.Subject.SubjectName).Caption("Предмет").Alignment(HorizontalAlignment.Left);
+            c.AddFor(m => m.Class).Lookup(l => l.DataSource(new JS("classArrayLookup"))
+                .DisplayExpr("name").ValueExpr("id")).Caption("Класс").Alignment(HorizontalAlignment.Center);
+            c.AddFor(m => m.ExamType.ExamTypeName).Caption("Форма проведения").Alignment(HorizontalAlignment.Center);
+            c.AddFor(m => m.Price).Caption("Стоимость")
+                .CalculateDisplayValue(new JS("function(value){return value.Price + ' руб.';}")).Alignment(HorizontalAlignment.Center);
+            c.AddFor(m => m.Flags).Lookup(l => l.DataSource(new JS("examFlags"))
+                .DisplayExpr("name").ValueExpr("id")).Caption("Статус").Alignment(HorizontalAlignment.Center);
+            //c.Add().DataField("CountOrders").Caption("Кол-во участников").Alignment(HorizontalAlignment.Center);
+        }))
+
+
+</div>
+    @*<div id="courseScheduler2"></div>*@
+
+
+
+
+
+
+
+
+    <h2 class="text-center font-weight-bolder mt-5 mb-5" style="color:#2e5188">Почему стоит выбрать наши курсы?</h2>
+    <div class="container text-center" style="color:#2e5188">
+        <div class="row">
+            <div class="col">
+                <img class="col mx-auto" src="~/Content/images/teacher.png">
+                <p class="h6 mt-3 mb-5">Преподаватели - руководители предметных комиссий, эксперты - консультанты</p>
+            </div>
+
+            <div class="col">
+                <img class="col mx-auto" src="~/Content/images/grade.png">
+                <p class="h6 mt-3 mb-5">3 стадии оценки уровня <br> знаний (в начале, в середине и в конце курсов)</p>
+            </div>
+
+            <div class="col">
+                <img class="col mx-auto" src="~/Content/images/average.png">
+                <p class="h6 mt-3 mb-5">Средний балл на ЕГЭ выше среднегородских показателей (статистика ведётся 5 лет)</p>
+            </div>
+
+            <div class="col">
+                <img class="col mx-auto" src="~/Content/images/feedback.png">
+                <p class="h6 mt-3 mb-5">Обратная связь (учёт посещаемости и активности слушателей)</p>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col">
+                <img class="col mx-auto" src="~/Content/images/payment.png">
+                <p class="h6 mt-3 mb-5">Возможность оплаты за счёт средств материнского капитала</p>
+            </div>
+
+            <div class="col">
+                <img class="col mx-auto" src="~/Content/images/tax.png">
+                <p class="h6 mt-3 mb-5">Возможность получения налогового вычета</p>
+            </div>
+
+            <div class="col">
+                <img class="col mx-auto" src="~/Content/images/sale.png">
+                <p class="h6 mt-3 mb-5">Скидки для отдельных категорий слушателей</p>
+            </div>
+
+            <div class="col">
+                <img class="col mx-auto" src="~/Content/images/requirements.png">
+                <p class="h6 mt-3 mb-5">Обучение по актуальным требованиям и нововведениям ГИА</p>
+            </div>
+        </div>
+
+    </div>
+
+    <h2 class="text-center font-weight-bolder mt-3 mb-4" style="color:#2e5188">Актуальные цифры!</h2>
+
+    <div class="row justify-content-between">
+
+        <div class="col m-4" style="background-color:cadetblue; border-radius:3px">
+            <h2 class="font-weight-bold text-center mt-4 mb-2" style="color:white">
+                @ViewBag.TeacherCount
+            </h2>
+            <h5 class="text-center mt-2 font-weight-normal" style="color:white">
+                Преподавателей
+            </h5>
+            <hr class="bg-white mb-4 mx-4" />
+        </div>
+        <div class="col m-4" style="background-color:cadetblue; border-radius:3px">
+            <h2 class="font-weight-bold text-center mt-4 mb-2" style="color:white">
+                @ViewBag.ProgramCount
+            </h2>
+            <h5 class="text-center mt-2 font-weight-normal" style="color:white">
+                Программы обучения
+            </h5>
+            <hr class="bg-white mb-4 mx-4" />
+        </div>
+        <div class="col m-4" style="background-color:cadetblue; border-radius:3px">
+            <h2 class="font-weight-bold text-center mt-4 mb-2" style="color:white">
+                @ViewBag.AvgScore
+            </h2>
+            <h5 class="text-center mt-2 font-weight-normal" style="color:white">
+                Средний прирост балла
+            </h5>
+            <hr class="bg-white mb-4 mx-4" />
+        </div>
+    </div>
+    <div class="row justify-content-between">
+
+        <div class="col m-4" style="background-color:cadetblue; border-radius:3px">
+            <h2 class="font-weight-bold text-center mt-4 mb-2" style="color:white">
+                @ViewBag.StudentCount
+            </h2>
+            <h5 class="text-center mt-2 font-weight-normal" style="color:white">
+                Прошедших курс
+            </h5>
+            <hr class="bg-white mb-4 mx-4" />
+        </div>
+        <div class="col m-4" style="background-color:cadetblue; border-radius:3px">
+            <h2 class="font-weight-bold text-center mt-4 mb-2" style="color:white">
+                @ViewBag.BextStudentCount
+            </h2>
+            <h5 class="text-center mt-2 font-weight-normal" style="color:white">
+                Отличников по ЕГЭ
+            </h5>
+            <hr class="bg-white mb-4 mx-4" />
+        </div>
+    </div>
+
+
+
+
+    <div class="container mt-5 mb-5  p-0">
+        <h3 class="text-center font-weight-bolder mt-5 mb-5" style="color:#2e5188">Часто задаваемые вопросы по ДТТ</h3>
+
+        <div id="accordion">
+            <div class="card">
+                <div id="headingOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"></div>
+                <div id="collapseOne" class="collapse show" style="color:#2e5188" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        -ДТТ в очной форме проводится по форме и процедуре, максимально приближенной
+                        к процедуре и форме Государственной итоговой аттестации.
+                        Задания выполняются на бланках, идентичных бланкам ГИА,
+                        до начала работы проводится инструктаж. При прохождении ДТТ в очной форме участник
+                        ДТТ может быть удален с тестирования при нарушении им правил поведения во время написания
+                        тестирования (наличие посторонних предметов и материалов, средств связи, электронных устройств и т.д.),
+                        о чем делается соответствующая отметка в регистрационном бланке.
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div id="headingTwo" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"></div>
+                <div id="collapseTwo" class="collapse" style="color:#2e5188" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div class="card-body">
+                        -Для решения теста по каждому предмету участнику предоставляется 2 дня в
+                        соответствии с расписанием тестирования. На решение заданий КИМ отводится время,
+                        соответствующее продолжительности ЕГЭ по предмету. По окончании этого времени доступ
+                        к заданиям КИМ будет закрыт до получения результатов тестирования. Часть 1 КИМ выполняется
+                        в виде он-лайн теста. Участник может листать задания, выполнять их в любой последовательности,
+                        вносить изменения в ответы. Часть 2 КИМ выполняется на листах бумаги формата А4.
+                        Ответы на задания части 2 КИМ необходимо отсканировать или сфотографировать в хорошем качестве
+                        и прикрепить к тесту в личном кабинете в течение 24 часов после завершения теста.
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div id="headingThree" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree"></div>
+                <div id="collapseThree" class="collapse" style="color:#2e5188" aria-labelledby="headingThree" data-parent="#accordion">
+                    <div class="card-body">
+                        -Обработка тестов будет проведена в течение 12 дней с даты ДТТ. Часть 1 проверяется автоматически,
+                        часть 2 проверяется экспертами – членами предметных комиссий Санкт-Петербурга.
+                        @*По окончании обработки участникам тестирования будет направлено приглашение на он-лайн семинар,
+                            который будет проведен руководителями предметных комиссий по Санкт-Петербургу по соответствующим дисциплинам.
+                            На семинаре будет произведен разбор основных ошибок, допущенных при написании ДТТ, заданий,
+                            по которым возникли сложности, а также участники будут иметь возможность задать свои вопросы
+                            руководителям предметных комиссий. Длительность семинара – 1 академический час.*@
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div id="headingFour" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour"></div>
+                <div id="collapseFour" class="collapse" style="color:#2e5188" aria-labelledby="headingFour" data-parent="#accordion">
+                    <div class="card-body">
+                        -При решении заданий КИМ участники могут пользоваться средствами обучения, разрешенными на ЕГЭ по предмету.
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div id="headingFive" data-toggle="collapse" data-target="#collapseFive" aria-expanded="true" aria-controls="collapseFive"></div>
+                <div id="collapseFive" class="collapse" style="color:#2e5188" aria-labelledby="headingFive" data-parent="#accordion">
+                    <div class="card-body">
+                        -Обработка тестов будет проведена в течение 12 дней с даты ДТТ. Часть 1 проверяется автоматически,
+                        часть 2 проверяется экспертами – членами предметных комиссий Санкт-Петербурга.
+                    </div>
+                </div>
+            </div>
+            @*<div class="card">
+                    <div id="headingSix" data-toggle="collapse" data-target="#collapseSix" aria-expanded="true" aria-controls="collapseSix"></div>
+                    <div id="collapseSix" class="collapse" style="color:#2e5188" aria-labelledby="headingSix" data-parent="#accordion">
+                        <div class="card-body">
+                            -По окончании обработки участникам тестирования будет направлено приглашение на он-лайн семинар,
+                            который будет проведен руководителями предметных комиссий по Санкт-Петербургу по соответствующим дисциплинам.
+                            На семинаре будет произведен разбор основных ошибок, допущенных при написании ДТТ, заданий,
+                            по которым возникли сложности, а также участники будут иметь возможность задать свои вопросы руководителям
+                            предметных комиссий. Длительность семинара – 1 академический час.
+                        </div>
+                    </div>
+                </div>*@
+            <div class="card">
+                <div id="headingSeven" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven"></div>
+                <div id="collapseSeven" class="collapse" style="color:#2e5188" aria-labelledby="headingSeven" data-parent="#accordion">
+                    <div class="card-body">
+                        <h5 class="pl-2 font-weight-normal">Для каждого участника ДТТ при регистрации на сайте dtt.ege.spb.ru будет создан личный кабинет.</h5>
+                        <div id="accordion2">
+                            <div class="card">
+                                <div id="headingEight" data-toggle="collapse" data-target="#collapseEight" aria-expanded="true" aria-controls="collapseEight"></div>
+                                <div id="collapseEight" class="collapse" style="color:#2e5188" aria-labelledby="headingEight" data-parent="#accordion2">
+                                    <div class="card-body">
+                                        <ul>
+                                            <li>оформляется заявка на ДТТ</li>
+                                            <li>формируется договор</li>
+                                            <li>формируется квитанция на оплату</li>
+                                            <li>
+                                                загружается документ, подтверждающий оплату (оплатить ДТТ и загрузить скан-копию
+                                                оплаченной квитанции в личный кабинет необходимо в срок, не более 5 (пяти)
+                                                календарных дней с даты регистрации и формирования договора, но не позднее,
+                                                чем за 2 (два) календарных дня до даты проведения тестирования.
+                                                В случае отсутствия прикрепленной квитанции в указанный выше срок,
+                                                регистрация на ДТТ аннулируется)
+                                            </li>
+                                            <li>предоставляется ссылка для ознакомления с результатами тестирования</li>
+                                            @*<li>
+                                                    отражается информация о проведении он-лайн семинара по результатам тестирования
+                                                    (ссылка, дата, время)
+                                                </li>*@
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div id="headingNine" data-toggle="collapse" data-target="#collapseNine" aria-expanded="true" aria-controls="collapseEight"></div>
+                                <div id="collapseNine" class="collapse" style="color:#2e5188" aria-labelledby="headingNine" data-parent="#accordion2">
+                                    <div class="card-body">
+                                        <ul>
+                                            <li>оформляется заявка на ДТТ</li>
+                                            <li>формируется договор</li>
+                                            <li>формируется квитанция на оплату</li>
+                                            <li>загружается документ, подтверждающий оплату</li>
+                                            <li>
+                                                открывается доступ к материалам тестирования (инструкция, часть 1 в виде он-лайн теста,
+                                                часть 2 КИМ – для выполнения заданий с развернутыми ответами)
+                                            </li>
+                                            <li>
+                                                принимаются результаты тестирования: часть 1 КИМ – по окончании времени тестирования,
+                                                часть 2 КИМ – отсканированная или сфотографированная участником в течение
+                                                24 часов после завершения теста
+                                            </li>
+                                            <li>предоставляется ссылка для ознакомления с результатами тестирования</li>
+                                            @*<li>
+                                                    отражается информация о проведении он-лайн семинара по результатам тестирования
+                                                    (ссылка, дата, время)
+                                                </li>*@
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="h4 mt-5 mb-5" style="color:#2e5188">
+            ВНИМАНИЕ!!! СПБЦОКОиИТ оставляет за собой право не обрабатывать (не проверять)
+            материалы части 2 тестирования, в случае, если Участником ответы выполнены нечитаемым почерком, сделаны некачественные
+            фотографии/сканы работы. При этом в результатах оценивания проставляется оценка «Х».
+        </div>
+
+        <div class="map mt-5">
+            @(Html.DevExtreme().Map()
+                .ID("map")
+                .Provider(GeoMapProvider.Bing)
+                .Zoom(16)
+                .Height(440)
+                .Width("100%")
+                .Controls(true)
+                .MarkerIconSrc(new JS("markerUrl"))
+                .Markers(markers =>
+                {
+                    markers.Add()
+                        .Coordinates(59.925874, 30.308397)
+                        .Tooltip(t => t.Text("ГБУ ДПО \"Санкт-Петербургский центр оценки " +
+                                             "качества образования и информационных технологий\""));
+                })
+            )
+            <div class="map1 mt-3 mb-4 " style="color:#2e5188">
+                <h6>ГБУ ДПО 'Санкт-Петербургский центр оценки качества образования и информационных технологий'</h6>
+
+                <ul style="list-style-type:none; padding:0">
+                    <li class="h6">Наш адрес:</li>
+                    <li>190068, Санкт-Петербург,</li>
+                    <li>Вознесенский проспект, дом 34 литер А</li>
+                </ul>
+
+                <ul style="list-style-type:none; padding:0">
+                    <li class="h6">Режим работы:</li>
+                    <li>ПН-ПТ 11:00-18:00, обед 13:00-14:00</li>
+                </ul>
+                <ul style="list-style-type:none; padding:0">
+                    <li class="h6">Контакты:</li>
+                    <li>
+                        8-909-587-34-38 (с 10:00 до 20:00)
+                    </li>
+                    <li>Email: dtt@ege.spb.ru</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+<div class="w-100" style="background-color:whitesmoke">
+
+    <div class="text-center w-75 mx-auto" style="color:#2e5188">
+        <hr>
+        <div class="row justify-content-between">
+            <div class="col">
+                <img class="col-sm-6 col-md-6 col-lg-6 mx-auto mb-2" src="~/Content/images/МинПросв.png">
+                <p style="font-size:12px">Министерство просвещения Российской Федерации</p>
+            </div>
+            <div class="col">
+                <img class="col-sm-6 col-md-6 col-lg-6 mx-auto mb-2" src="~/Content/images/ФСН.png">
+                <p style="font-size:12px">Федеральная служба по надзору в сфере образовани и науки</p>
+            </div>
+            <div class="col">
+                <img class="col-sm-6 col-md-6 col-lg-6 mx-auto mb-2" src="~/Content/images/ФЦТ.png">
+                <p style="font-size:12px">ФГБУ "Федеральный центр тестирования"</p>
+            </div>
+            <div class="col">
+                <img class="col-sm-6 col-md-6 col-lg-6 mx-auto mb-2" src="~/Content/images/ФИПИ.png">
+                <p style="font-size:12px">ФГБНУ "Федеральный институт педагогических измерений"</p>
+            </div>
+            <div class="col">
+                <img class="col-sm-6 col-md-6 col-lg-6 mx-auto mb-2" src="~/Content/images/РосОбр.png">
+                <p style="font-size:12px">Федеральный образовательный портал "Российское образование"</p>
+            </div>
+        </div>
+
+
+        <div class="row justify-content-between">
+            <div class="col">
+                <img class="col-sm-6 col-md-6 col-lg-6 mx-auto mb-2" src="~/Content/images/ЕГЭ.png">
+                <p style="font-size:12px">Федеральный информационный портал ЕГЭ</p>
+            </div>
+            <div class="col">
+                <img class="col-sm-6 col-md-6 col-lg-6 mx-auto mb-2" src="~/Content/images/ГИА9.png">
+                <p style="font-size:12px">Федеральный информационный портал ГИА-9</p>
+            </div>
+            <div class="col">
+                <img class="col-sm-6 col-md-6 col-lg-6 mx-auto mb-2" src="~/Content/images/КомОбр.png">
+                <p style="font-size:12px">Комитет по образованию Санкт-Петербурга</p>
+            </div>
+            <div class="col">
+                <img class="col-sm-6 col-md-6 col-lg-6 mx-auto mb-2" src="~/Content/images/КомОбр.png">
+                <p style="font-size:12px">Комитет по науке и высшей школе Санкт-Петербурга</p>
+            </div>
+            <div class="col">
+                <img class="col-sm-6 col-md-6 col-lg-6 mx-auto mb-2" src="~/Content/images/ПертрОбр.png">
+                <p style="font-size:12px">Информационный портал "Петербургское образование"</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+     
+</body>

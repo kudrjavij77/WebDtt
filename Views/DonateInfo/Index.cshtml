@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Этапы оплаты</h2>
+
+@(Html.DevExtreme().DataGrid<WebDtt.Models.DonateInfo>()
+    .DataSource(ds => ds.WebApi()
+        .Controller("DonateInfoes")
+        .LoadAction("Get")
+        .InsertAction("Post")
+        .UpdateAction("Put")
+        .DeleteAction("Delete")
+        .Key("DonateInfoID")
+    )
+    .RemoteOperations(true)
+    .Columns(columns => {
+
+                            columns.AddFor(m => m.DonateInfoID).AllowEditing(false).Visible(false);
+
+                            columns.AddFor(m => m.DonateNumber);
+
+                            columns.AddFor(m => m.Total);
+
+                            columns.AddFor(m => m.EndDate);
+
+                            columns.AddFor(m => m.Description);
+
+                            columns.AddFor(m => m.Flags).AllowEditing(false);
+
+                            columns.AddFor(m => m.DonateTypeID).Lookup(lookup => lookup
+                                .DataSource(ds => ds.WebApi().Controller("DonateInfoes").LoadAction("DonateTypesLookup").Key("DonateTypeID"))
+                                .ValueExpr("DonateTypeID")
+                                .DisplayExpr(new JS("function(e){return e.FullTotal + '(этапов: ' + e.CountDonates + ')'}"))
+                                );
+
+                            columns.AddFor(m => m.TotalString);
+    })
+    .Editing(e => e
+        .AllowAdding(true)
+        .AllowUpdating(true)
+        .AllowDeleting(true)
+        .Mode(GridEditMode.Batch)
+        .Form(f=>f.Items(i =>
+        {
+            i.AddSimpleFor(m => m.DonateNumber);
+            i.AddSimpleFor(m => m.Total);
+            i.AddSimpleFor(m => m.TotalString);
+            i.AddSimpleFor(m => m.EndDate);
+            i.AddSimpleFor(m => m.Description);
+            i.AddSimpleFor(m => m.DonateTypeID);
+        }))
+    ))

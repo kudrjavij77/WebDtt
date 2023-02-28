@@ -1,0 +1,20 @@
+﻿@(Html.DevExtreme()
+    .DataGrid<WebDtt.Models.Exam>()
+        .ID("gridExams")
+        .HoverStateEnabled(true)
+        .DataSource(new JS("component.option('dataSource')"))
+        .Columns(col =>
+        {
+            col.AddFor(m => m.ExamID).Visible(false);
+            col.AddFor(m => m.ExamViewSubjectTypeClassDate);
+            col.AddFor(m => m.Flags);
+        })
+        .Selection(s => s.Mode(SelectionMode.Multiple))
+        .SelectedRowKeys(new JS("component.option('value')"))
+        .OnSelectionChanged(@<text>
+                                function(selectedItems) {
+                                var keys = selectedItems.selectedRowKeys;
+                                component.option("value", keys);
+                                }
+                             </text>)
+)

@@ -1,0 +1,212 @@
+﻿@using System.Data.Entity.Core.Objects
+@using WebDtt.Models
+@model WebDtt.Models.Order
+
+@*<div style="text-align: center">
+        <br>
+        <h3><i>РЕГИСТРАЦИЯ НА ДТТ будет доступна с 01 апреля 2021 года!</i></h3>
+    </div>*@
+
+
+
+@{
+    ViewData["Title"] = "Новый договор на добровольное тренировочное тестирование";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/my-script/NewUserOrderDtt.js"></script>
+
+@(Html.DevExtreme().Popup()
+    .ID("popup")
+    .Width("90%")
+    .Height("80%")
+    .Visible(false)
+    .ShowTitle(false)
+    .DragEnabled(false)
+    .CloseOnOutsideClick(true)
+    .CloseOnBackButton(true)
+    .ShowCloseButton(true)
+    .ShowTitle(true)
+    .ContentTemplate(new TemplateName("popup-template"))
+)
+
+@using (Html.DevExtreme().NamedTemplate("popup-template"))
+{
+    @(Html.DevExtreme().ScrollView()
+        .Width("100%")
+        .Height("100%")
+        .Content(@<text>@Html.Partial("Templates/_PoliticConfirmed")</text>)
+    )
+}
+
+@(Html.DevExtreme().Popover()
+    .Target("#dx_StudentBox")
+    .ShowEvent("mouseenter")
+    .HideEvent("mouseleave")
+    .Position(Position.Top)
+    .Width(300)
+    .ContentTemplate(@<text>
+                Это вы, если сдаете экзамен сами, или ваш ребенок, если региструете его для прохождения тестирования.
+    </text>)
+)
+
+@(Html.DevExtreme().Popover()
+    .Target("#dx_CreatorBox")
+    .ShowEvent("mouseenter")
+    .HideEvent("mouseleave")
+    .Position(Position.Top)
+    .Width(300)
+    .ContentTemplate(@<text>
+                Это человек, выступающий заказчиком в договоре. Должен быть совершеннолетним.
+    </text>)
+)
+
+@(Html.DevExtreme().Popover()
+    .Target("#examType")
+    .ShowEvent("mouseenter")
+    .HideEvent("mouseleave")
+    .Position(Position.Top)
+    .Width(300)
+    .ContentTemplate(@<text>
+                <p>Необходимо выбрать форму прохождения тестирования</p>
+                <p><span style="color: firebrick">* Очный</span> - проводится очно в пункте проведения экзамена согласно порядку проведения ГИА.</p>
+                @*<p>
+                        <span style="color: firebrick">* Полудистанционный</span> - проводится дистанционно (на дому). Бланки печатаются(отправляются
+                        на Email участника) в РЦОИ. После прохождения тестирования участник возвращает заполненные
+                        бланки в РЦОИ для дальнейшей обработки.
+                    </p>*@
+                <p>
+                    <span style="color: firebrick">* Автодистанционный</span> - проводится дистанционно (на дому) полностью в электронной форме.
+                    Часть 1 в форме теста в личном кабинете. Часть 2 - записывается на бумажный носитель.
+                    Изображения части 2 прикрепляются к экзамену в личном кабинете.
+                </p>
+                @*<p><span style="color: firebrick">* Тестирование</span> - проводится дистанционно (на дому). Тестирование только в форме теста.</p>*@
+    </text>)
+)
+
+@(Html.DevExtreme().Popover()
+    .Target("#dx_Exams")
+    .ShowEvent("mouseenter")
+    .HideEvent("mouseleave")
+    .Position(Position.Top)
+    .Width(300)
+    .ContentTemplate(@<text>
+            Выберите из списка необходимые тесты и подтвердитe выбор. Список отфильтрован в зависимости от класса участника, формы тестирования, уже выбранных тестов.
+    </text>)
+)
+
+@*@{
+    var filterValue = new object[]
+    {
+        new object[] { "TestDateTime", FilterBuilderFieldFilterOperations.GreaterThan, DateTime.Now },
+    };
+}*@
+
+
+<div id="form-container" style="margin: 10px 10px 30px">
+
+    <h4>@ViewBag.Title</h4>
+    <hr>
+    <p style="font-size: 9pt">*заполняя форму, выбор тестов оставьте напоследок. Сначала заполните все остальные поля</p>
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+        using (Html.DevExtreme().ValidationGroup())
+        {
+            @Html.AntiForgeryToken()
+            @(Html.DevExtreme().Form<Order>()
+                .ID("form")
+                //.FormData(new Order() { CreateDate = DateTime.Now, OrderTypeID = 1})
+                .ShowValidationSummary(true)
+                .Items(items =>
+                {
+                    items.AddSimpleFor(m => m.StudentPersonID)
+                        .Label(l => l.Location(FormLabelLocation.Top).Text("Участник"))
+                        .Editor(e => e.DropDownBox()
+                            .ID("dx_StudentBox")
+                            .OnValueChanged("onChangedStudent")
+                            .DataSourceOptions(dso => dso.Filter("[ 'PersonTypeID', '=', '1' ]"))
+                            .DataSource(ds => ds.WebApi()
+                                .Controller("Persons").LoadAction("Get")
+                                .InsertAction("Post").Key("PersonID"))
+                            .DisplayExpr("ViewShortFio")
+                            .ValueExpr("PersonID")
+                            .ContentTemplate(new TemplateName("dxDataGridStudents")));
+
+                    items.AddSimpleFor(m => m.CreatorPersonID)
+                        .Label(l => l.Location(FormLabelLocation.Top).Text("Законный представитель"))
+                        .Editor(e => e.DropDownBox().ID("dx_CreatorBox")
+                            .OnValueChanged("onChangedDelegate")
+                            .DataSourceOptions(dso => dso.Filter("[ 'PersonTypeID', '=', '3' ]"))
+                            .DataSource(ds => ds.WebApi()
+                                .Controller("Persons").LoadAction("Get")
+                                .InsertAction("Post").Key("PersonID"))
+                            .DisplayExpr("ViewShortFio")
+                            .ValueExpr("PersonID")
+                            .ContentTemplate(new TemplateName("dxDataGridDelegates")));
+
+                    items.AddSimpleFor(m => m.ExamType)
+                        .Label(l => l.Location(FormLabelLocation.Top).Text("Форма тестирования"))
+                        .Editor(e => e
+                            .Lookup().ID("examType")
+                            .OnContentReady("initializedExamType")
+                            .OnValueChanged("onChangedExamType")
+                            .DataSource(ds => ds.WebApi()
+                                .Controller("Orders").LoadAction("GetExamTypes").Key("ExamTypeID"))
+                            .DisplayExpr("ExamTypeName").ValueExpr("ExamTypeID"));
+
+                    items.AddSimpleFor(m => m.Exams).IsRequired(true)
+                        .Label(l => l.Location(FormLabelLocation.Top).Text("Тесты"))
+                        .Editor(e => e
+                            .TagBox().ID("dx_Exams").Name("exams")
+                            .DisplayExpr("ExamViewSubjectDate").ValueExpr("ExamID")
+                            .ApplyValueMode(EditorApplyValueMode.UseButtons)
+                            //.ShowSelectionControls(true)
+                            .ShowClearButton(true).ShowDropDownButton(true)
+                            .OnOpened("onChangedExams")
+                            .OnItemClick("onChangedExams")
+                            //.OnValueChanged("onChangedExams")
+                            //.DataSourceOptions(dso => dso.Filter(filterValue))
+                            .DataSource(ds => ds.WebApi()
+                                .Controller("Orders").LoadAction("GetExams").Key("ExamID"))
+                            .NoDataText("Нет экзаменов, удовлетворяющих выбранным параметрам выше."));
+
+                    items.AddButton().HorizontalAlignment(HorizontalAlignment.Left)
+                        .ButtonOptions(b => b.Text("Сформировать договор")
+                            .Type(ButtonType.Success)
+                            .UseSubmitBehavior(true)
+                        );
+                })
+
+
+                //.OnInitialized("onFormInitialized")
+                //.OnContentReady("onFormReady")
+                .FormData(Model)
+                .ShowColonAfterLabel(true))
+        }
+    }
+
+</div>
+
+
+@using (Html.DevExtreme().NamedTemplate("dxDataGridStudents"))
+{
+    @(Html.DevExtreme().ScrollView()
+        .Content(@<text>@Html.Partial("Templates/_UserStudentsGrid")</text>))
+}
+
+
+@using (Html.DevExtreme().NamedTemplate("dxDataGridDelegates"))
+{
+    @(Html.DevExtreme().ScrollView()
+        .Content(@<text>@Html.Partial("Templates/_UserDelegatesGrid")</text>))
+}
+
+
+@using (Html.DevExtreme().NamedTemplate("dxDataGridExams"))
+{
+    @(Html.DevExtreme().ScrollView()
+        .Content(@<text>@Html.Partial("Templates/_UserExamsGrid")</text>))
+}
+
+
